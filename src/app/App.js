@@ -10,6 +10,9 @@ import TelesalesOptionServices from 'src/features/Telesales/pages/TelesalesOptio
 import TelesalesOptionProducts from 'src/features/Telesales/pages/TelesalesOption/TelesalesOptionProducts'
 import TelesalesOptionBuying from 'src/features/Telesales/pages/TelesalesOption/TelesalesOptionBuying'
 import TelesalesOptionUse from 'src/features/Telesales/pages/TelesalesOption/TelesalesOptionUse'
+import UnauthenticateGuard from 'src/guards/UnauthenticateGuard'
+import Authentication from 'src/features/Authentication'
+import AuthenticateGuard from 'src/guards/AuthenticateGuard'
 
 function App({ store, persistor }) {
   return (
@@ -21,7 +24,14 @@ function App({ store, persistor }) {
               <Route path="/">
                 <Route index element={<Navigate to="/danh-sach" replace />} />
               </Route>
-              <Route path="/danh-sach" element={<Telesales />}>
+              <Route
+                path="/danh-sach"
+                element={
+                  <UnauthenticateGuard>
+                    <Telesales />
+                  </UnauthenticateGuard>
+                }
+              >
                 <Route index element={<TelesalesList />} />
                 <Route path=":MemberID" element={<TelesalesDetail />}>
                   <Route index element={<Navigate to="dich-vu" replace />} />
@@ -44,6 +54,14 @@ function App({ store, persistor }) {
                   />
                 </Route>
               </Route>
+              <Route
+                path="/yeu-cau-quyen-truy-cap"
+                element={
+                  <AuthenticateGuard>
+                    <Authentication />
+                  </AuthenticateGuard>
+                }
+              />
               <Route
                 path="/telesales/index.html"
                 element={<Navigate to="/" replace />}

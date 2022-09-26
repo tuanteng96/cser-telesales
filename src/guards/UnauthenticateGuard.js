@@ -1,17 +1,15 @@
 import React from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 export default function UnauthenticateGuard({ children }) {
-  const { Token } = useSelector(({ auth }) => ({
-    Token: auth.Token
+  const { tele, teleAdv } = useSelector(({ auth }) => ({
+    tele: auth.Info?.rightsSum?.tele,
+    teleAdv: auth.Info?.rightsSum?.teleAdv
   }))
 
-  const location = useLocation()
-
-  if (Token) {
-    const from = location.state?.from?.pathname || '/'
-    return <Navigate to={from} />
+  if (!tele && !teleAdv) {
+    return <Navigate to="/yeu-cau-quyen-truy-cap" />
   }
 
   return children

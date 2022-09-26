@@ -29,7 +29,7 @@ if (DevHelpers.isDevelopment()) {
     CrStockID: 8975,
     rightsSum: {
       tele: true,
-      teleAdv: true
+      teleAdv: true,
     }
   }
   window.token =

@@ -8,9 +8,9 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import { toUrlServer } from 'src/helpers/AssetsHelpers'
 import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
+import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 moment.locale('vi')
 
 CalendarMemberBook.propTypes = {
@@ -79,7 +79,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
       const dataResult = data.data.map(item => ({
         value: item.id,
         label: item.text,
-        Thumbnail: toUrlServer('/images/user.png')
+        Thumbnail: AssetsHelpers.toUrlServer('/images/user.png')
       }))
       callback(dataResult)
     }, 300)

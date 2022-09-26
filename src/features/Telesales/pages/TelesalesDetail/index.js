@@ -11,6 +11,7 @@ import InterestedProducts from './InterestedProducts'
 import CareHistory from './CareHistory'
 import uuid from 'react-uuid'
 import CalendarMember from './CalendarMember'
+import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 import moment from 'moment'
 import 'moment/locale/vi'
@@ -51,7 +52,9 @@ function TelesalesDetail(props) {
       })
       .catch(error => console.log(error))
   }
-  //console.log(MemberCurrent)
+
+  console.log(MemberCurrent)
+
   return (
     <div className="d-flex h-100 telesales-list">
       <div className="telesales-list__sidebar bg-white">
@@ -67,11 +70,14 @@ function TelesalesDetail(props) {
         <div className="p-18px">
           <div className="d-flex justify-content-center">
             <div className="w-85px position-relative">
-              <img
-                className="w-100 rounded-sm shadow"
-                src="https://preview.keenthemes.com/metronic/theme/html/demo1/dist/assets/media/users/300_1.jpg"
-                alt=""
-              />
+              {loadingMember && <Skeleton count={1} width={85} height={85} />}
+              {!loadingMember && (
+                <img
+                  className="w-100 rounded-sm shadow"
+                  src={AssetsHelpers.toUrlAvatarServer(MemberCurrent?.Photo)}
+                  alt={MemberCurrent?.FullName}
+                />
+              )}
             </div>
             <div className="flex-fill pl-15px">
               <div className="text-capitalize fw-700 font-size-md mb-3px line-height-sm text-primary">

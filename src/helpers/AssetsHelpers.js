@@ -1,9 +1,14 @@
 import { DevHelpers } from './DevHelpers'
 
 export const AssetsHelpers = {
-  toAbsoluteUrl: pathname => process.env.PUBLIC_URL + pathname
+  toAbsoluteUrl: pathname => process.env.PUBLIC_URL + pathname,
+  toUrlServer: pathname =>
+    DevHelpers.isDevelopment()
+      ? process.env.REACT_APP_API_URL + pathname
+      : '' + pathname,
+  toUrlAvatarServer: pathname => {
+    return DevHelpers.isDevelopment()
+      ? process.env.REACT_APP_API_URL + '/upload/image/' + pathname
+      : '/upload/images' + pathname
+  }
 }
-export const toUrlServer = pathname =>
-  DevHelpers.isDevelopment()
-    ? process.env.REACT_APP_API_URL + pathname
-    : '' + pathname
