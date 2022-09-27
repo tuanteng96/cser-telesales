@@ -38,7 +38,7 @@ function MemberTransfer({ onHide, show, onSubmit, loading }) {
             <Form className="d-flex flex-column h-100">
               <Modal.Header closeButton>
                 <Modal.Title className="font-size-lg text-uppercase">
-                  Chuyển đổi nhân viên
+                  Chuyển đổi khách hàng
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body className="p-15px">

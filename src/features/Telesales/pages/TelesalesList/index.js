@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
@@ -7,9 +7,12 @@ import Sidebar from './components/Sidebar'
 import { Overlay } from 'react-bootstrap'
 import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
+import { TelesalesContext } from '../..'
+import { useWindowSize } from 'src/hooks/useWindowSize'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+
 moment.locale('vi')
 
 const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
@@ -126,6 +129,8 @@ function TelesalesList(props) {
   const [PageTotal, setPageTotal] = useState(0)
   const [IsEditing, setIsEditing] = useState(false)
 
+  const { onOpenSidebar } = useContext(TelesalesContext)
+
   const [filters, setFilters] = useState({
     filter: {
       tele_process: '', //Đang tiếp cận,Đặt lịch thành công
@@ -143,6 +148,8 @@ function TelesalesList(props) {
     pi: 1,
     ps: 20
   })
+
+  const { width } = useWindowSize()
 
   useEffect(() => {
     getListTelesales()
@@ -299,10 +306,10 @@ function TelesalesList(props) {
         align: 'center',
         width: 130,
         sortable: false,
-        frozen: 'right'
+        frozen: width > 991 ? 'right' : ''
       }
     ],
-    []
+    [width]
   )
 
   const handleEndReached = () => {
@@ -323,13 +330,20 @@ function TelesalesList(props) {
         onSubmit={onFilter}
         onRefresh={onRefresh}
       />
-      <div className="telesales-list__content flex-fill px-30px pb-30px d-flex flex-column">
-        <div className="border-bottom py-15px text-uppercase fw-600 font-size-lg">
+      <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
+        <div className="border-bottom py-15px text-uppercase fw-600 font-size-lg position-relative">
           Danh sách khách hàng -{' '}
           <span className="text-danger">{PageTotal}</span>
           <span className="pl-5px font-label text-muted font-size-sm text-none">
             khách hàng
           </span>
+          <button
+            type="button"
+            className="btn btn-primary position-absolute top-9px right-0 d-lg-none"
+            onClick={onOpenSidebar}
+          >
+            <i className="fa-solid fa-filters"></i>
+          </button>
         </div>
         <div className="flex-grow-1">
           <ReactBaseTableInfinite
