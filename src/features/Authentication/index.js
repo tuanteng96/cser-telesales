@@ -15,7 +15,7 @@ function Authentication(props) {
         <div className="ps-5">
           <img
             className="max-w-400px"
-            src={AssetsHelpers.toAbsoluteUrl("/_assets/images/authen.png")}
+            src={AssetsHelpers.toAbsoluteUrl('/_assets/images/authen.png')}
             alt="Bạn không có quyền."
           />
         </div>

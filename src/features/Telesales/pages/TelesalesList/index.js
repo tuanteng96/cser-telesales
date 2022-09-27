@@ -25,6 +25,14 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
   )
   const target = useRef(null)
 
+  useEffect(() => {
+    setValue(
+      rowData?.TeleUser?.ID > 0
+        ? { label: rowData?.TeleUser?.FullName, value: rowData?.TeleUser?.ID }
+        : null
+    )
+  }, [rowData?.TeleUser])
+
   const handleClick = () => {
     if (!teleAdv) return
     setEditing(true)
@@ -129,7 +137,8 @@ function TelesalesList(props) {
       bookDateTo: '', // dd/mm/yyyy
       last_used: '',
       remains: '', //
-      key: ''
+      key: '',
+      emptyStaff: false
     },
     pi: 1,
     ps: 20
@@ -140,13 +149,15 @@ function TelesalesList(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters])
 
-  const getListTelesales = () => {
+  const getListTelesales = callback => {
     setLoading(true)
     const newFilter = {
       ...filters,
       filter: {
         ...filters.filter,
-        tele_user_id: filters.filter.tele_user_id
+        tele_user_id: filters.filter.emptyStaff
+          ? 0
+          : filters.filter.tele_user_id
           ? filters.filter.tele_user_id.values
           : '',
         tele_process: filters.filter.tele_process
@@ -167,7 +178,8 @@ function TelesalesList(props) {
         bookDateTo: filters.filter.bookDateTo
           ? moment(filters.filter.bookDateTo).format('DD/MM/YYYY')
           : ''
-      }
+      },
+      pi: callback ? 1 : filters.pi
     }
     telesalesApi
       .getListMemberTelesales(newFilter)
@@ -188,9 +200,16 @@ function TelesalesList(props) {
           setPageCount(PCount)
           setPageTotal(Total)
           setLoading(false)
+          callback && callback()
         }
       })
       .catch(error => console.log(error))
+  }
+
+  const onRefresh = callback => {
+    getListTelesales(() => {
+      callback && callback()
+    })
   }
 
   const columns = useMemo(
@@ -298,7 +317,12 @@ function TelesalesList(props) {
 
   return (
     <div className="d-flex h-100 telesales-list">
-      <Sidebar filters={filters} loading={loading} onSubmit={onFilter} />
+      <Sidebar
+        filters={filters}
+        loading={loading}
+        onSubmit={onFilter}
+        onRefresh={onRefresh}
+      />
       <div className="telesales-list__content flex-fill px-30px pb-30px d-flex flex-column">
         <div className="border-bottom py-15px text-uppercase fw-600 font-size-lg">
           Danh sách khách hàng -{' '}

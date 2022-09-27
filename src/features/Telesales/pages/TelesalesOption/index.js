@@ -4,7 +4,6 @@ import { NavLink, Outlet } from 'react-router-dom'
 export const MemberContext = React.createContext()
 
 function TelesalesOption({ ListProds, loading }) {
-  
   return (
     <MemberContext.Provider value={{ ListProds, loading }}>
       <div className="h-100 d-flex flex-column">

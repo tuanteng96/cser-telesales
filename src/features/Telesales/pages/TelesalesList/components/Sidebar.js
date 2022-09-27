@@ -8,6 +8,8 @@ import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import { NumericFormat } from 'react-number-format'
 import clsx from 'clsx'
 import Skeleton from 'react-loading-skeleton'
+import MemberTransfer from './MemberTransfer'
+import telesalesApi from 'src/api/telesales.api'
 
 import vi from 'date-fns/locale/vi' // the locale you want
 import { useSelector } from 'react-redux'
@@ -19,9 +21,11 @@ Sidebar.propTypes = {
   onSubmit: PropTypes.func
 }
 
-function Sidebar({ filters, onSubmit, loading }) {
+function Sidebar({ filters, onSubmit, loading, onRefresh }) {
   const [ListType, setListType] = useState([])
   const [loadingType, setLoadingType] = useState(false)
+  const [btnLoading, setBtnLoading] = useState(false)
+  const [isModal, setIsModal] = useState(false)
 
   const { teleAdv } = useSelector(({ auth }) => ({
     teleAdv: auth?.Info?.rightsSum?.teleAdv || false
@@ -45,8 +49,44 @@ function Sidebar({ filters, onSubmit, loading }) {
     }
   }
 
+  const onSubmitTransfer = (values, { resetForm }) => {
+    setBtnLoading(true)
+    const dataSubmit = {
+      FromTeleUserID: values.FromTeleUserID ? values.FromTeleUserID.value : '',
+      ToTeleUserID: values.ToTeleUserID ? values.ToTeleUserID.value : ''
+    }
+    telesalesApi
+      .transferMember(dataSubmit)
+      .then(response => {
+        onRefresh(() => {
+          setBtnLoading(false)
+          resetForm()
+          onHideModal()
+          window.top?.toastr &&
+            window.top?.toastr.success('Chuyển đổi thành công', '', {
+              timeOut: 1500
+            })
+        })
+      })
+      .catch(error => console.log(error))
+  }
+
+  const onOpenModal = () => {
+    setIsModal(true)
+  }
+
+  const onHideModal = () => {
+    setIsModal(false)
+  }
+
   return (
     <div className="telesales-list__sidebar bg-white">
+      <MemberTransfer
+        show={isModal}
+        loading={btnLoading}
+        onSubmit={onSubmitTransfer}
+        onHide={onHideModal}
+      />
       <Formik
         initialValues={filters}
         onSubmit={onSubmit}
@@ -59,8 +99,16 @@ function Sidebar({ filters, onSubmit, loading }) {
 
           return (
             <Form className="d-flex flex-column h-100">
-              <div className="border-bottom p-15px text-uppercase fw-600 font-size-lg">
+              <div className="border-bottom p-15px text-uppercase fw-600 font-size-lg position-relative">
                 Bộ lọc khách hàng
+                {teleAdv && (
+                  <div
+                    className="cursor-pointer position-absolute top-8px right-10px w-40px h-40px d-flex align-items-center justify-content-center"
+                    onClick={onOpenModal}
+                  >
+                    <i className="fa-regular fa-users-gear text-primary"></i>
+                  </div>
+                )}
               </div>
               <div className="flex-grow-1 p-15px overflow-auto">
                 <div className="mb-15px form-group">
@@ -261,22 +309,37 @@ function Sidebar({ filters, onSubmit, loading }) {
                   />
                 </div>
                 {teleAdv && (
-                  <div className="form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Chọn theo nhân viên
+                  <>
+                    <div className="form-group">
+                      <label className="font-label text-muted mb-5px">
+                        Chọn theo nhân viên
+                      </label>
+                      <SelectStaffs
+                        className="select-control"
+                        menuPosition="fixed"
+                        menuPlacement="top"
+                        name="filter.tele_user_id"
+                        onChange={otp => {
+                          setFieldValue('filter.tele_user_id', otp, false)
+                        }}
+                        value={values.filter.tele_user_id}
+                        isClearable={true}
+                      />
+                    </div>
+                    <label className="checkbox d-flex cursor-pointer mt-20px">
+                      <input
+                        type="checkbox"
+                        name="filter.emptyStaff"
+                        value={values.filter.emptyStaff}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <span className="checkbox-icon"></span>
+                      <span className="fw-500 font-label">
+                        Chưa chọn nhân viên phụ trách
+                      </span>
                     </label>
-                    <SelectStaffs
-                      className="select-control"
-                      menuPosition="fixed"
-                      menuPlacement="top"
-                      name="filter.tele_user_id"
-                      onChange={otp => {
-                        setFieldValue('filter.tele_user_id', otp, false)
-                      }}
-                      value={values.filter.tele_user_id}
-                      isClearable={true}
-                    />
-                  </div>
+                  </>
                 )}
               </div>
               <div className="border-top p-15px">

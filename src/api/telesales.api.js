@@ -57,6 +57,12 @@ const telesalesApi = {
       `/api/v3/mbookadmin?cmd=AdminBooking&CurrentStockID=${CurrentStockID}&u_id_z4aDf2=${u_id_z4aDf2}`,
       JSON.stringify(data)
     )
+  },
+  transferMember: data => {
+    return http.post(
+      '/api/v3/tele23@member_transferTeleUserIDs',
+      JSON.stringify(data)
+    )
   }
 }
 export default telesalesApi

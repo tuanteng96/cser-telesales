@@ -29,11 +29,11 @@ if (DevHelpers.isDevelopment()) {
     CrStockID: 8975,
     rightsSum: {
       tele: true,
-      teleAdv: true,
+      teleAdv: true
     }
   }
   window.token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDEzOTUiLCJuYmYiOjE2NjM4NTUzNzEsImV4cCI6MTY2NDQ2MDE3MSwiaWF0IjoxNjYzODU1MzcxfQ.mAGD2lja2pREYtCcd8rJv--5eLbPO8F1I22c3JSFuuE'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDE0MTEiLCJuYmYiOjE2NjQyNzEwOTQsImV4cCI6MTY2NDg3NTg5NCwiaWF0IjoxNjY0MjcxMDk0fQ.yUn7gOOIFSyvpgq3WkEdLjIYmNsWMe1y3_40um-M4cs'
 }
 
 const Auth = createSlice({
