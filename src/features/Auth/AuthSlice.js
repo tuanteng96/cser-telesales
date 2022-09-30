@@ -1,6 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import persistReducer from 'redux-persist/es/persistReducer'
-import storage from 'redux-persist/lib/storage'
 import { DevHelpers } from 'src/helpers/DevHelpers'
 
 if (DevHelpers.isDevelopment()) {
@@ -33,7 +31,7 @@ if (DevHelpers.isDevelopment()) {
     }
   }
   window.token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDE0MTEiLCJuYmYiOjE2NjQyNzEwOTQsImV4cCI6MTY2NDg3NTg5NCwiaWF0IjoxNjY0MjcxMDk0fQ.yUn7gOOIFSyvpgq3WkEdLjIYmNsWMe1y3_40um-M4cs'
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDE0NDQiLCJuYmYiOjE2NjQ1MjQ2NzcsImV4cCI6MTY2NTEyOTQ3NywiaWF0IjoxNjY0NTI0Njc3fQ.-wKeOcKL12z5q3rz3FVFYFABR4S-F_KIwLkO6U-ckus'
 }
 
 const Auth = createSlice({
@@ -53,12 +51,6 @@ const Auth = createSlice({
   }
 })
 
-const persistConfig = {
-  key: 'auth',
-  storage: storage
-  //blacklist: ['user']
-}
-
 const { reducer, actions } = Auth
 export const { setProfile } = actions
-export default persistReducer(persistConfig, reducer)
+export default reducer

@@ -1,6 +1,5 @@
 import { Provider } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { PersistGate } from 'redux-persist/integration/react'
 import AuthInit from 'src/features/Auth/AuthInit'
 import ScrollToTop from 'src/layout/_core/ScrollToTop'
 import Telesales from 'src/features/Telesales'
@@ -17,59 +16,51 @@ import AuthenticateGuard from 'src/guards/AuthenticateGuard'
 function App({ store, persistor }) {
   return (
     <Provider store={store}>
-      <PersistGate loading={'Đang tải ...'} persistor={persistor}>
-        <AuthInit>
-          <ScrollToTop>
-            <Routes>
-              <Route path="/">
-                <Route index element={<Navigate to="/danh-sach" replace />} />
+      <AuthInit>
+        <ScrollToTop>
+          <Routes>
+            <Route path="/">
+              <Route index element={<Navigate to="/danh-sach" replace />} />
+            </Route>
+            <Route
+              path="/danh-sach"
+              element={
+                <UnauthenticateGuard>
+                  <Telesales />
+                </UnauthenticateGuard>
+              }
+            >
+              <Route index element={<TelesalesList />} />
+              <Route path=":MemberID" element={<TelesalesDetail />}>
+                <Route index element={<Navigate to="dich-vu" replace />} />
+                <Route path="dich-vu" element={<TelesalesOptionServices />} />
+                <Route path="san-pham" element={<TelesalesOptionProducts />} />
+                <Route
+                  path="lich-su-mua-hang"
+                  element={<TelesalesOptionBuying />}
+                />
+                <Route
+                  path="lich-su-du-dung-dv"
+                  element={<TelesalesOptionUse />}
+                />
+                <Route path="*" element={<Navigate to="/dich-vu" replace />} />
               </Route>
-              <Route
-                path="/danh-sach"
-                element={
-                  <UnauthenticateGuard>
-                    <Telesales />
-                  </UnauthenticateGuard>
-                }
-              >
-                <Route index element={<TelesalesList />} />
-                <Route path=":MemberID" element={<TelesalesDetail />}>
-                  <Route index element={<Navigate to="dich-vu" replace />} />
-                  <Route path="dich-vu" element={<TelesalesOptionServices />} />
-                  <Route
-                    path="san-pham"
-                    element={<TelesalesOptionProducts />}
-                  />
-                  <Route
-                    path="lich-su-mua-hang"
-                    element={<TelesalesOptionBuying />}
-                  />
-                  <Route
-                    path="lich-su-du-dung-dv"
-                    element={<TelesalesOptionUse />}
-                  />
-                  <Route
-                    path="*"
-                    element={<Navigate to="/dich-vu" replace />}
-                  />
-                </Route>
-              </Route>
-              <Route
-                path="/yeu-cau-quyen-truy-cap"
-                element={
-                  <AuthenticateGuard>
-                    <Authentication />
-                  </AuthenticateGuard>
-                }
-              />
-              <Route
-                path="/telesales/index.html"
-                element={<Navigate to="/" replace />}
-              />
-            </Routes>
-          </ScrollToTop>
-        </AuthInit>
-      </PersistGate>
+            </Route>
+            <Route
+              path="/yeu-cau-quyen-truy-cap"
+              element={
+                <AuthenticateGuard>
+                  <Authentication />
+                </AuthenticateGuard>
+              }
+            />
+            <Route
+              path="/telesales/index.html"
+              element={<Navigate to="/" replace />}
+            />
+          </Routes>
+        </ScrollToTop>
+      </AuthInit>
     </Provider>
   )
 }
