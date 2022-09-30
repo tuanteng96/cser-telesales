@@ -55,7 +55,7 @@ function App({ store, persistor }) {
               }
             />
             <Route
-              path="/telesales/index.html"
+              path="/Admin/telesales/index.html"
               element={<Navigate to="/" replace />}
             />
           </Routes>
