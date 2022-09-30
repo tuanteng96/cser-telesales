@@ -4,14 +4,16 @@ import { Link } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite'
 import Sidebar from './components/Sidebar'
-import { Overlay } from 'react-bootstrap'
+import { Overlay, OverlayTrigger, Popover } from 'react-bootstrap'
 import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import { TelesalesContext } from '../..'
 import { useWindowSize } from 'src/hooks/useWindowSize'
+import Text from 'react-texty'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+import clsx from 'clsx'
 
 moment.locale('vi')
 
@@ -267,9 +269,54 @@ function TelesalesList(props) {
         sortable: false
       },
       {
-        key: 'Contact',
+        key: 'TopTele',
         title: 'Liên hệ gần nhất',
-        dataKey: 'Contact',
+        cellRenderer: ({ rowData }) => (
+          <>
+            {rowData.TopTele && rowData.TopTele.length > 0 ? (
+              <div className="d-flex align-items-center w-100">
+                <Text className="flex-1 pr-10px" tooltipMaxWidth={280}>
+                  {rowData.TopTele[0].Content}
+                </Text>
+                <OverlayTrigger
+                  rootClose
+                  trigger="click"
+                  key="auto"
+                  placement="auto"
+                  overlay={
+                    <Popover id={`popover-positioned-top`}>
+                      <Popover.Body className="p-0 max-h-300px overflow-auto">
+                        {rowData.TopTele.map((item, index) => (
+                          <div
+                            className={clsx(
+                              'p-15px',
+                              rowData.TopTele.length - 1 !== index &&
+                                'border-bottom'
+                            )}
+                            key={index}
+                          >
+                            {item.Content}
+                            <div className="font-number mt-5px text-muted">
+                              Ngày{' '}
+                              {moment(item.CreateDate).format(
+                                'DD-MM-YYYY HH:mm'
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </Popover.Body>
+                    </Popover>
+                  }
+                >
+                  <i className="fa-solid fa-circle-info text-warning font-size-lg cursor-pointer"></i>
+                </OverlayTrigger>
+              </div>
+            ) : (
+              <>Chưa có liên hệ</>
+            )}
+          </>
+        ),
+        dataKey: 'TopTele',
         width: 250,
         sortable: false
       },
@@ -286,7 +333,10 @@ function TelesalesList(props) {
         dataKey: 'action',
         cellRenderer: ({ rowData }) => (
           <div className="d-flex">
-            <button className="w-38px h-38px rounded-circle btn btn-success shadow mx-4px p-0 position-relative">
+            <a
+              href={`tel:${rowData?.MobilePhone}`}
+              className="w-38px h-38px rounded-circle btn btn-success shadow mx-4px p-0 position-relative"
+            >
               <img
                 className="w-23px position-absolute top-7px right-7px"
                 src={AssetsHelpers.toAbsoluteUrl(
@@ -294,7 +344,7 @@ function TelesalesList(props) {
                 )}
                 alt=""
               />
-            </button>
+            </a>
             <Link
               className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
               to={`${rowData.ID}`}
@@ -306,7 +356,7 @@ function TelesalesList(props) {
         align: 'center',
         width: 130,
         sortable: false,
-        frozen: width > 991 ? 'right' : ''
+        frozen: width > 991 ? 'right' : false
       }
     ],
     [width]

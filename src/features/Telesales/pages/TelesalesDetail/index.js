@@ -108,10 +108,13 @@ function TelesalesDetail(props) {
                   )}
                   {!loadingMember && MemberCurrent?.MobilePhone}
                 </div>
-                <div className="btn btn-sm btn-primary mr-2 py-6px px-3 px-xxl-3 fw-500 mt-8px">
+                <a
+                  href={`tel:${MemberCurrent?.MobilePhone}`}
+                  className="btn btn-sm btn-primary mr-2 py-6px px-3 px-xxl-3 fw-500 mt-8px"
+                >
                   <i className="fa-solid fa-phone pr-5px"></i>
                   Gọi điện
-                </div>
+                </a>
               </div>
             </div>
             <div className="mt-20px">

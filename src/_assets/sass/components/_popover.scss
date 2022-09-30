@@ -30,6 +30,7 @@
     .popover-arrow {
       &:before {
         border-left-color: #fff !important;
+        display: none;
       }
     }
   }

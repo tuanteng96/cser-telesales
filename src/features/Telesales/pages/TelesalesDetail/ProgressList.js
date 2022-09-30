@@ -49,7 +49,7 @@ function ProgressList({ initialValues, MemberLoading, ...props }) {
   return (
     <div className="telesales-detail-head border-bottom px-18px d-flex align-items-center justify-content-center">
       <div
-        className="w-40px h-40px border rounded-circle cursor-pointer position-relative mr-10px d-xxl-none"
+        className="w-40px h-40px border rounded-circle cursor-pointer position-relative mr-10px d-xl-none"
         onClick={() => navigate('/danh-sach')}
       >
         <i className="fa-regular fa-arrow-left position-absolute left-12px top-12px"></i>
@@ -64,7 +64,7 @@ function ProgressList({ initialValues, MemberLoading, ...props }) {
         value={values}
       />
       <div
-        className="w-40px h-40px border rounded-circle cursor-pointer position-relative ml-10px d-xxl-none bg-primary shadow"
+        className="w-40px h-40px border rounded-circle cursor-pointer position-relative ml-10px d-xl-none bg-primary shadow"
         onClick={onOpenProfile}
       >
         <i className="fa-solid fa-user text-white position-absolute left-13px top-12px"></i>
