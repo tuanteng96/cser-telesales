@@ -214,6 +214,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     <div className="d-flex">
                       <div className="flex-fill">
                         <DatePicker
+                          calendarClassName="hide-header"
                           onChange={date => {
                             setFieldValue('filter.birthDateFrom', date, false)
                           }}
@@ -221,6 +222,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                           placeholderText="Từ ngày"
                           className="form-control"
                           dateFormat="dd/MM"
+                          dateFormatCalendar="MMMM"
                         />
                       </div>
                       <div className="w-35px d-flex align-items-center justify-content-center">
@@ -235,6 +237,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                           placeholderText="Đến ngày"
                           className="form-control"
                           dateFormat="dd/MM"
+                          dateFormatCalendar="MMMM"
                         />
                       </div>
                     </div>
@@ -273,7 +276,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                   </div>
                   <div className="mb-15px form-group">
                     <label className="font-label text-muted">
-                      Ngày dùng cuối
+                      Số ngày khách chưa đến cơ sở
                     </label>
                     <NumericFormat
                       allowNegative={false}
@@ -297,7 +300,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     className={`${clsx('form-group', teleAdv && 'mb-15px')}`}
                   >
                     <label className="font-label text-muted">
-                      Số buổi còn lại
+                      Khách hết sản phẩm trong số ngày tới
                     </label>
                     <NumericFormat
                       allowNegative={false}
