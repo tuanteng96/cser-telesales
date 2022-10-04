@@ -160,15 +160,19 @@ function TelesalesList(props) {
 
   const getListTelesales = callback => {
     setLoading(true)
+    let tele_user_id_new = ''
+    if (filters.filter.emptyStaff) {
+      tele_user_id_new = 0
+    } else {
+      tele_user_id_new = filters.filter.tele_user_id
+        ? filters.filter.tele_user_id.value
+        : ''
+    }
     const newFilter = {
       ...filters,
       filter: {
         ...filters.filter,
-        tele_user_id: filters.filter.emptyStaff
-          ? 0
-          : filters.filter.tele_user_id
-          ? filters.filter.tele_user_id.values
-          : '',
+        tele_user_id: tele_user_id_new,
         tele_process: filters.filter.tele_process
           ? filters.filter.tele_process.join(',')
           : '',
@@ -190,6 +194,7 @@ function TelesalesList(props) {
       },
       pi: callback ? 1 : filters.pi
     }
+
     telesalesApi
       .getListMemberTelesales(newFilter)
       .then(({ data }) => {
