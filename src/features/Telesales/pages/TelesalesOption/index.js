@@ -26,7 +26,7 @@ function TelesalesOption({ ListProds, loading }) {
             }
             to="dich-vu"
           >
-            Dịch vụ
+            Thẻ liệu trình
           </NavLink>
           <NavLink
             className={({ isActive }) =>
@@ -36,7 +36,7 @@ function TelesalesOption({ ListProds, loading }) {
             }
             to="san-pham"
           >
-            Sản phẩm
+            Sản phẩm sắp hết
           </NavLink>
           <NavLink
             className={({ isActive }) =>

@@ -15,7 +15,8 @@ import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
 moment.locale('vi')
 
 const initialValues = {
-  Content: ''
+  Content: '',
+  Result: ''
 }
 
 const AddWishListSchema = Yup.object().shape({
@@ -59,7 +60,8 @@ function CareHistory(props) {
         {
           MemberID: MemberID,
           Content: values.Content,
-          Type: 'PROCESS'
+          Type: 'PROCESS',
+          Result: values.Result ? values.Result.value : ''
         }
       ],
       delete: []
@@ -131,8 +133,14 @@ function CareHistory(props) {
                 enableReinitialize={true}
               >
                 {formikProps => {
-                  const { values, touched, errors, handleBlur, handleChange } =
-                    formikProps
+                  const {
+                    values,
+                    touched,
+                    errors,
+                    setFieldValue,
+                    handleBlur,
+                    handleChange
+                  } = formikProps
                   return (
                     <Form>
                       <Popover.Header className="font-weight-bold text-uppercase d-flex justify-content-between py-3">
@@ -145,6 +153,12 @@ function CareHistory(props) {
                             isLoading={false}
                             className="w-100 flex-1"
                             placeholder="Chọn kết quả"
+                            name="Result"
+                            onChange={otp => {
+                              setFieldValue('Result', otp, false)
+                            }}
+                            value={values.Result}
+                            isClearable={true}
                           />
                         </div>
                         <div className="form-group">
@@ -220,6 +234,11 @@ function CareHistory(props) {
                       Xóa
                     </span>
                   </div>
+                  {item.Result && (
+                    <div className="mt-8px fw-500">
+                      <span className="text-danger">{item.Result}</span>
+                    </div>
+                  )}
                   <div className="mt-5px fw-300">{item.Content}</div>
                 </div>
               ))

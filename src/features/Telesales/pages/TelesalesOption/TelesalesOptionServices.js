@@ -57,9 +57,7 @@ function TelesalesOptionServices(props) {
                 aria-valuemin={0}
                 aria-valuemax={100}
               >
-                <span className="number">
-                  {Math.round((rowData.Done / rowData.Total) * 100 || 0)} %
-                </span>
+                <span className="number">{rowData.Done}b</span>
               </div>
             </div>
             <div className="w-50px text-end fw-600 font-size-sm font-number">
@@ -72,40 +70,30 @@ function TelesalesOptionServices(props) {
       },
       {
         key: 'BH_Total',
-        title: 'Buổi bảo hành',
+        title: 'Bảo hành',
         dataKey: 'BH_Total',
         cellRenderer: ({ rowData }) =>
           rowData.BH_Total > 0 ? (
             <div className="d-flex align-items-center w-100">
-              <div className="progress flex-fill" style={{ height: '13px' }}>
-                <div
-                  className="progress-bar"
-                  role="progressbar"
-                  style={{
-                    width: `${(rowData.BH_Done / rowData.BH_Total) * 100 || 0}%`
-                  }}
-                  aria-valuenow={
-                    (rowData.BH_Done / rowData.BH_Total) * 100 || 0
-                  }
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                >
-                  <span className="number">
-                    {Math.round(
-                      (rowData.BH_Done / rowData.BH_Total) * 100 || 0
-                    )}{' '}
-                    %
-                  </span>
-                </div>
-              </div>
-              <div className="w-50px text-end fw-600 font-size-sm font-number">
-                {rowData.BH_Done} / {rowData.BH_Total}
-              </div>
+              {rowData.BH_Done <= 0
+                ? 'Có bảo hành chưa kích hoạt'
+                : `Đã dùng ${rowData.BH_Done} buổi`}
             </div>
           ) : (
             'Không có bảo hành'
           ),
         width: 250,
+        sortable: false
+      },
+      {
+        key: 'Ngay_Het_Han',
+        title: 'Ngày hết hạn',
+        dataKey: 'Ngay_Het_Han',
+        cellRenderer: ({ rowData }) =>
+          rowData.Ngay_Het_Han
+            ? moment(rowData.Ngay_Het_Han).format('DD-MM-YYYY')
+            : 'Chưa có',
+        width: 200,
         sortable: false
       },
       {
@@ -119,12 +107,14 @@ function TelesalesOptionServices(props) {
               onClick={() => onOpenModal(rowData)}
               disabled={!rowData.OsItems || rowData.OsItems.length === 0}
             >
-              Chi tiết
+              {!rowData.OsItems || rowData.OsItems.length === 0
+                ? 'Chưa thực hiện'
+                : 'Chi tiết'}
             </button>
           </div>
         ),
         align: 'center',
-        width: 110,
+        width: 130,
         sortable: false,
         frozen: 'right'
       }

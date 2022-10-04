@@ -27,6 +27,15 @@ function ModalOptionService({ onHide, show, OsItems }) {
         sortable: false
       },
       {
+        key: 'BookDate',
+        title: 'Loại buổi',
+        cellRenderer: ({ rowData }) =>
+          moment(rowData.BookDate).format('HH:mm DD-MM-YYYY'),
+        dataKey: 'BookDate',
+        width: 180,
+        sortable: false
+      },
+      {
         key: 'Staffs',
         title: 'Nhân viên thực hiện',
         cellRenderer: ({ rowData }) => (
@@ -46,7 +55,7 @@ function ModalOptionService({ onHide, show, OsItems }) {
   )
   if (!OsItems) return ''
   return (
-    <Modal show={show} onHide={onHide}>
+    <Modal show={show} dialogClassName="modal-max-md" onHide={onHide}>
       <Modal.Header closeButton>
         <Modal.Title className="font-size-lg text-uppercase">
           Lịch sử {OsItems.ProdTitle}
