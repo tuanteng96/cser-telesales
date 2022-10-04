@@ -10,6 +10,7 @@ import Swal from 'sweetalert2'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
 
 moment.locale('vi')
 
@@ -138,6 +139,14 @@ function CareHistory(props) {
                         Thêm mới lịch sử
                       </Popover.Header>
                       <Popover.Body>
+                        <div className="form-group mb-15px">
+                          <label>Kết quả</label>
+                          <SelectTeleHis
+                            isLoading={false}
+                            className="w-100 flex-1"
+                            placeholder="Chọn kết quả"
+                          />
+                        </div>
                         <div className="form-group">
                           <label>Ghi chú</label>
                           <textarea

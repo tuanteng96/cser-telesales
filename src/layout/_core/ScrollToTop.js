@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const ScrollToTop = props => {
   const location = useLocation()
@@ -10,18 +10,22 @@ const ScrollToTop = props => {
   }, [location])
 
   useEffect(() => {
-    if (window.isDesktop) {
-      if (location?.pathname === '/app23/index.html') {
-        navigate('/', { replace: true })
-      } else {
-        window.top.location.hash = `rp:${location?.pathname}`
+    if (location?.pathname === '/Admin/telesales/index.html') {
+      navigate('/', { replace: true })
+    } else {
+      const pathnameList = location?.pathname.split('/')
+      if (pathnameList.length > 3) {
+        window.top.location.hash = `mb:danh-sach/${pathnameList[2]}`
+      }
+      if (pathnameList.length === 2) {
+        window.top.location.hash = `mb:/`
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location])
 
   useEffect(() => {
-    if (window.isDesktop && window.top.location.hash) {
+    if (window.top.location.hash) {
       const url = window.top.location.hash.slice(
         4,
         window.top.location.hash.length

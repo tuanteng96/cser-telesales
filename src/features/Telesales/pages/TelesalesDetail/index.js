@@ -219,17 +219,16 @@ function TelesalesDetail(props) {
           MemberLoading={loadingMember}
         />
         <div className="d-flex flex-wrap telesales-detail-body">
-          <div className="border-right telesales-use">
-            <PerfectScrollbar
-              options={perfectScrollbarOptions}
-              className="scroll h-md-100 h-auto"
-              style={{ position: 'relative' }}
-            >
-              <InterestedProducts />
-              <CalendarMember />
-              <CareHistory />
-            </PerfectScrollbar>
-          </div>
+          <PerfectScrollbar
+            options={perfectScrollbarOptions}
+            className="border-right telesales-use scroll h-md-100 h-auto"
+            style={{ position: 'relative' }}
+          >
+            <InterestedProducts />
+            <CalendarMember />
+            <CareHistory />
+          </PerfectScrollbar>
+
           <div className="flex-fill telesales-options">
             <TelesalesOption ListProds={ListProds} loading={loadingMember} />
           </div>
