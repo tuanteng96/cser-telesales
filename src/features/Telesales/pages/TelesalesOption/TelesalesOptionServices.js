@@ -69,29 +69,19 @@ function TelesalesOptionServices(props) {
         sortable: false
       },
       {
-        key: 'BH_Total',
+        key: 'BH_Title',
         title: 'Bảo hành',
-        dataKey: 'BH_Total',
-        cellRenderer: ({ rowData }) =>
-          rowData.BH_Total > 0 ? (
-            <div className="d-flex align-items-center w-100">
-              {rowData.BH_Done <= 0
-                ? 'Có bảo hành chưa kích hoạt'
-                : `Đã dùng ${rowData.BH_Done} buổi`}
-            </div>
-          ) : (
-            'Không có bảo hành'
-          ),
+        dataKey: 'BH_Title',
         width: 250,
         sortable: false
       },
       {
-        key: 'Ngay_Het_Han',
+        key: 'EndDate',
         title: 'Ngày hết hạn',
-        dataKey: 'Ngay_Het_Han',
+        dataKey: 'EndDate',
         cellRenderer: ({ rowData }) =>
-          rowData.Ngay_Het_Han
-            ? moment(rowData.Ngay_Het_Han).format('DD-MM-YYYY')
+          rowData.EndDate
+            ? moment(rowData.EndDate).format('DD-MM-YYYY')
             : 'Chưa có',
         width: 200,
         sortable: false

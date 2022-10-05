@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import moment from 'moment'
 import 'moment/locale/vi'
 import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
+import { useSelector } from 'react-redux'
 
 moment.locale('vi')
 
@@ -28,6 +29,10 @@ function CareHistory(props) {
   const [loading, setLoading] = useState(false)
   const [List, setList] = useState([])
   const [btnLoading, setBtnLoading] = useState(false)
+
+  const { teleAdv } = useSelector(({ auth }) => ({
+    teleAdv: auth?.Info?.rightsSum?.teleAdv || false
+  }))
 
   useEffect(() => {
     getCareHistoryList()
@@ -227,12 +232,17 @@ function CareHistory(props) {
                     <span className="font-number fw-500">
                       {moment(item.CreateDate).format('HH:mm DD-MM-YYYY')}
                     </span>
-                    <span
-                      className="fw-500 text-danger cursor-pointer text-underline font-size-sm"
-                      onClick={() => onDelete(item)}
-                    >
-                      Xóa
-                    </span>
+
+                    {(teleAdv ||
+                      moment(item.CreateDate).format('DD-MM-YYYY') ===
+                        moment().format('DD-MM-YYYY')) && (
+                      <span
+                        className="fw-500 text-danger cursor-pointer text-underline font-size-sm"
+                        onClick={() => onDelete(item)}
+                      >
+                        Xóa
+                      </span>
+                    )}
                   </div>
                   {item.Result && (
                     <div className="mt-8px fw-500">

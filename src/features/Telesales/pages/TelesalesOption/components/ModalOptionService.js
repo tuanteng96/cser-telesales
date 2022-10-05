@@ -27,11 +27,11 @@ function ModalOptionService({ onHide, show, OsItems }) {
         sortable: false
       },
       {
-        key: 'BookDate',
+        key: 'IsWarrant',
         title: 'Loại buổi',
         cellRenderer: ({ rowData }) =>
-          moment(rowData.BookDate).format('HH:mm DD-MM-YYYY'),
-        dataKey: 'BookDate',
+          rowData.IsWarrant ? 'Bảo hành' : 'Buổi thường',
+        dataKey: 'IsWarrant',
         width: 180,
         sortable: false
       },
