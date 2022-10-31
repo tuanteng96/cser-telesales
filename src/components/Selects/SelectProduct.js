@@ -33,7 +33,7 @@ function SelectProduct({ onChange, value, ...props }) {
       //className="select-control"
       classNamePrefix="select"
       loadOptions={getAllProducts}
-      placeholder="Chọn sản phẩm"
+      placeholder="Chọn sản phẩm, dịch vụ"
       value={value}
       onChange={onChange}
       additional={{

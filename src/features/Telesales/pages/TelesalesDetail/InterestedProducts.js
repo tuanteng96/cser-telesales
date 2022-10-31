@@ -155,7 +155,7 @@ function InterestedProducts(props) {
                       </Popover.Header>
                       <Popover.Body>
                         <div className="form-group">
-                          <label>Sản phẩm</label>
+                          <label>Sản phẩm, dịch vụ</label>
                           <SelectProduct
                             isMulti
                             isClearable
