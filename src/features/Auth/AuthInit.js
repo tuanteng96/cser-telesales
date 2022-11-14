@@ -4,7 +4,7 @@ import { LayoutSplashScreen } from 'src/layout/_core/SplashScreen'
 import { setProfile } from './AuthSlice'
 
 function checkInfo(fn) {
-  if (!window.top.Info || !window.top.token) {
+  if (!window.top.Info && !window.top.token) {
     setTimeout(() => {
       checkInfo(fn)
     }, 50)

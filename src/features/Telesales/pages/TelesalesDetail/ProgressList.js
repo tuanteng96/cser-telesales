@@ -42,7 +42,7 @@ function ProgressList({ initialValues, MemberLoading, ...props }) {
       .editTagsMember(newData)
       .then(response => {
         setValues(otp)
-        setLoading(true)
+        setLoading(false)
       })
       .catch(error => console.log(error))
   }
