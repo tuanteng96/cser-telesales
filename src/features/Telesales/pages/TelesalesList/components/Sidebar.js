@@ -275,17 +275,36 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     </div>
                   </div>
                   <div className="mb-15px form-group">
-                    <label className="checkbox d-flex cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="filter.HasNoti"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        checked={values.filter.HasNoti}
-                      />
-                      <span className="checkbox-icon"></span>
-                      <span>Có lịch nhắc</span>
+                    <label className="font-label text-muted mb-5px">
+                      Khách có lịch nhắc
                     </label>
+                    <div className="d-flex">
+                      <div className="flex-fill">
+                        <DatePicker
+                          onChange={date => {
+                            setFieldValue('filter.NotiFrom', date, false)
+                          }}
+                          selected={values.filter.NotiFrom}
+                          placeholderText="Từ ngày"
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                        />
+                      </div>
+                      <div className="w-35px d-flex align-items-center justify-content-center">
+                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                      </div>
+                      <div className="flex-fill">
+                        <DatePicker
+                          onChange={date => {
+                            setFieldValue('filter.NotiTo', date, false)
+                          }}
+                          selected={values.filter.NotiTo}
+                          placeholderText="Đến ngày"
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                        />
+                      </div>
+                    </div>
                   </div>
                   <div className="mb-15px form-group">
                     <label className="font-label text-muted">

@@ -146,7 +146,8 @@ function TelesalesList(props) {
       remains: '', //
       key: '',
       emptyStaff: false,
-      HasNoti: false
+      NotiFrom: '',
+      NotiTo: ''
     },
     pi: 1,
     ps: 20
@@ -191,6 +192,12 @@ function TelesalesList(props) {
           : '',
         bookDateTo: filters.filter.bookDateTo
           ? moment(filters.filter.bookDateTo).format('DD/MM/YYYY')
+          : '',
+        NotiFrom: filters.filter.NotiFrom
+          ? moment(filters.filter.NotiFrom).format('DD/MM/YYYY')
+          : '',
+        NotiTo: filters.filter.NotiTo
+          ? moment(filters.filter.NotiTo).format('DD/MM/YYYY')
           : ''
       },
       pi: callback ? 1 : filters.pi
