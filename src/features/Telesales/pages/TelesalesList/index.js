@@ -145,7 +145,8 @@ function TelesalesList(props) {
       last_used: '',
       remains: '', //
       key: '',
-      emptyStaff: false
+      emptyStaff: false,
+      HasNoti: false
     },
     pi: 1,
     ps: 20

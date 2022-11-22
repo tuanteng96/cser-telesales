@@ -47,6 +47,15 @@ const telesalesApi = {
   getCareHistory: data => {
     return http.post('/api/v3/tele23@list_tele', JSON.stringify(data))
   },
+  getNotiMember: data => {
+    return http.post('/api/v3/Tele23@notiList', JSON.stringify(data))
+  },
+  addNotiMember: data => {
+    return http.post('/api/v3/Tele23@notiEdit', JSON.stringify(data))
+  },
+  deleteNotiMember: data => {
+    return http.post('/api/v3/Tele23@notiDelete', JSON.stringify(data))
+  },
   getListBookMember: ({ From = null, To = null, StockID = '', MemberID }) => {
     return http.get(
       `/api/v3/mbookadmin?cmd=getbooks&memberid=${MemberID}&from=${From}&to=${To}&stockid=${StockID}&status=XAC_NHAN&UserServiceIDs=&StatusMember=&StatusBook=&StatusAtHome=`

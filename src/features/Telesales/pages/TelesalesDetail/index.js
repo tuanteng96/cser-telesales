@@ -17,6 +17,7 @@ import moment from 'moment'
 import 'moment/locale/vi'
 import clsx from 'clsx'
 import { TelesalesContext } from '../..'
+import NotificationMember from './NotificationMember'
 
 moment.locale('vi')
 
@@ -226,6 +227,7 @@ function TelesalesDetail(props) {
           >
             <InterestedProducts />
             <CalendarMember />
+            <NotificationMember />
             <CareHistory />
           </PerfectScrollbar>
 

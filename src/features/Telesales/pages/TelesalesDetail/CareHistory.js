@@ -7,11 +7,10 @@ import { useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import Skeleton from 'react-loading-skeleton'
 import Swal from 'sweetalert2'
-
+import { useSelector } from 'react-redux'
+import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
 import moment from 'moment'
 import 'moment/locale/vi'
-import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
-import { useSelector } from 'react-redux'
 
 moment.locale('vi')
 

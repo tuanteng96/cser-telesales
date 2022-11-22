@@ -275,6 +275,19 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     </div>
                   </div>
                   <div className="mb-15px form-group">
+                    <label className="checkbox d-flex cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="filter.HasNoti"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        checked={values.filter.HasNoti}
+                      />
+                      <span className="checkbox-icon"></span>
+                      <span>Có lịch nhắc</span>
+                    </label>
+                  </div>
+                  <div className="mb-15px form-group">
                     <label className="font-label text-muted">
                       Số ngày khách chưa đến cơ sở
                     </label>
