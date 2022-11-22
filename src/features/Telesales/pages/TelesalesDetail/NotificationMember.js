@@ -44,7 +44,8 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
           Date: item.Date ? new Date(item.Date) : '',
           Desc: item.Desc,
           ID: item.ID,
-          IsNoti: item.IsNoti
+          IsNoti: item.IsNoti,
+          CreateDate: item.CreateDate ? new Date(item.CreateDate) : ''
         }
       }))
     }
@@ -192,6 +193,11 @@ function NotificationMember(props) {
         ID: values.noti?.ID || 0
       }
     }
+    if (values.noti.CreateDate) {
+      newData.noti.CreateDate = moment(values.noti.CreateDate).format(
+        'MM/DD/YYYY'
+      )
+    }
     telesalesApi
       .addNotiMember(newData)
       .then(response => {
@@ -319,7 +325,7 @@ function NotificationMember(props) {
                     <div className="mt-8px fw-500">
                       Ngày nhắc
                       <span className="pl-5px">
-                        {moment(item.Date).format('HH:mm DD-MM-YYYY')}
+                        {moment(item.Date).format('DD-MM-YYYY')}
                       </span>
                       {item.IsNoti && (
                         <span className="pl-5px font-size-xs text-success">

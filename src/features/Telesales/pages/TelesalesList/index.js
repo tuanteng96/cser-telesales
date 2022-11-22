@@ -147,7 +147,8 @@ function TelesalesList(props) {
       key: '',
       emptyStaff: false,
       NotiFrom: '',
-      NotiTo: ''
+      NotiTo: '',
+      HasNoti: true
     },
     pi: 1,
     ps: 20
