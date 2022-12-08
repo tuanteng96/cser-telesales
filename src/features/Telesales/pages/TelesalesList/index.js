@@ -10,10 +10,11 @@ import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import { TelesalesContext } from '../..'
 import { useWindowSize } from 'src/hooks/useWindowSize'
 import Text from 'react-texty'
+import ReminderCalendar from './components/ReminderCalendar'
+import clsx from 'clsx'
 
 import moment from 'moment'
 import 'moment/locale/vi'
-import clsx from 'clsx'
 
 moment.locale('vi')
 
@@ -23,6 +24,7 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
   }))
   const [Editing, setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
+
   const [value, setValue] = useState(
     rowData?.TeleUser?.ID > 0
       ? { label: rowData?.TeleUser?.FullName, value: rowData?.TeleUser?.ID }
@@ -131,6 +133,7 @@ function TelesalesList(props) {
   const [PageCount, setPageCount] = useState(0)
   const [PageTotal, setPageTotal] = useState(0)
   const [IsEditing, setIsEditing] = useState(false)
+  const [isModal, setIsModal] = useState(false)
 
   const { onOpenSidebar } = useContext(TelesalesContext)
 
@@ -389,6 +392,14 @@ function TelesalesList(props) {
     setFilters(prevState => ({ ...prevState, ...values, pi: 1 }))
   }
 
+  const onOpenModal = () => {
+    setIsModal(true)
+  }
+
+  const onHideModal = () => {
+    setIsModal(false)
+  }
+
   return (
     <div className="d-flex h-100 telesales-list">
       <Sidebar
@@ -398,19 +409,30 @@ function TelesalesList(props) {
         onRefresh={onRefresh}
       />
       <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
-        <div className="border-bottom py-15px text-uppercase fw-600 font-size-lg position-relative">
-          Danh sách khách hàng -{' '}
-          <span className="text-danger">{PageTotal}</span>
-          <span className="pl-5px font-label text-muted font-size-sm text-none">
-            khách hàng
-          </span>
-          <button
-            type="button"
-            className="btn btn-primary position-absolute top-9px right-0 d-lg-none"
-            onClick={onOpenSidebar}
-          >
-            <i className="fa-solid fa-filters"></i>
-          </button>
+        <div className="border-bottom py-10px text-uppercase fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
+          <div>
+            Danh sách khách hàng -
+            <span className="text-danger pl-3px">{PageTotal}</span>
+            <span className="pl-5px font-label text-muted font-size-sm text-none">
+              khách hàng
+            </span>
+          </div>
+          <div>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={onOpenModal}
+            >
+              <i className="far fa-bells pr-2px"></i> Lịch nhắc
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary position-absolute top-9px right-0 d-lg-none"
+              onClick={onOpenSidebar}
+            >
+              <i className="fa-solid fa-filters"></i>
+            </button>
+          </div>
         </div>
         <div className="flex-grow-1">
           <ReactBaseTableInfinite
@@ -428,6 +450,7 @@ function TelesalesList(props) {
           />
         </div>
       </div>
+      <ReminderCalendar show={isModal} onHide={onHideModal} />
     </div>
   )
 }
