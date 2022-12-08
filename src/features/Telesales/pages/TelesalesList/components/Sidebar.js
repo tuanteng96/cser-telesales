@@ -10,6 +10,7 @@ import clsx from 'clsx'
 import Skeleton from 'react-loading-skeleton'
 import MemberTransfer from './MemberTransfer'
 import telesalesApi from 'src/api/telesales.api'
+import Select from 'react-select'
 
 import vi from 'date-fns/locale/vi' // the locale you want
 import { useSelector } from 'react-redux'
@@ -28,13 +29,28 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
   const [btnLoading, setBtnLoading] = useState(false)
   const [isModal, setIsModal] = useState(false)
   const { isSidebar, onHideSidebar } = useContext(TelesalesContext)
-  const { teleAdv } = useSelector(({ auth }) => ({
-    teleAdv: auth?.Info?.rightsSum?.teleAdv || false
+  const [StocksList, setStocksList] = useState([])
+  const { teleAdv, Stocks } = useSelector(({ auth }) => ({
+    teleAdv: auth?.Info?.rightsSum?.teleAdv || false,
+    Stocks: auth?.Info?.Stocks || []
   }))
 
   useEffect(() => {
     getTypeConfig()
   }, [])
+
+  useEffect(() => {
+    const newStocks = [{ value: '', label: 'Tất cả cơ sở' }, ...Stocks]
+    setStocksList(() =>
+      newStocks
+        .filter(item => item.ID !== 778)
+        .map(item => ({
+          ...item,
+          label: item.Title || item.label,
+          value: item.ID || item.value
+        }))
+    )
+  }, [Stocks])
 
   const getTypeConfig = async () => {
     setLoadingType(true)
@@ -191,6 +207,25 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                         </div>
                       </div>
                     ))}
+                  <div className="mb-15px form-group">
+                    <label className="font-label text-muted mb-5px">
+                      Cơ sở
+                    </label>
+                    <Select
+                      name="filter.StockID"
+                      placeholder="Chọn cơ cở"
+                      classNamePrefix="select"
+                      options={StocksList}
+                      className="select-control"
+                      value={StocksList.filter(
+                        item =>
+                          Number(item.value) === Number(values?.filter?.StockID)
+                      )}
+                      onChange={otp => {
+                        setFieldValue('filter.StockID', otp ? otp.value : '')
+                      }}
+                    />
+                  </div>
                   <div className="mb-15px form-group">
                     <label className="font-label text-muted mb-5px">
                       Tìm theo SP, DV khách quan tâm

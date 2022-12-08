@@ -121,9 +121,10 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
 }
 
 function TelesalesList(props) {
-  const { UserID, rightsSum } = useSelector(({ auth }) => ({
+  const { UserID, rightsSum, CrStockID } = useSelector(({ auth }) => ({
     UserID: auth?.User?.ID || '',
-    rightsSum: auth?.Info?.rightsSum || null
+    rightsSum: auth?.Info?.rightsSum || null,
+    CrStockID: auth?.Info?.CrStockID || ''
   }))
   const [ListTelesales, setListTelesales] = useState([])
   const [loading, setLoading] = useState(false)
@@ -148,7 +149,8 @@ function TelesalesList(props) {
       emptyStaff: false,
       NotiFrom: '',
       NotiTo: '',
-      HasNoti: false
+      HasNoti: false,
+      StockID: CrStockID
     },
     pi: 1,
     ps: 20
@@ -208,6 +210,7 @@ function TelesalesList(props) {
       .getListMemberTelesales(newFilter)
       .then(({ data }) => {
         if (data.error) {
+          setLoading(false)
           // Xử lí lỗi
         } else {
           const { List, PCount, Total } = {
