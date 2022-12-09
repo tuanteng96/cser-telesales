@@ -7,11 +7,19 @@ import Cookies from 'js-cookie'
 import Skeleton from 'react-loading-skeleton'
 import { useSelector } from 'react-redux'
 import CalendarMemberBook from './CalendarMemberBook'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+import clsx from 'clsx'
+import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 moment.locale('vi')
+
+const perfectScrollbarOptions = {
+  wheelSpeed: 2,
+  wheelPropagation: false
+}
 
 function CalendarMember(props) {
   let { MemberID } = useParams()
@@ -152,8 +160,8 @@ function CalendarMember(props) {
   }
 
   return (
-    <div className="border-bottom p-18px">
-      <div className="text-uppercase d-flex justify-content-between align-items-center">
+    <div className="border-bottom">
+      <div className="text-uppercase d-flex justify-content-between align-items-center pt-18px pl-18px pr-18px pb-10px">
         <span className="fw-600 text-primary">Đặt lịch khách hàng</span>
         <div className="d-flex">
           <button
@@ -167,12 +175,22 @@ function CalendarMember(props) {
           </button>
         </div>
       </div>
-      <div>
+      <PerfectScrollbar
+        options={perfectScrollbarOptions}
+        className="scroll pl-18px pr-18px pb-18px max-h-300px"
+        style={{ position: 'relative' }}
+      >
         {loading &&
           Array(1)
             .fill()
             .map((item, index) => (
-              <div className="bg-light rounded-sm p-15px mt-12px" key={index}>
+              <div
+                className={clsx(
+                  'bg-light rounded-sm p-15px',
+                  1 - 1 !== index && 'mb-12px'
+                )}
+                key={index}
+              >
                 <div className="d-flex justify-content-between">
                   <div>
                     <Skeleton count={1} width={130} height={15} />
@@ -190,7 +208,13 @@ function CalendarMember(props) {
           <>
             {ListBooks && ListBooks.length > 0 ? (
               ListBooks.map((item, index) => (
-                <div className="bg-light rounded-sm p-15px mt-12px" key={index}>
+                <div
+                  className={clsx(
+                    'bg-light rounded-sm p-15px',
+                    ListBooks.length - 1 !== index && 'mb-12px'
+                  )}
+                  key={index}
+                >
                   <div className="d-flex justify-content-between">
                     <div>
                       <span className="font-number fw-500">
@@ -211,11 +235,24 @@ function CalendarMember(props) {
                 </div>
               ))
             ) : (
-              <div>Không có lịch</div>
+              <div className="w-100 d-flex align-items-center justify-content-center">
+                <div className="text-center">
+                  <img
+                    className="w-100 max-w-120px"
+                    src={AssetsHelpers.toAbsoluteUrl(
+                      '/_assets/images/data-empty.png'
+                    )}
+                    alt="Không có dữ liệu"
+                  />
+                  <div className="text-center font-size-base fw-300">
+                    Không có lịch.
+                  </div>
+                </div>
+              </div>
             )}
           </>
         )}
-      </div>
+      </PerfectScrollbar>
       <CalendarMemberBook
         show={isModalBook}
         onHide={onHideModalBook}

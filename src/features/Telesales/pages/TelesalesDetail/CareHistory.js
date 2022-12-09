@@ -9,10 +9,18 @@ import Skeleton from 'react-loading-skeleton'
 import Swal from 'sweetalert2'
 import { useSelector } from 'react-redux'
 import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+
 import moment from 'moment'
 import 'moment/locale/vi'
+import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 moment.locale('vi')
+
+const perfectScrollbarOptions = {
+  wheelSpeed: 2,
+  wheelPropagation: false
+}
 
 const initialValues = {
   Content: '',
@@ -120,8 +128,8 @@ function CareHistory(props) {
   }
 
   return (
-    <div className="p-18px">
-      <div className="text-uppercase d-flex justify-content-between align-items-center">
+    <div>
+      <div className="text-uppercase d-flex justify-content-between align-items-center pt-18px pl-18px pr-18px pb-10px">
         <span className="fw-600 text-primary">Lịch sử chăm sóc</span>
         <OverlayTrigger
           rootClose
@@ -203,12 +211,22 @@ function CareHistory(props) {
           <button className="btn btn-xs btn-success">Thêm mới</button>
         </OverlayTrigger>
       </div>
-      <div>
+      <PerfectScrollbar
+        options={perfectScrollbarOptions}
+        className="scroll pl-18px pr-18px pb-18px max-h-300px"
+        style={{ position: 'relative' }}
+      >
         {loading &&
           Array(1)
             .fill()
             .map((item, index) => (
-              <div className="bg-light rounded-sm p-15px mt-12px" key={index}>
+              <div
+                className={clsx(
+                  'bg-light rounded-sm p-15px',
+                  1 - 1 !== index && 'mb-12px'
+                )}
+                key={index}
+              >
                 <div className="d-flex justify-content-between">
                   <span className="font-number fw-500">
                     <Skeleton count={1} width={130} height={15} />
@@ -226,7 +244,13 @@ function CareHistory(props) {
           <>
             {List && List.length > 0 ? (
               List.map((item, index) => (
-                <div className="bg-light rounded-sm p-15px mt-12px" key={index}>
+                <div
+                  className={clsx(
+                    'bg-light rounded-sm p-15px',
+                    List.length - 1 !== index && 'mb-12px'
+                  )}
+                  key={index}
+                >
                   <div className="d-flex justify-content-between">
                     <span className="font-number fw-500">
                       {moment(item.CreateDate).format('HH:mm DD-MM-YYYY')}
@@ -252,11 +276,24 @@ function CareHistory(props) {
                 </div>
               ))
             ) : (
-              <div className="mt-10px">Không có lịch sử</div>
+              <div className="w-100 d-flex align-items-center justify-content-center">
+                <div className="text-center">
+                  <img
+                    className="w-100 max-w-120px"
+                    src={AssetsHelpers.toAbsoluteUrl(
+                      '/_assets/images/data-empty.png'
+                    )}
+                    alt="Không có dữ liệu"
+                  />
+                  <div className="text-center font-size-base fw-300">
+                    Không có lịch nhắc.
+                  </div>
+                </div>
+              </div>
             )}
           </>
         )}
-      </div>
+      </PerfectScrollbar>
     </div>
   )
 }

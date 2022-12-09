@@ -9,6 +9,13 @@ import telesalesApi from 'src/api/telesales.api'
 import Text from 'react-texty'
 import Skeleton from 'react-loading-skeleton'
 import Swal from 'sweetalert2'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
+
+const perfectScrollbarOptions = {
+  wheelSpeed: 2,
+  wheelPropagation: false
+}
 
 const initialValues = {
   add_wishlist: null
@@ -129,8 +136,8 @@ function InterestedProducts(props) {
   }
 
   return (
-    <div className="border-bottom p-18px">
-      <div className="text-uppercase d-flex justify-content-between align-items-center">
+    <div className="border-bottom">
+      <div className="text-uppercase d-flex justify-content-between align-items-center pt-18px pl-18px pr-18px pb-10px">
         <span className="fw-600 text-primary">SP khách hàng quan tâm</span>
         <OverlayTrigger
           rootClose
@@ -195,13 +202,20 @@ function InterestedProducts(props) {
           <button className="btn btn-xs btn-success">Thêm mới</button>
         </OverlayTrigger>
       </div>
-      <div>
+      <PerfectScrollbar
+        options={perfectScrollbarOptions}
+        className="scroll pl-18px pr-18px pb-18px max-h-300px"
+        style={{ position: 'relative' }}
+      >
         {loading &&
           Array(1)
             .fill()
             .map((item, index) => (
               <div
-                className="bg-light rounded-sm mt-12px d-flex overflow-hidden"
+                className={clsx(
+                  'bg-light rounded-sm d-flex overflow-hidden',
+                  1 - 1 !== index && 'mb-12px'
+                )}
                 key={index}
               >
                 <div className="flex-fill py-8px px-15px fw-500">
@@ -217,7 +231,10 @@ function InterestedProducts(props) {
             {List && List.length > 0 ? (
               List.map((item, index) => (
                 <div
-                  className="bg-light rounded-sm mt-12px d-flex overflow-hidden"
+                  className={clsx(
+                    'bg-light rounded-sm d-flex overflow-hidden',
+                    List.length - 1 !== index && 'mb-12px'
+                  )}
                   key={index}
                 >
                   <div
@@ -235,11 +252,24 @@ function InterestedProducts(props) {
                 </div>
               ))
             ) : (
-              <div className="mt-10px">Không có sản phẩm</div>
+              <div className="w-100 d-flex align-items-center justify-content-center">
+                <div className="text-center">
+                  <img
+                    className="w-100 max-w-120px"
+                    src={AssetsHelpers.toAbsoluteUrl(
+                      '/_assets/images/data-empty.png'
+                    )}
+                    alt="Không có dữ liệu"
+                  />
+                  <div className="text-center font-size-base fw-300">
+                    Không có sản phẩm.
+                  </div>
+                </div>
+              </div>
             )}
           </>
         )}
-      </div>
+      </PerfectScrollbar>
     </div>
   )
 }
