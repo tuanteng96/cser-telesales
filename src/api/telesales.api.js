@@ -72,6 +72,9 @@ const telesalesApi = {
       '/api/v3/tele23@member_transferTeleUserIDs',
       JSON.stringify(data)
     )
+  },
+  getMemberTeleNoti: data => {
+    return http.post('/api/v3/Tele23@MemberTeleNoti', JSON.stringify(data))
   }
 }
 export default telesalesApi

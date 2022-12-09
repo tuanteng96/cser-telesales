@@ -410,24 +410,25 @@ function TelesalesList(props) {
       />
       <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
         <div className="border-bottom py-10px text-uppercase fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
-          <div>
+          <div className="flex-1">
             Danh sách khách hàng -
             <span className="text-danger pl-3px">{PageTotal}</span>
             <span className="pl-5px font-label text-muted font-size-sm text-none">
               khách hàng
             </span>
           </div>
-          <div>
+          <div className="w-85px w-md-auto">
             <button
               type="button"
               className="btn btn-primary"
               onClick={onOpenModal}
             >
-              <i className="far fa-bells pr-2px"></i> Lịch nhắc
+              <i className="far fa-bells pr-5px"></i>
+              <span className="d-none d-md-inline-block">Lịch nhắc</span>
             </button>
             <button
               type="button"
-              className="btn btn-primary position-absolute top-9px right-0 d-lg-none"
+              className="btn btn-primary d-lg-none ml-5px"
               onClick={onOpenSidebar}
             >
               <i className="fa-solid fa-filters"></i>
@@ -450,7 +451,7 @@ function TelesalesList(props) {
           />
         </div>
       </div>
-      <ReminderCalendar show={isModal} onHide={onHideModal} />
+      <ReminderCalendar show={isModal} onHide={onHideModal} filters={filters} />
     </div>
   )
 }

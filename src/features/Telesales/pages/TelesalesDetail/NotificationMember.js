@@ -254,7 +254,7 @@ function NotificationMember(props) {
   }
 
   return (
-    <div className="p-18px">
+    <div className="p-18px border-bottom">
       <div className="text-uppercase d-flex justify-content-between align-items-center">
         <span className="fw-600 text-primary">Lịch nhắc</span>
         <OverlayComponent
