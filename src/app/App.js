@@ -12,6 +12,8 @@ import TelesalesOptionUse from 'src/features/Telesales/pages/TelesalesOption/Tel
 import UnauthenticateGuard from 'src/guards/UnauthenticateGuard'
 import Authentication from 'src/features/Authentication'
 import AuthenticateGuard from 'src/guards/AuthenticateGuard'
+import Statistical from 'src/features/Statistical'
+import StatisticalList from 'src/features/Statistical/pages/StatisticalList'
 
 function App({ store, persistor }) {
   return (
@@ -45,6 +47,17 @@ function App({ store, persistor }) {
                 />
                 <Route path="*" element={<Navigate to="/dich-vu" replace />} />
               </Route>
+            </Route>
+            <Route
+              path="/thong-ke"
+              element={
+                <UnauthenticateGuard>
+                  <Statistical />
+                </UnauthenticateGuard>
+              }
+            >
+              <Route index element={<Navigate to="danh-sach" replace />} />
+              <Route path="danh-sach" element={<StatisticalList />} />
             </Route>
             <Route
               path="/yeu-cau-quyen-truy-cap"

@@ -409,15 +409,19 @@ function TelesalesList(props) {
         onRefresh={onRefresh}
       />
       <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
-        <div className="border-bottom py-10px text-uppercase fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
+        <div className="border-bottom py-10px fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
           <div className="flex-1">
-            Danh sách khách hàng -
+            <span className="text-uppercase ">Danh sách khách hàng -</span>
             <span className="text-danger pl-3px">{PageTotal}</span>
             <span className="pl-5px font-label text-muted font-size-sm text-none">
               khách hàng
             </span>
           </div>
           <div className="w-85px w-md-auto">
+            <Link className="btn btn-primary mr-8px" to="/thong-ke/danh-sach">
+              <i className="far fa-sort-amount-up-alt pr-5px"></i>
+              <span className="d-none d-md-inline-block">Thống kê</span>
+            </Link>
             <button
               type="button"
               className="btn btn-primary"

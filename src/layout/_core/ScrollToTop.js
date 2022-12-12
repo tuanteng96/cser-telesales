@@ -16,9 +16,15 @@ const ScrollToTop = props => {
       const pathnameList = location?.pathname.split('/')
       if (pathnameList.length > 3) {
         window.top.location.hash = `mb:danh-sach/${pathnameList[2]}`
+        return
+      }
+      if (pathnameList.length === 3 && pathnameList.includes('thong-ke')) {
+        window.top.location.hash = `mb:thong-ke/danh-sach`
+        return
       }
       if (pathnameList.length === 2) {
         window.top.location.hash = `mb:/`
+        return
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
