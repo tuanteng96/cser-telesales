@@ -89,7 +89,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       <SelectStaffs
                         className="select-control"
                         menuPosition="fixed"
-                        menuPlacement="top"
+                        menuPlacement="bottom"
                         name="filter.UserID"
                         onChange={otp => {
                           setFieldValue('filter.UserID', otp, false)
