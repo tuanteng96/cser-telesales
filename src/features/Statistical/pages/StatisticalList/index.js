@@ -12,8 +12,10 @@ import 'moment/locale/vi'
 moment.locale('vi')
 
 function StatisticalList(props) {
-  const { CrStockID } = useSelector(({ auth }) => ({
-    CrStockID: auth?.Info?.CrStockID || ''
+  const { CrStockID, teleAdv, User } = useSelector(({ auth }) => ({
+    CrStockID: auth?.Info?.CrStockID || '',
+    teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false,
+    User: auth?.Info?.User
   }))
   const [ListTelesales, setListTelesales] = useState([])
   const [loading, setLoading] = useState(false)
@@ -22,7 +24,12 @@ function StatisticalList(props) {
 
   const [filters, setFilters] = useState({
     filter: {
-      UserID: '',
+      UserID: !teleAdv
+        ? {
+            label: User.FullName,
+            value: User.ID
+          }
+        : '',
       From: '',
       To: '',
       StockID: CrStockID,

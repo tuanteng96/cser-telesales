@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import clsx from 'clsx'
-import Select from 'react-select'
 import { useSelector } from 'react-redux'
 import { StatisticalContext } from 'src/features/Statistical'
 import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
 
 import vi from 'date-fns/locale/vi' // the locale you want
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
+import SelectStocks from 'src/components/Selects/SelectStocks'
 
 registerLocale('vi', vi) // register it with the name you want
 
@@ -20,24 +20,9 @@ Sidebar.propTypes = {
 
 function Sidebar({ filters, onSubmit, loading, onRefresh }) {
   const { isSidebar, onHideSidebar } = useContext(StatisticalContext)
-  const [StocksList, setStocksList] = useState([])
-  const { teleAdv, Stocks } = useSelector(({ auth }) => ({
-    teleAdv: auth?.Info?.rightsSum?.teleAdv || false,
-    Stocks: auth?.Info?.Stocks || []
+  const { teleAdv } = useSelector(({ auth }) => ({
+    teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false
   }))
-
-  useEffect(() => {
-    const newStocks = [{ value: '', label: 'Tất cả cơ sở' }, ...Stocks]
-    setStocksList(() =>
-      newStocks
-        .filter(item => item.ID !== 778)
-        .map(item => ({
-          ...item,
-          label: item.Title || item.label,
-          value: item.ID || item.value
-        }))
-    )
-  }, [Stocks])
 
   return (
     <>
@@ -66,16 +51,9 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     <label className="font-label text-muted mb-5px">
                       Cơ sở
                     </label>
-                    <Select
+                    <SelectStocks
                       name="filter.StockID"
-                      placeholder="Chọn cơ cở"
-                      classNamePrefix="select"
-                      options={StocksList}
-                      className="select-control"
-                      value={StocksList.filter(
-                        item =>
-                          Number(item.value) === Number(values?.filter?.StockID)
-                      )}
+                      value={values?.filter?.StockID}
                       onChange={otp => {
                         setFieldValue('filter.StockID', otp ? otp.value : '')
                       }}

@@ -20,7 +20,7 @@ moment.locale('vi')
 
 const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
   const { teleAdv } = useSelector(({ auth }) => ({
-    teleAdv: auth?.Info?.rightsSum?.teleAdv || false
+    teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false
   }))
   const [Editing, setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -123,9 +123,9 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
 }
 
 function TelesalesList(props) {
-  const { UserID, rightsSum, CrStockID } = useSelector(({ auth }) => ({
-    UserID: auth?.User?.ID || '',
-    rightsSum: auth?.Info?.rightsSum || null,
+  const { User, teleAdv, CrStockID } = useSelector(({ auth }) => ({
+    User: auth?.Info?.User,
+    teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false,
     CrStockID: auth?.Info?.CrStockID || ''
   }))
   const [ListTelesales, setListTelesales] = useState([])
@@ -140,7 +140,12 @@ function TelesalesList(props) {
   const [filters, setFilters] = useState({
     filter: {
       tele_process: '', //Đang tiếp cận,Đặt lịch thành công
-      tele_user_id: rightsSum?.tele && rightsSum?.teleAdv ? UserID : '',
+      tele_user_id: !teleAdv
+        ? {
+            label: User.FullName,
+            value: User.ID
+          }
+        : '',
       wishlist: '', // id,id san_pham
       birthDateFrom: '', //31/12
       birthDateTo: '', //31/12

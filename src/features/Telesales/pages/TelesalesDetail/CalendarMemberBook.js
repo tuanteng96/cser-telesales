@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import Select, { components } from 'react-select'
+import { components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { Modal } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
@@ -11,6 +11,7 @@ import moment from 'moment'
 import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
 import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
+import SelectStocks from 'src/components/Selects/SelectStocks'
 moment.locale('vi')
 
 CalendarMemberBook.propTypes = {
@@ -54,7 +55,7 @@ const initialValue = {
 function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
   let { MemberID } = useParams()
   const [initialValues, setInitialValues] = useState(initialValue)
-  const { AuthStocks, AuthCrStockID } = useSelector(({ auth }) => ({
+  const { AuthCrStockID } = useSelector(({ auth }) => ({
     AuthStocks: auth.Info.Stocks.filter(item => item.ParentID !== 0).map(
       item => ({
         ...item,
@@ -168,16 +169,14 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                       showTimeSelect
                       timeFormat="HH:mm"
                     />
-                    <Select
+                    <SelectStocks
                       className={`select-control mt-2 ${
                         errors.StockID && touched.StockID
                           ? 'is-invalid solid-invalid'
                           : ''
                       }`}
                       classNamePrefix="select"
-                      value={AuthStocks.filter(
-                        item => item.ID === values.StockID
-                      )}
+                      value={values.StockID}
                       //isLoading={true}
                       //isDisabled={true}
                       isClearable
@@ -185,7 +184,6 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                       //menuIsOpen={true}
                       name="StockID"
                       placeholder="Chọn cơ sở"
-                      options={AuthStocks}
                       onChange={option => {
                         setFieldValue('StockID', option ? option.value : '')
                         setFieldValue('RootIdS', '')

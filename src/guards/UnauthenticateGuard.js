@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'
 
 export default function UnauthenticateGuard({ children }) {
   const { tele, teleAdv } = useSelector(({ auth }) => ({
-    tele: auth.Info?.rightsSum?.tele,
-    teleAdv: auth.Info?.rightsSum?.teleAdv
+    tele: auth.Info?.rightsSum?.tele?.hasRight,
+    teleAdv: auth.Info?.rightsSum?.teleAdv?.hasRight
   }))
 
   if (!tele && !teleAdv) {

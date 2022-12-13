@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { DevHelpers } from 'src/helpers/DevHelpers'
 import { LayoutSplashScreen } from 'src/layout/_core/SplashScreen'
 import { setProfile } from './AuthSlice'
 
@@ -21,6 +22,45 @@ function AuthInit(props) {
 
   useEffect(() => {
     async function requestUser() {
+      if (DevHelpers.isDevelopment()) {
+        window.Info = {
+          User: {
+            FullName: 'Admin System',
+            UserName: 'admin',
+            ID: 1
+          },
+          Stocks: [
+            {
+              ID: 778,
+              Title: 'Quản lý cơ sở',
+              ParentID: 0
+            },
+            {
+              ID: 8975,
+              Title: 'Cser Hà Nội',
+              ParentID: 778
+            },
+            {
+              ID: 10053,
+              Title: 'Cser Hồ Chí Minh',
+              ParentID: 778
+            }
+          ],
+          CrStockID: 8975,
+          rightsSum: {
+            tele: {
+              hasRight: true,
+              stocks: [{ ID: 8975, Title: 'Cser Hà Nội' }]
+            },
+            teleAdv: {
+              hasRight: true,
+              stocks: [{ ID: 8975, Title: 'Cser Hà Nội' }]
+            }
+          }
+        }
+        window.token =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDE5NzIiLCJuYmYiOjE2NzA5Mjg3MzUsImV4cCI6MTY3MTUzMzUzNSwiaWF0IjoxNjcwOTI4NzM1fQ.JGOW0HhBgDKNLCji9qRaGUwVMfLxwYua742v5Dt6-gA'
+      }
       checkInfo(() => {
         dispatch(
           setProfile({
@@ -34,6 +74,12 @@ function AuthInit(props) {
     if (!window.top.Info || !window.top.token) {
       requestUser()
     } else {
+      dispatch(
+        setProfile({
+          Info: window.top.Info,
+          token: window.top.token
+        })
+      )
       setShowSplashScreen(false)
     }
 
