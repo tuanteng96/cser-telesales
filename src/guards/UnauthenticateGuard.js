@@ -3,12 +3,11 @@ import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 export default function UnauthenticateGuard({ children }) {
-  const { tele, teleAdv } = useSelector(({ auth }) => ({
-    tele: auth.Info?.rightsSum?.tele?.hasRight,
-    teleAdv: auth.Info?.rightsSum?.teleAdv?.hasRight
+  const { tele } = useSelector(({ auth }) => ({
+    tele: auth.Info?.rightsSum?.tele?.hasRight
   }))
 
-  if (!tele && !teleAdv) {
+  if (!tele) {
     return <Navigate to="/yeu-cau-quyen-truy-cap" />
   }
 

@@ -9,9 +9,10 @@ SelectStaffs.propTypes = {
   onChange: PropTypes.func
 }
 
-function SelectStaffs({ onChange, value, isLoading, ...props }) {
-  const { Stocks } = useSelector(({ auth }) => ({
-    Stocks: auth?.PermissionStocks
+function SelectStaffs({ onChange, value, isLoading, adv, ...props }) {
+  const { Stocks, StockAdv } = useSelector(({ auth }) => ({
+    Stocks: auth?.PermissionStocks,
+    StockAdv: auth?.PermissionStocksAdv
   }))
   const [loading, setLoading] = useState(false)
 
@@ -37,10 +38,18 @@ function SelectStaffs({ onChange, value, isLoading, ...props }) {
           newData.push(newItem)
         }
       }
-      if (Stocks !== 'All Stocks') {
-        newData = newData.filter(
-          o => Stocks && Stocks.some(x => x.ID === o.groupid)
-        )
+      if (adv) {
+        if (StockAdv !== 'All Stocks') {
+          newData = newData.filter(
+            o => StockAdv && StockAdv.some(x => x.ID === o.groupid)
+          )
+        }
+      } else {
+        if (Stocks !== 'All Stocks') {
+          newData = newData.filter(
+            o => Stocks && Stocks.some(x => x.ID === o.groupid)
+          )
+        }
       }
     }
     setLoading(false)

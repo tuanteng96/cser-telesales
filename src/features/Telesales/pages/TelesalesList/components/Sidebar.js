@@ -375,6 +375,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                           Chọn theo nhân viên
                         </label>
                         <SelectStaffs
+                          adv={true}
                           className="select-control"
                           menuPosition="fixed"
                           menuPlacement="top"

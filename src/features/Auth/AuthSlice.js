@@ -10,23 +10,28 @@ const Auth = createSlice({
     setProfile: (state, { payload }) => {
       //Unauthorized
       let PermissionStocks = []
+      let PermissionStocksAdv = []
       if (
         payload?.Info?.rightsSum?.tele?.hasRight ||
         payload?.Info?.rightsSum?.teleAdv?.hasRight
       ) {
         if (payload?.Info?.rightsSum?.tele?.stocks) {
           PermissionStocks = payload?.Info?.rightsSum?.tele?.stocks || []
+          PermissionStocksAdv = payload?.Info?.rightsSum?.teleAdv?.stocks || []
         } else {
           PermissionStocks = 'All Stocks'
+          PermissionStocksAdv = 'All Stocks'
         }
       } else {
         PermissionStocks = '401 Unauthorized'
+        PermissionStocksAdv = '401 Unauthorized'
       }
       return {
         ...state,
         Token: payload.token,
         Info: payload.Info,
-        PermissionStocks: PermissionStocks
+        PermissionStocks: PermissionStocks,
+        PermissionStocksAdv: PermissionStocksAdv
       }
     }
   }

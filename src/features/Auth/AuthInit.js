@@ -46,7 +46,7 @@ function AuthInit(props) {
               ParentID: 778
             }
           ],
-          CrStockID: 8975,
+          CrStockID: 8975, //8975
           rightsSum: {
             tele: {
               hasRight: true,
@@ -54,12 +54,12 @@ function AuthInit(props) {
             },
             teleAdv: {
               hasRight: true,
-              stocks: [{ ID: 8975, Title: 'Cser Hà Nội' }]
+              stocks: [{ ID: 10053, Title: 'Cser Hồ Chí Minh' }]
             }
           }
         }
         window.token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDE5NzIiLCJuYmYiOjE2NzA5Mjg3MzUsImV4cCI6MTY3MTUzMzUzNSwiaWF0IjoxNjcwOTI4NzM1fQ.JGOW0HhBgDKNLCji9qRaGUwVMfLxwYua742v5Dt6-gA'
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDE5ODAiLCJuYmYiOjE2NzA5ODg2OTEsImV4cCI6MTY3MTU5MzQ5MSwiaWF0IjoxNjcwOTg4NjkxfQ.EPsLbSMpotzapsm2TRnIUsQR1wxFHB00xp_K9GEAkR8'
       }
       checkInfo(() => {
         dispatch(

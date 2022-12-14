@@ -74,6 +74,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                         }}
                         value={values.filter.UserID}
                         isClearable={true}
+                        adv={true}
                       />
                     </div>
                   )}

@@ -59,6 +59,7 @@ function MemberTransfer({ onHide, show, onSubmit, loading }) {
                     }}
                     value={values.FromTeleUserID}
                     isClearable={true}
+                    adv={true}
                   />
                 </div>
                 <div className="form-group">
@@ -78,6 +79,7 @@ function MemberTransfer({ onHide, show, onSubmit, loading }) {
                     }}
                     value={values.ToTeleUserID}
                     isClearable={true}
+                    adv={true}
                   />
                 </div>
               </Modal.Body>

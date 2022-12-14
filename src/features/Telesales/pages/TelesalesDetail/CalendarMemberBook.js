@@ -179,7 +179,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                       value={values.StockID}
                       //isLoading={true}
                       //isDisabled={true}
-                      isClearable
+                      //isClearable
                       isSearchable
                       //menuIsOpen={true}
                       name="StockID"

@@ -113,6 +113,7 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
                 }}
                 value={value}
                 isClearable={true}
+                adv={true}
               />
             </div>
           )}
