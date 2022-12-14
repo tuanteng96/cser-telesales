@@ -22,6 +22,10 @@ const ScrollToTop = props => {
         window.top.location.hash = `mb:thong-ke/danh-sach`
         return
       }
+      if (pathnameList.length === 3 && pathnameList.includes('lich-nhac')) {
+        window.top.location.hash = `mb:lich-nhac/danh-sach`
+        return
+      }
       if (pathnameList.length === 2) {
         window.top.location.hash = `mb:/`
         return

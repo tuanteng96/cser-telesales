@@ -12,6 +12,7 @@ import { useWindowSize } from 'src/hooks/useWindowSize'
 import Text from 'react-texty'
 import ReminderCalendar from './components/ReminderCalendar'
 import clsx from 'clsx'
+import Navbar from 'src/components/Navbar/Navbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
@@ -398,9 +399,9 @@ function TelesalesList(props) {
     setFilters(prevState => ({ ...prevState, ...values, pi: 1 }))
   }
 
-  const onOpenModal = () => {
-    setIsModal(true)
-  }
+  // const onOpenModal = () => {
+  //   setIsModal(true)
+  // }
 
   const onHideModal = () => {
     setIsModal(false)
@@ -423,19 +424,16 @@ function TelesalesList(props) {
               khách hàng
             </span>
           </div>
-          <div className="w-85px w-md-auto">
-            <Link className="btn btn-primary mr-8px" to="/thong-ke/danh-sach">
-              <i className="far fa-sort-amount-up-alt pr-5px"></i>
-              <span className="d-none d-md-inline-block">Thống kê</span>
-            </Link>
-            <button
+          <div className="w-85px w-md-auto d-flex">
+            <Navbar />
+            {/* <button
               type="button"
               className="btn btn-primary"
               onClick={onOpenModal}
             >
               <i className="far fa-bells pr-5px"></i>
               <span className="d-none d-md-inline-block">Lịch nhắc</span>
-            </button>
+            </button> */}
             <button
               type="button"
               className="btn btn-primary d-lg-none ml-5px"

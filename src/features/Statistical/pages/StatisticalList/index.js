@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import telesalesApi from 'src/api/telesales.api'
-import { Link } from 'react-router-dom'
 import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite'
 import Sidebar from './components/Sidebar'
 import { StatisticalContext } from '../..'
+import Navbar from 'src/components/Navbar/Navbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
@@ -171,16 +171,11 @@ function StatisticalList(props) {
             </span>
             <span className="text-danger pl-3px">{PageTotal}</span>
             <span className="pl-5px font-label text-muted font-size-sm text-none">
-              khách hàng
+              lượt chăm sóc
             </span>
           </div>
-          <div className="w-85px w-md-auto">
-            <Link className="btn btn-primary" to="/danh-sach">
-              <i className="far fa-list pr-5px"></i>
-              <span className="d-none d-md-inline-block">
-                Danh sách khách hàng
-              </span>
-            </Link>
+          <div className="w-85px w-md-auto d-flex">
+            <Navbar />
             <button
               type="button"
               className="btn btn-primary d-lg-none ml-5px"

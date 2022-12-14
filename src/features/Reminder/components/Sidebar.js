@@ -4,12 +4,12 @@ import { Formik, Form } from 'formik'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import clsx from 'clsx'
 import { useSelector } from 'react-redux'
-import { StatisticalContext } from 'src/features/Statistical'
-import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
-
-import vi from 'date-fns/locale/vi' // the locale you want
+import Select from 'react-select'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import SelectStocks from 'src/components/Selects/SelectStocks'
+import { ReminderContext } from '..'
+
+import vi from 'date-fns/locale/vi' // the locale you want
 
 registerLocale('vi', vi) // register it with the name you want
 
@@ -18,8 +18,19 @@ Sidebar.propTypes = {
   onSubmit: PropTypes.func
 }
 
+const StatusList = [
+  {
+    value: 0,
+    label: 'Chưa nhắc'
+  },
+  {
+    value: 1,
+    label: 'Đã nhắc'
+  }
+]
+
 function Sidebar({ filters, onSubmit, loading, onRefresh }) {
-  const { isSidebar, onHideSidebar } = useContext(StatisticalContext)
+  const { isSidebar, onHideSidebar } = useContext(ReminderContext)
   const { teleAdv } = useSelector(({ auth }) => ({
     teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false
   }))
@@ -52,10 +63,10 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       Cơ sở
                     </label>
                     <SelectStocks
-                      name="filter.StockID"
-                      value={values?.filter?.StockID}
+                      name="StockID"
+                      value={values?.StockID}
                       onChange={otp => {
-                        setFieldValue('filter.StockID', otp ? otp.value : '')
+                        setFieldValue('StockID', otp ? otp.value : '')
                       }}
                     />
                   </div>
@@ -68,11 +79,11 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                         className="select-control"
                         menuPosition="fixed"
                         menuPlacement="bottom"
-                        name="filter.UserID"
+                        name="UserId"
                         onChange={otp => {
-                          setFieldValue('filter.UserID', otp, false)
+                          setFieldValue('UserId', otp, false)
                         }}
-                        value={values.filter.UserID}
+                        value={values.UserId}
                         isClearable={true}
                         adv={true}
                       />
@@ -87,9 +98,9 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                         <DatePicker
                           calendarClassName="hide-header"
                           onChange={date => {
-                            setFieldValue('filter.From', date, false)
+                            setFieldValue('DateFrom', date, false)
                           }}
-                          selected={values.filter.From}
+                          selected={values.DateFrom}
                           placeholderText="Từ ngày"
                           className="form-control"
                           dateFormat="dd/MM/yyyy"
@@ -102,9 +113,9 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       <div className="flex-fill">
                         <DatePicker
                           onChange={date => {
-                            setFieldValue('filter.To', date, false)
+                            setFieldValue('DateTo', date, false)
                           }}
-                          selected={values.filter.To}
+                          selected={values.DateTo}
                           placeholderText="Đến ngày"
                           className="form-control"
                           dateFormat="dd/MM/yyyy"
@@ -115,18 +126,19 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                   </div>
                   <div className="form-group mb-0">
                     <label className="font-label text-muted mb-5px">
-                      Kết quả
+                      Trạng thái
                     </label>
-                    <SelectTeleHis
-                      isLoading={false}
-                      className="w-100 flex-1"
-                      placeholder="Chọn kết quả"
-                      name="filter.Result"
+                    <Select
+                      classNamePrefix="select"
+                      options={StatusList}
+                      className="select-control"
+                      name="IsNoti"
+                      value={values?.IsNoti}
                       onChange={otp => {
-                        setFieldValue('filter.Result', otp, false)
+                        setFieldValue('IsNoti', otp)
                       }}
-                      value={values.filter.Result}
-                      isClearable={true}
+                      placeholder="Chọn trạng thái"
+                      isClearable
                     />
                   </div>
                 </div>

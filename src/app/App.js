@@ -14,6 +14,8 @@ import Authentication from 'src/features/Authentication'
 import AuthenticateGuard from 'src/guards/AuthenticateGuard'
 import Statistical from 'src/features/Statistical'
 import StatisticalList from 'src/features/Statistical/pages/StatisticalList'
+import Reminder from 'src/features/Reminder'
+import ReminderList from 'src/features/Reminder/pages/ReminderList'
 
 function App({ store, persistor }) {
   return (
@@ -58,6 +60,17 @@ function App({ store, persistor }) {
             >
               <Route index element={<Navigate to="danh-sach" replace />} />
               <Route path="danh-sach" element={<StatisticalList />} />
+            </Route>
+            <Route
+              path="/lich-nhac"
+              element={
+                <UnauthenticateGuard>
+                  <Reminder />
+                </UnauthenticateGuard>
+              }
+            >
+              <Route index element={<Navigate to="danh-sach" replace />} />
+              <Route path="danh-sach" element={<ReminderList />} />
             </Route>
             <Route
               path="/yeu-cau-quyen-truy-cap"

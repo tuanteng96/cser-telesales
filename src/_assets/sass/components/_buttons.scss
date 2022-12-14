@@ -1,13 +1,27 @@
 .btn {
-  border-radius: 0.225rem;
-  padding: 0.575rem 0.85rem;
-  .btn-check:focus + .btn,
-  &:focus,
-  &:active {
-    box-shadow: none !important;
-  }
-  &.btn-xs {
-    padding: 0.115rem 0.45rem 0;
-    font-size: 11px;
-  }
+    border-radius: 0.225rem;
+    padding: 0.575rem 0.85rem;
+    .btn-check:focus+.btn,
+    &:focus,
+    &:active {
+        box-shadow: none !important;
+    }
+    &.btn-xs {
+        padding: 0.115rem 0.45rem 0;
+        font-size: 11px;
+    }
+}
+
+.btn-default {
+    background-color: #cecece;
+}
+
+.dropdown-toggle {
+    &.btn-primary {
+        color: #fff;
+        background-color: #337ab7 !important;
+        border-color: #337ab7 !important;
+        border-radius: 2px;
+        height: 100%;
+    }
 }
