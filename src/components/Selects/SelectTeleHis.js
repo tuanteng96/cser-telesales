@@ -23,7 +23,7 @@ function SelectTeleHis({ onChange, value, isLoading, className, ...props }) {
     if (data && data.data && data?.data.length > 0) {
       const result = data.data[0].ValueText
       const newResult = result
-        ? result.split(', ').map(item => ({
+        ? result.split(',').map(item => ({
             value: item,
             label: item
           }))
