@@ -10,7 +10,6 @@ import moment from 'moment'
 import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
 import SelectStocks from 'src/components/Selects/SelectStocks'
-import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import SelectStaffsService from 'src/components/Selects/SelectStaffsService'
 moment.locale('vi')
 
