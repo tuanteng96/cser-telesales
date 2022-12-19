@@ -11,6 +11,7 @@ import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
+import SelectStaffsService from 'src/components/Selects/SelectStaffsService'
 moment.locale('vi')
 
 CalendarMemberBook.propTypes = {
@@ -215,7 +216,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                     <label className="mb-1 d-none d-md-block">
                       Nhân viên thực hiện
                     </label>
-                    <SelectStaffs
+                    <SelectStaffsService
                       className="select-control"
                       menuPosition="fixed"
                       menuPlacement="bottom"
