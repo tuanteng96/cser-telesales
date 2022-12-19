@@ -216,6 +216,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                       Nhân viên thực hiện
                     </label>
                     <SelectStaffsService
+                      isMulti
                       className="select-control"
                       menuPosition="fixed"
                       menuPlacement="bottom"
