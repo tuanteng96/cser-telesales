@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Select from 'react-select'
+import PropTypes from 'prop-types'
 
-function SelectStocks({ value, ...props }) {
+SelectStocks.propTypes = {
+  allStock: PropTypes.bool
+}
+
+SelectStocks.defaultProps = {
+  allStock: true
+}
+
+function SelectStocks({ value, allStock, ...props }) {
   const [StocksList, setStocksList] = useState([])
   const { PermissionStocks, Stocks } = useSelector(({ auth }) => ({
     Stocks: auth?.Info?.Stocks || [],
@@ -12,7 +21,9 @@ function SelectStocks({ value, ...props }) {
   useEffect(() => {
     let newStocks = [...Stocks]
     if (PermissionStocks === 'All Stocks') {
-      newStocks = [{ value: '', label: 'Tất cả cơ sở' }, ...Stocks]
+      if (allStock) {
+        newStocks = [{ value: '', label: 'Tất cả cơ sở' }, ...Stocks]
+      }
     } else {
       newStocks = newStocks.filter(
         o => PermissionStocks && PermissionStocks.some(x => o.ID === x.ID)
@@ -27,7 +38,7 @@ function SelectStocks({ value, ...props }) {
           value: item.ID || item.value
         }))
     )
-  }, [Stocks, PermissionStocks])
+  }, [Stocks, PermissionStocks, allStock])
 
   return (
     <Select

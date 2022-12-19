@@ -59,7 +59,7 @@ function AuthInit(props) {
           }
         }
         window.token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDE5ODgiLCJuYmYiOjE2NzEwNjkzNzksImV4cCI6MTY3MTY3NDE3OSwiaWF0IjoxNjcxMDY5Mzc5fQ.rrzGBle79CBxjE_pw0Z9DMO6ITAIMZ_6OMMvdtm5MJk'
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMjAxMDMwMTAyMDIwMjgiLCJuYmYiOjE2NzE0NDE1NTUsImV4cCI6MTY3MjA0NjM1NSwiaWF0IjoxNjcxNDQxNTU1fQ.Q1hGvjXo_tRntKSjCog_GF3uHYzXxJnPuqJg-XORzdE'
       }
       checkInfo(() => {
         dispatch(

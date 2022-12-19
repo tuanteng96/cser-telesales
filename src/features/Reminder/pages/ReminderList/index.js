@@ -313,8 +313,8 @@ function ReminderList(props) {
         sortable: false
       }
     ],
-    []
-  ) // eslint-disable-line react-hooks/exhaustive-deps
+    [] // eslint-disable-line react-hooks/exhaustive-deps
+  )
 
   const onSubmit = async values => {
     setBtnLoading(true)

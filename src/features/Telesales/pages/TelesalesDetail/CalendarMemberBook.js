@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { components } from 'react-select'
 import AsyncSelect from 'react-select/async'
 import { Modal } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
@@ -10,8 +9,8 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
-import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import SelectStocks from 'src/components/Selects/SelectStocks'
+import SelectStaffs from 'src/components/Selects/SelectStaffs'
 moment.locale('vi')
 
 CalendarMemberBook.propTypes = {
@@ -23,23 +22,6 @@ CalendarMemberBook.defaultProps = {
   show: false,
   onHide: null,
   onSubmit: null
-}
-
-const CustomOptionStaff = ({ children, ...props }) => {
-  const { Thumbnail, label } = props.data
-  return (
-    <components.Option {...props}>
-      <div className="d-flex align-items-center">
-        {Thumbnail && (
-          <div className="w-20px h-20px mr-8px rounded-circle overflow-hidden d-flex align-items-center justify-content-center">
-            <img className="w-100" src={Thumbnail} alt={label} />
-          </div>
-        )}
-
-        {children}
-      </div>
-    </components.Option>
-  )
 }
 
 const initialValue = {
@@ -69,22 +51,6 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
   useEffect(() => {
     setInitialValues(prevState => ({ ...prevState, StockID: AuthCrStockID }))
   }, [AuthCrStockID])
-
-  const loadOptionsStaff = (inputValue, callback, stockID) => {
-    const filters = {
-      key: inputValue,
-      StockID: stockID
-    }
-    setTimeout(async () => {
-      const { data } = await moreApi.getStaffs(filters)
-      const dataResult = data.data.map(item => ({
-        value: item.id,
-        label: item.text,
-        Thumbnail: AssetsHelpers.toUrlServer('/images/user.png')
-      }))
-      callback(dataResult)
-    }, 300)
-  }
 
   const loadOptionsServices = (inputValue, callback, stockID) => {
     const filters = {
@@ -191,6 +157,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                       }}
                       menuPosition="fixed"
                       onBlur={handleBlur}
+                      allStock={false}
                     />
                   </div>
                   <div className="form-group form-group-ezs border-top px-20px pt-15px mb-15px">
@@ -248,35 +215,16 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                     <label className="mb-1 d-none d-md-block">
                       Nhân viên thực hiện
                     </label>
-                    <AsyncSelect
-                      key={values.StockID}
-                      className={`select-control ${
-                        errors.UserServiceIDs && touched.UserServiceIDs
-                          ? 'is-invalid solid-invalid'
-                          : ''
-                      }`}
-                      classNamePrefix="select"
-                      isLoading={false}
-                      isDisabled={false}
-                      isClearable
-                      isSearchable
-                      isMulti
+                    <SelectStaffs
+                      className="select-control"
                       menuPosition="fixed"
-                      //menuIsOpen={true}
+                      menuPlacement="bottom"
                       name="UserServiceIDs"
                       value={values.UserServiceIDs}
                       onChange={option =>
                         setFieldValue('UserServiceIDs', option)
                       }
-                      placeholder="Chọn nhân viên"
-                      components={{
-                        Option: CustomOptionStaff
-                      }}
-                      cacheOptions
-                      loadOptions={(v, callback) =>
-                        loadOptionsStaff(v, callback, values.StockID)
-                      }
-                      defaultOptions
+                      isClearable={true}
                       noOptionsMessage={({ inputValue }) =>
                         !inputValue
                           ? 'Không có nhân viên'

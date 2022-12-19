@@ -4,9 +4,28 @@ import PropTypes from 'prop-types'
 import moreApi from 'src/api/more.api'
 import { isArray } from 'lodash'
 import { useSelector } from 'react-redux'
+import { components } from 'react-select'
+import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 SelectStaffs.propTypes = {
   onChange: PropTypes.func
+}
+
+const CustomOptionStaff = ({ children, ...props }) => {
+  const { Thumbnail, label } = props.data
+  return (
+    <components.Option {...props}>
+      <div className="d-flex align-items-center">
+        {Thumbnail && (
+          <div className="w-20px h-20px mr-8px rounded-circle overflow-hidden d-flex align-items-center justify-content-center">
+            <img className="w-100" src={Thumbnail} alt={label} />
+          </div>
+        )}
+
+        {children}
+      </div>
+    </components.Option>
+  )
 }
 
 function SelectStaffs({ onChange, value, isLoading, adv, ...props }) {
@@ -29,12 +48,24 @@ function SelectStaffs({ onChange, value, isLoading, adv, ...props }) {
         const { group, groupid, text, id } = key
         const index = newData.findIndex(item => item.groupid === groupid)
         if (index > -1) {
-          newData[index].options.push({ label: text, value: id, ...key })
+          newData[index].options.push({
+            label: text,
+            value: id,
+            ...key,
+            Thumbnail: AssetsHelpers.toUrlServer('/images/user.png')
+          })
         } else {
           const newItem = {}
           newItem.label = group
           newItem.groupid = groupid
-          newItem.options = [{ label: text, value: id, ...key }]
+          newItem.options = [
+            {
+              label: text,
+              value: id,
+              ...key,
+              Thumbnail: AssetsHelpers.toUrlServer('/images/user.png')
+            }
+          ]
           newData.push(newItem)
         }
       }
@@ -75,6 +106,9 @@ function SelectStaffs({ onChange, value, isLoading, adv, ...props }) {
         page: 1
       }}
       noOptionsMessage={({ inputValue }) => 'Không có nhân viên'}
+      components={{
+        Option: CustomOptionStaff
+      }}
     />
   )
 }
