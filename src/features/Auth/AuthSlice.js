@@ -15,11 +15,21 @@ const Auth = createSlice({
         payload?.Info?.rightsSum?.tele?.hasRight ||
         payload?.Info?.rightsSum?.teleAdv?.hasRight
       ) {
-        if (payload?.Info?.rightsSum?.tele?.stocks) {
+        if (
+          payload?.Info?.rightsSum?.tele?.stocks &&
+          !payload?.Info?.rightsSum?.tele?.IsAllStock
+        ) {
           PermissionStocks = payload?.Info?.rightsSum?.tele?.stocks || []
-          PermissionStocksAdv = payload?.Info?.rightsSum?.teleAdv?.stocks || []
         } else {
           PermissionStocks = 'All Stocks'
+        }
+
+        if (
+          payload?.Info?.rightsSum?.teleAdv?.stocks &&
+          !payload?.Info?.rightsSum?.teleAdv?.IsAllStock
+        ) {
+          PermissionStocksAdv = payload?.Info?.rightsSum?.teleAdv?.stocks || []
+        } else {
           PermissionStocksAdv = 'All Stocks'
         }
       } else {
