@@ -13,7 +13,7 @@ function Navbar(props) {
             to="/danh-sach"
             className={({ isActive }) =>
               isActive
-                ? 'btn btn-primary fw-500 py-6px'
+                ? 'btn btn-primary fw-500 py-6px d-flex align-items-center'
                 : 'btn btn-out btn-default fw-500 py-6px'
             }
           >
