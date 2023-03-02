@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite'
@@ -16,6 +16,7 @@ import Navbar from 'src/components/Navbar/Navbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+import { setFiltersTeles } from '../../TelesalesSlice'
 
 moment.locale('vi')
 
@@ -125,11 +126,14 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
 }
 
 function TelesalesList(props) {
-  const { User, teleAdv, CrStockID } = useSelector(({ auth }) => ({
-    User: auth?.Info?.User,
-    teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false,
-    CrStockID: auth?.Info?.CrStockID || ''
-  }))
+  const { User, teleAdv, CrStockID, filtersRedux } = useSelector(
+    ({ auth, telesales }) => ({
+      User: auth?.Info?.User,
+      teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false,
+      CrStockID: auth?.Info?.CrStockID || '',
+      filtersRedux: telesales.filters
+    })
+  )
   const [ListTelesales, setListTelesales] = useState([])
   const [loading, setLoading] = useState(false)
   const [PageCount, setPageCount] = useState(0)
@@ -138,29 +142,32 @@ function TelesalesList(props) {
   const [isModal, setIsModal] = useState(false)
 
   const { onOpenSidebar } = useContext(TelesalesContext)
+  const dispatch = useDispatch()
 
   const [filters, setFilters] = useState({
     filter: {
-      tele_process: '', //Đang tiếp cận,Đặt lịch thành công
-      tele_user_id: !teleAdv
+      tele_process: filtersRedux.tele_process || '', //Đang tiếp cận,Đặt lịch thành công
+      tele_user_id: filtersRedux.tele_user_id
+        ? filtersRedux.tele_user_id
+        : !teleAdv
         ? {
             label: User.FullName,
             value: User.ID
           }
         : '',
-      wishlist: '', // id,id san_pham
-      birthDateFrom: '', //31/12
-      birthDateTo: '', //31/12
-      bookDateFrom: '', // dd/mm/yyyy
-      bookDateTo: '', // dd/mm/yyyy
-      last_used: '',
-      remains: '', //
-      key: '',
-      emptyStaff: false,
-      NotiFrom: '',
-      NotiTo: '',
-      HasNoti: false,
-      StockID: CrStockID
+      wishlist: filtersRedux.wishlist || '', // id,id san_pham
+      birthDateFrom: filtersRedux.birthDateFrom || '', //31/12
+      birthDateTo: filtersRedux.birthDateTo || '', //31/12
+      bookDateFrom: filtersRedux.bookDateFrom || '', // dd/mm/yyyy
+      bookDateTo: filtersRedux.bookDateTo || '', // dd/mm/yyyy
+      last_used: filtersRedux.last_used || '',
+      remains: filtersRedux.remains || '', //
+      key: filtersRedux.key || '',
+      emptyStaff: filtersRedux.emptyStaff || false,
+      NotiFrom: filtersRedux.NotiFrom || '',
+      NotiTo: filtersRedux.NotiTo || '',
+      HasNoti: filtersRedux.HasNoti || false,
+      StockID: filtersRedux.StockID || CrStockID
     },
     pi: 1,
     ps: 20
@@ -263,6 +270,12 @@ function TelesalesList(props) {
         key: 'FullName',
         title: 'Họ và tên',
         dataKey: 'FullName',
+        cellRenderer: ({ rowData }) => (
+          <div>
+            <div className="fw-600">{rowData?.FullName}</div>
+            <div className="font-number">{rowData?.MobilePhone}</div>
+          </div>
+        ),
         width: 250,
         sortable: false
       },
@@ -396,6 +409,7 @@ function TelesalesList(props) {
   }
 
   const onFilter = values => {
+    dispatch(setFiltersTeles(values))
     setFilters(prevState => ({ ...prevState, ...values, pi: 1 }))
   }
 

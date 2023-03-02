@@ -182,6 +182,9 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                                   value={x.Title}
                                   onChange={handleChange}
                                   onBlur={handleBlur}
+                                  checked={values?.filter?.tele_process.includes(
+                                    x.Title
+                                  )}
                                 />
                                 <span className="checkbox-icon"></span>
                                 <span className="fw-500 font-label">

@@ -38,7 +38,7 @@ function NoteMember({ initialValues, loading }) {
           //
         })
         .catch(error => console.log(error))
-    }, 800)
+    }, 300)
   }
   return (
     <div className="pl-15px pr-15px pb-15px pt-8px">
