@@ -15,6 +15,8 @@ import { TelesalesContext } from 'src/features/Telesales'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 
 import vi from 'date-fns/locale/vi' // the locale you want
+import MemberTransferImport from './MemberTransferImport'
+import { Dropdown } from 'react-bootstrap'
 
 registerLocale('vi', vi) // register it with the name you want
 
@@ -27,7 +29,9 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
   const [ListType, setListType] = useState([])
   const [loadingType, setLoadingType] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
+  const [btnLoadingImport, setBtnLoadingImport] = useState(false)
   const [isModal, setIsModal] = useState(false)
+  const [isModalImport, setIsModalImport] = useState(false)
   const { isSidebar, onHideSidebar } = useContext(TelesalesContext)
   const { teleAdv } = useSelector(({ auth }) => ({
     teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false
@@ -73,12 +77,43 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
       .catch(error => console.log(error))
   }
 
+  const onSubmitTransferImport = (values, { resetForm }) => {
+    setBtnLoadingImport(true)
+    const dataSubmit = {
+      ...values,
+      users: values.users ? values.users.map(x => x.value).join(',') : ''
+    }
+
+    telesalesApi
+      .transferMemberImport(dataSubmit)
+      .then(response => {
+        onRefresh(() => {
+          setBtnLoadingImport(false)
+          resetForm()
+          onHideModalImport()
+          window.top?.toastr &&
+            window.top?.toastr.success('Chuyển đổi thành công', '', {
+              timeOut: 1500
+            })
+        })
+      })
+      .catch(error => console.log(error))
+  }
+
   const onOpenModal = () => {
     setIsModal(true)
   }
 
   const onHideModal = () => {
     setIsModal(false)
+  }
+
+  const onOpenModalImport = () => {
+    setIsModalImport(true)
+  }
+
+  const onHideModalImport = () => {
+    setIsModalImport(false)
   }
 
   return (
@@ -95,6 +130,12 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
           onSubmit={onSubmitTransfer}
           onHide={onHideModal}
         />
+        <MemberTransferImport
+          show={isModalImport}
+          loading={btnLoadingImport}
+          onSubmit={onSubmitTransferImport}
+          onHide={onHideModalImport}
+        />
         <Formik
           initialValues={filters}
           onSubmit={onSubmit}
@@ -110,11 +151,34 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                 <div className="border-bottom p-15px text-uppercase fw-600 font-size-lg position-relative">
                   Bộ lọc khách hàng
                   {teleAdv && (
-                    <div
-                      className="cursor-pointer position-absolute top-8px right-10px w-40px h-40px d-flex align-items-center justify-content-center"
-                      onClick={onOpenModal}
-                    >
-                      <i className="fa-regular fa-users-gear text-primary"></i>
+                    <div className="cursor-pointer position-absolute top-8px right-10px">
+                      <Dropdown>
+                        <Dropdown.Toggle
+                          className="btn-out cursor-pointer w-40px h-40px d-flex align-items-center justify-content-center bg-white"
+                          style={{
+                            background: '#fff !important'
+                          }}
+                        >
+                          <i className="fa-regular fa-users-gear text-primary"></i>
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item
+                            className="text-capitalize"
+                            href="#"
+                            onClick={onOpenModal}
+                          >
+                            Chuyển đổi khách hàng
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="text-capitalize"
+                            href="#"
+                            onClick={onOpenModalImport}
+                          >
+                            Import khách hàng
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
                     </div>
                   )}
                 </div>
