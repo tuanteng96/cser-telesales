@@ -21,7 +21,14 @@ const TransferSchema = Yup.object().shape({
   users: Yup.array().required('Chọn nhân viên.')
 })
 
-function MemberTransferImport({ onHide, show, onSubmit, loading }) {
+function MemberTransferImport({
+  onHide,
+  show,
+  onSubmit,
+  onResetMember,
+  loading,
+  loadingReset
+}) {
   return (
     <Modal show={show} onHide={onHide} dialogClassName="modal-max-sm">
       <Formik
@@ -88,24 +95,37 @@ function MemberTransferImport({ onHide, show, onSubmit, loading }) {
                   />
                 </div>
               </Modal.Body>
-              <Modal.Footer>
+              <Modal.Footer className="justify-content-between">
                 <button
                   type="button"
-                  className="btn btn-secondary"
-                  onClick={onHide}
-                >
-                  Đóng
-                </button>
-                <button
-                  type="submit"
-                  disabled={loading}
+                  disabled={loadingReset}
                   className={clsx(
-                    'btn btn-primary',
-                    loading && 'spinner spinner-white spinner-right mr-3'
+                    'btn btn-success',
+                    loadingReset && 'spinner spinner-white spinner-right mr-3'
                   )}
+                  onClick={onResetMember}
                 >
-                  Thực hiện
+                  Reset
                 </button>
+                <div>
+                  <button
+                    type="button"
+                    className="btn btn-secondary mr-8px"
+                    onClick={onHide}
+                  >
+                    Đóng
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={clsx(
+                      'btn btn-primary',
+                      loading && 'spinner spinner-white spinner-right mr-3'
+                    )}
+                  >
+                    Thực hiện
+                  </button>
+                </div>
               </Modal.Footer>
             </Form>
           )

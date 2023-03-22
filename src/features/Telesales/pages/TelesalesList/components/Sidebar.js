@@ -30,6 +30,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
   const [loadingType, setLoadingType] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
   const [btnLoadingImport, setBtnLoadingImport] = useState(false)
+  const [btnLoadingReset, setBtnLoadingReset] = useState(false)
   const [isModal, setIsModal] = useState(false)
   const [isModalImport, setIsModalImport] = useState(false)
   const { isSidebar, onHideSidebar } = useContext(TelesalesContext)
@@ -100,6 +101,23 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
       .catch(error => console.log(error))
   }
 
+  const onResetMember = () => {
+    setBtnLoadingReset(true)
+    telesalesApi
+      .transferMemberReset()
+      .then(response => {
+        onRefresh(() => {
+          setBtnLoadingReset(false)
+          onHideModalImport()
+          window.top?.toastr &&
+            window.top?.toastr.success('Chuyển đổi thành công', '', {
+              timeOut: 1500
+            })
+        })
+      })
+      .catch(error => console.log(error))
+  }
+
   const onOpenModal = () => {
     setIsModal(true)
   }
@@ -135,6 +153,8 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
           loading={btnLoadingImport}
           onSubmit={onSubmitTransferImport}
           onHide={onHideModalImport}
+          onResetMember={onResetMember}
+          loadingReset={btnLoadingReset}
         />
         <Formik
           initialValues={filters}

@@ -76,6 +76,9 @@ const telesalesApi = {
   transferMemberImport: data => {
     return http.post('/api/v3/tele23@setmembers', JSON.stringify(data))
   },
+  transferMemberReset: () => {
+    return http.post('/api/v3/tele23@ResetMembers')
+  },
   getMemberTeleNoti: data => {
     return http.post('/api/v3/Tele23@MemberTeleNoti', JSON.stringify(data))
   },

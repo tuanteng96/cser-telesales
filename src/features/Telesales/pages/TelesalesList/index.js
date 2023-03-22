@@ -250,9 +250,14 @@ function TelesalesList(props) {
   }
 
   const onRefresh = callback => {
-    getListTelesales(() => {
+    if (filters.pi > 1) {
+      setFilters(prevState => ({ ...prevState, pi: 1 }))
       callback && callback()
-    })
+    } else {
+      getListTelesales(() => {
+        callback && callback()
+      })
+    }
   }
 
   const columns = useMemo(
