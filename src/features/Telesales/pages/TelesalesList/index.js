@@ -140,6 +140,7 @@ function TelesalesList(props) {
   const [PageTotal, setPageTotal] = useState(0)
   const [IsEditing, setIsEditing] = useState(false)
   const [isModal, setIsModal] = useState(false)
+  const [IsLoadingEx, setIsLoadingEx] = useState(false)
 
   const { onOpenSidebar } = useContext(TelesalesContext)
   const dispatch = useDispatch()
@@ -426,6 +427,63 @@ function TelesalesList(props) {
     setIsModal(false)
   }
 
+  const ExportExcel = () => {
+    setIsLoadingEx(true)
+    let tele_user_id_new = ''
+    if (filters.filter.emptyStaff) {
+      tele_user_id_new = 0
+    } else {
+      tele_user_id_new = filters.filter.tele_user_id
+        ? filters.filter.tele_user_id.value
+        : ''
+    }
+    const newFilter = {
+      ...filters,
+      filter: {
+        ...filters.filter,
+        tele_user_id: tele_user_id_new,
+        tele_process: filters.filter.tele_process
+          ? filters.filter.tele_process.join(',')
+          : '',
+        wishlist: filters.filter.wishlist
+          ? filters.filter.wishlist.map(wish => wish.value).join(',')
+          : '',
+        birthDateFrom: filters.filter.birthDateFrom
+          ? moment(filters.filter.birthDateFrom).format('DD/MM')
+          : '',
+        birthDateTo: filters.filter.birthDateTo
+          ? moment(filters.filter.birthDateTo).format('DD/MM')
+          : '',
+        bookDateFrom: filters.filter.bookDateFrom
+          ? moment(filters.filter.bookDateFrom).format('DD/MM/YYYY')
+          : '',
+        bookDateTo: filters.filter.bookDateTo
+          ? moment(filters.filter.bookDateTo).format('DD/MM/YYYY')
+          : '',
+        NotiFrom: filters.filter.NotiFrom
+          ? moment(filters.filter.NotiFrom).format('DD/MM/YYYY')
+          : '',
+        NotiTo: filters.filter.NotiTo
+          ? moment(filters.filter.NotiTo).format('DD/MM/YYYY')
+          : ''
+      },
+      pi: 1,
+      ps: PageTotal
+    }
+
+    telesalesApi.getListMemberTelesales(newFilter).then(({ data }) => {
+      window?.EzsExportExcel &&
+        window?.EzsExportExcel({
+          Url: 'telesale',
+          Data: {
+            data: data,
+            params: filters
+          },
+          hideLoading: () => setIsLoadingEx(false)
+        })
+    })
+  }
+
   return (
     <div className="d-flex h-100 telesales-list">
       <Sidebar
@@ -444,7 +502,7 @@ function TelesalesList(props) {
             </span>
           </div>
           <div className="w-85px w-md-auto d-flex">
-            <Navbar />
+            <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
             {/* <button
               type="button"
               className="btn btn-primary"
