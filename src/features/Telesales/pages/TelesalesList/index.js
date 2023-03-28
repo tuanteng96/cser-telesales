@@ -20,6 +20,21 @@ import { setFiltersTeles } from '../../TelesalesSlice'
 
 moment.locale('vi')
 
+function checkGG(fn) {
+  if (
+    window.GC &&
+    window.GC.Spread &&
+    window.GC.Spread.Excel &&
+    window.GC.Spread.Excel.IO
+  ) {
+    fn()
+  } else {
+    setTimeout(() => {
+      checkGG(fn)
+    }, 50)
+  }
+}
+
 const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
   const { teleAdv } = useSelector(({ auth }) => ({
     teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false
@@ -429,58 +444,60 @@ function TelesalesList(props) {
 
   const ExportExcel = () => {
     setIsLoadingEx(true)
-    let tele_user_id_new = ''
-    if (filters.filter.emptyStaff) {
-      tele_user_id_new = 0
-    } else {
-      tele_user_id_new = filters.filter.tele_user_id
-        ? filters.filter.tele_user_id.value
-        : ''
-    }
-    const newFilter = {
-      ...filters,
-      filter: {
-        ...filters.filter,
-        tele_user_id: tele_user_id_new,
-        tele_process: filters.filter.tele_process
-          ? filters.filter.tele_process.join(',')
-          : '',
-        wishlist: filters.filter.wishlist
-          ? filters.filter.wishlist.map(wish => wish.value).join(',')
-          : '',
-        birthDateFrom: filters.filter.birthDateFrom
-          ? moment(filters.filter.birthDateFrom).format('DD/MM')
-          : '',
-        birthDateTo: filters.filter.birthDateTo
-          ? moment(filters.filter.birthDateTo).format('DD/MM')
-          : '',
-        bookDateFrom: filters.filter.bookDateFrom
-          ? moment(filters.filter.bookDateFrom).format('DD/MM/YYYY')
-          : '',
-        bookDateTo: filters.filter.bookDateTo
-          ? moment(filters.filter.bookDateTo).format('DD/MM/YYYY')
-          : '',
-        NotiFrom: filters.filter.NotiFrom
-          ? moment(filters.filter.NotiFrom).format('DD/MM/YYYY')
-          : '',
-        NotiTo: filters.filter.NotiTo
-          ? moment(filters.filter.NotiTo).format('DD/MM/YYYY')
+    checkGG(() => {
+      let tele_user_id_new = ''
+      if (filters.filter.emptyStaff) {
+        tele_user_id_new = 0
+      } else {
+        tele_user_id_new = filters.filter.tele_user_id
+          ? filters.filter.tele_user_id.value
           : ''
-      },
-      pi: 1,
-      ps: PageTotal
-    }
+      }
+      const newFilter = {
+        ...filters,
+        filter: {
+          ...filters.filter,
+          tele_user_id: tele_user_id_new,
+          tele_process: filters.filter.tele_process
+            ? filters.filter.tele_process.join(',')
+            : '',
+          wishlist: filters.filter.wishlist
+            ? filters.filter.wishlist.map(wish => wish.value).join(',')
+            : '',
+          birthDateFrom: filters.filter.birthDateFrom
+            ? moment(filters.filter.birthDateFrom).format('DD/MM')
+            : '',
+          birthDateTo: filters.filter.birthDateTo
+            ? moment(filters.filter.birthDateTo).format('DD/MM')
+            : '',
+          bookDateFrom: filters.filter.bookDateFrom
+            ? moment(filters.filter.bookDateFrom).format('DD/MM/YYYY')
+            : '',
+          bookDateTo: filters.filter.bookDateTo
+            ? moment(filters.filter.bookDateTo).format('DD/MM/YYYY')
+            : '',
+          NotiFrom: filters.filter.NotiFrom
+            ? moment(filters.filter.NotiFrom).format('DD/MM/YYYY')
+            : '',
+          NotiTo: filters.filter.NotiTo
+            ? moment(filters.filter.NotiTo).format('DD/MM/YYYY')
+            : ''
+        },
+        pi: 1,
+        ps: PageTotal
+      }
 
-    telesalesApi.getListMemberTelesales(newFilter).then(({ data }) => {
-      window?.EzsExportExcel &&
-        window?.EzsExportExcel({
-          Url: 'telesale',
-          Data: {
-            data: data,
-            params: filters
-          },
-          hideLoading: () => setIsLoadingEx(false)
-        })
+      telesalesApi.getListMemberTelesales(newFilter).then(({ data }) => {
+        window?.EzsExportExcel &&
+          window?.EzsExportExcel({
+            Url: 'telesale',
+            Data: {
+              data: data,
+              params: filters
+            },
+            hideLoading: () => setIsLoadingEx(false)
+          })
+      })
     })
   }
 
