@@ -73,7 +73,7 @@ function TelesalesDetail(props) {
           </div>
           <div
             className="w-40px h-40px border rounded-circle cursor-pointer position-relative mr-10px d-xxl-none"
-            onClick={onHideProfile}
+            onClick={() => navigate('/danh-sach')}
           >
             <i className="fa-regular fa-arrow-left position-absolute left-12px top-12px"></i>
           </div>
