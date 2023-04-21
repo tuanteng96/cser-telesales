@@ -312,6 +312,41 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                   </div>
                   <div className="mb-15px form-group">
                     <label className="font-label text-muted mb-5px">
+                      Ngày tạo khách hàng
+                    </label>
+                    <div className="d-flex">
+                      <div className="flex-fill">
+                        <DatePicker
+                          calendarClassName="hide-header"
+                          onChange={date => {
+                            setFieldValue('filter.CreateFrom', date, false)
+                          }}
+                          selected={values.filter.CreateFrom}
+                          placeholderText="Từ ngày"
+                          className="form-control"
+                          dateFormat="dd/MM"
+                          dateFormatCalendar="MMMM"
+                        />
+                      </div>
+                      <div className="w-35px d-flex align-items-center justify-content-center">
+                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                      </div>
+                      <div className="flex-fill">
+                        <DatePicker
+                          onChange={date => {
+                            setFieldValue('filter.CreateTo', date, false)
+                          }}
+                          selected={values.filter.CreateTo}
+                          placeholderText="Đến ngày"
+                          className="form-control"
+                          dateFormat="dd/MM"
+                          dateFormatCalendar="MMMM"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-15px form-group">
+                    <label className="font-label text-muted mb-5px">
                       Khách hàng sinh nhật
                     </label>
                     <div className="d-flex">

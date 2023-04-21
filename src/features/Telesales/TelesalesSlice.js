@@ -18,7 +18,9 @@ const Telesales = createSlice({
       NotiFrom: '',
       NotiTo: '',
       HasNoti: false,
-      StockID: ''
+      StockID: '',
+      CreateFrom: '',
+      CreateTo: ''
     }
   },
   reducers: {

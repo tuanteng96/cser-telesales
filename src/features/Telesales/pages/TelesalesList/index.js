@@ -183,7 +183,9 @@ function TelesalesList(props) {
       NotiFrom: filtersRedux.NotiFrom || '',
       NotiTo: filtersRedux.NotiTo || '',
       HasNoti: filtersRedux.HasNoti || false,
-      StockID: filtersRedux.StockID || CrStockID
+      StockID: filtersRedux.StockID || CrStockID,
+      CreateFrom: filtersRedux.CreateFrom || '',
+      CreateTo: filtersRedux.CreateTo || ''
     },
     pi: 1,
     ps: 20
@@ -234,6 +236,12 @@ function TelesalesList(props) {
           : '',
         NotiTo: filters.filter.NotiTo
           ? moment(filters.filter.NotiTo).format('DD/MM/YYYY')
+          : '',
+        CreateFrom: filters.filter.CreateFrom
+          ? moment(filters.filter.CreateFrom).format('DD/MM/YYYY')
+          : '',
+        CreateTo: filters.filter.CreateTo
+          ? moment(filters.filter.CreateTo).format('DD/MM/YYYY')
           : ''
       },
       pi: callback ? 1 : filters.pi
@@ -298,6 +306,16 @@ function TelesalesList(props) {
           </div>
         ),
         width: 250,
+        sortable: false
+      },
+      {
+        key: 'CreateDate',
+        title: 'Ngày tạo',
+        dataKey: 'CreateDate',
+        cellRenderer: ({ rowData }) => (
+          <div>{moment(rowData?.CreateDate).format('DD-MM-YYYY')}</div>
+        ),
+        width: 180,
         sortable: false
       },
       {
@@ -481,6 +499,12 @@ function TelesalesList(props) {
             : '',
           NotiTo: filters.filter.NotiTo
             ? moment(filters.filter.NotiTo).format('DD/MM/YYYY')
+            : '',
+          CreateFrom: filters.filter.CreateFrom
+            ? moment(filters.filter.CreateFrom).format('DD/MM/YYYY')
+            : '',
+          CreateTo: filters.filter.CreateTo
+            ? moment(filters.filter.CreateTo).format('DD/MM/YYYY')
             : ''
         },
         pi: 1,
