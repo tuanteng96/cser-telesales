@@ -270,6 +270,7 @@ function CareHistory(props) {
                   {item.Result && (
                     <div className="mt-8px fw-500">
                       <span className="text-danger">{item.Result}</span>
+                      <span className="pl-5px">- {item.TeleName}</span>
                     </div>
                   )}
                   <div className="mt-5px fw-300">{item.Content}</div>
