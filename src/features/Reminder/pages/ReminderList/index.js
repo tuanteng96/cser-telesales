@@ -14,6 +14,7 @@ import * as Yup from 'yup'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+import { Link } from 'react-router-dom'
 
 moment.locale('vi')
 
@@ -40,6 +41,21 @@ const convertArray = arrays => {
     }
   }
   return newArray
+}
+
+function checkGG(fn) {
+  if (
+    window.GC &&
+    window.GC.Spread &&
+    window.GC.Spread.Excel &&
+    window.GC.Spread.Excel.IO
+  ) {
+    fn()
+  } else {
+    setTimeout(() => {
+      checkGG(fn)
+    }, 50)
+  }
 }
 
 const AddNotiSchema = Yup.object().shape({
@@ -163,6 +179,7 @@ function ReminderList(props) {
   const [PageCount, setPageCount] = useState(0)
   const [PageTotal, setPageTotal] = useState(0)
   const [btnLoading, setBtnLoading] = useState(false)
+  const [IsLoadingEx, setIsLoadingEx] = useState(false)
   const [filters, setFilters] = useState({
     DateTo: '', // DD-MM-YYYY
     DateFrom: '', // DD-MM-YYYY
@@ -245,6 +262,16 @@ function ReminderList(props) {
         title: 'Họ tên khách hàng',
         dataKey: 'member.FullName',
         width: 250,
+        cellRenderer: ({ rowData }) => (
+          <Link
+            className="text-black"
+            style={{ textDecoration: 'none' }}
+            to={`/danh-sach/${rowData?.member?.ID}`}
+          >
+            <div className="fw-600">{rowData?.member?.FullName}</div>
+            <div className="font-number">{rowData?.member?.MobilePhone}</div>
+          </Link>
+        ),
         sortable: false,
         rowSpan: ({ rowData }) => rowData.rowSpan || 1
       },
@@ -379,6 +406,37 @@ function ReminderList(props) {
     setFilters({ ...filters, Pi, Ps })
   }
 
+  const ExportExcel = () => {
+    setIsLoadingEx(true)
+    checkGG(() => {
+      const newFilter = {
+        ...filters,
+        DateFrom: filters.DateFrom
+          ? moment(filters.DateFrom).format('DD/MM/YYYY')
+          : '',
+        DateTo: filters.DateTo
+          ? moment(filters.DateTo).format('DD/MM/YYYY')
+          : '',
+        UserId: filters.UserId ? filters.UserId.value : '',
+        IsNoti: filters.IsNoti ? filters.IsNoti.value : '',
+        pi: 1,
+        ps: PageTotal
+      }
+
+      telesalesApi.getMemberTeleNoti(newFilter).then(({ data }) => {
+        window?.EzsExportExcel &&
+          window?.EzsExportExcel({
+            Url: 'telesale-reminder',
+            Data: {
+              data: data,
+              params: filters
+            },
+            hideLoading: () => setIsLoadingEx(false)
+          })
+      })
+    })
+  }
+
   return (
     <div className="d-flex h-100 telesales-list">
       <Sidebar
@@ -397,7 +455,7 @@ function ReminderList(props) {
             </span>
           </div>
           <div className="w-85px w-md-auto d-flex">
-            <Navbar />
+            <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
             <button
               type="button"
               className="btn btn-primary d-lg-none ml-5px"

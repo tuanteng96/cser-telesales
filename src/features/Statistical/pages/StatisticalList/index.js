@@ -8,8 +8,25 @@ import Navbar from 'src/components/Navbar/Navbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+import { Link, useLocation } from 'react-router-dom'
+import { useWindowSize } from 'src/hooks/useWindowSize'
 
 moment.locale('vi')
+
+function checkGG(fn) {
+  if (
+    window.GC &&
+    window.GC.Spread &&
+    window.GC.Spread.Excel &&
+    window.GC.Spread.Excel.IO
+  ) {
+    fn()
+  } else {
+    setTimeout(() => {
+      checkGG(fn)
+    }, 50)
+  }
+}
 
 function StatisticalList(props) {
   const { CrStockID, teleAdv, User } = useSelector(({ auth }) => ({
@@ -21,6 +38,9 @@ function StatisticalList(props) {
   const [loading, setLoading] = useState(false)
   const [PageCount, setPageCount] = useState(0)
   const [PageTotal, setPageTotal] = useState(0)
+  const [IsLoadingEx, setIsLoadingEx] = useState(false)
+
+  const { pathname } = useLocation()
 
   const [filters, setFilters] = useState({
     filter: {
@@ -38,6 +58,8 @@ function StatisticalList(props) {
     pi: 1,
     ps: 20
   })
+
+  const { width } = useWindowSize()
 
   const { onOpenSidebar } = useContext(StatisticalContext)
 
@@ -97,53 +119,82 @@ function StatisticalList(props) {
   }
 
   const columns = useMemo(
-    () => [
-      {
-        key: 'index',
-        title: 'STT',
-        dataKey: 'index',
-        cellRenderer: ({ rowIndex }) => rowIndex + 1,
-        width: 60,
-        sortable: false,
-        align: 'center'
-      },
-      {
-        key: 'MemberName',
-        title: 'Họ tên khách hàng',
-        dataKey: 'MemberName',
-        width: 250,
-        sortable: false
-      },
-      {
-        key: 'StockTitle',
-        title: 'Cơ sở',
-        dataKey: 'StockTitle',
-        width: 250,
-        sortable: false
-      },
-      {
-        key: 'Content',
-        title: 'Nội dung',
-        dataKey: 'Content',
-        width: 350,
-        sortable: false
-      },
-      {
-        key: 'Result',
-        title: 'Kết quả',
-        dataKey: 'Result',
-        width: 350,
-        sortable: false
-      },
-      {
-        key: 'TeleName',
-        title: 'Nhân viên thực hiện',
-        dataKey: 'TeleName',
-        width: 250,
-        sortable: false
-      }
-    ],
-    []
+    () => {
+      return [
+        {
+          key: 'index',
+          title: 'STT',
+          dataKey: 'index',
+          cellRenderer: ({ rowIndex }) => rowIndex + 1,
+          width: 60,
+          sortable: false,
+          align: 'center'
+        },
+        {
+          key: 'MemberName',
+          title: 'Họ tên khách hàng',
+          dataKey: 'MemberName',
+          cellRenderer: ({ rowData }) => (
+            <div>
+              <div className="fw-600">{rowData?.MemberName}</div>
+              <div className="font-number">{rowData?.MobilePhone}</div>
+            </div>
+          ),
+          width: 250,
+          sortable: false
+        },
+        {
+          key: 'StockTitle',
+          title: 'Cơ sở',
+          dataKey: 'StockTitle',
+          width: 250,
+          sortable: false
+        },
+        {
+          key: 'Content',
+          title: 'Nội dung',
+          dataKey: 'Content',
+          width: 350,
+          sortable: false
+        },
+        {
+          key: 'Result',
+          title: 'Kết quả',
+          dataKey: 'Result',
+          width: 350,
+          sortable: false
+        },
+        {
+          key: 'TeleName',
+          title: 'Nhân viên thực hiện',
+          dataKey: 'TeleName',
+          width: 250,
+          sortable: false
+        },
+        {
+          key: 'action',
+          title: 'Thao tác',
+          dataKey: 'action',
+          cellRenderer: ({ rowData }) => (
+            <div className="d-flex">
+              <Link
+                className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
+                to={`/danh-sach/${rowData.MemberID}`}
+                state={{ previousPath: pathname }}
+              >
+                <i className="fa-regular fa-arrow-right pt-2px"></i>
+              </Link>
+            </div>
+          ),
+          align: 'center',
+          width: 130,
+          sortable: false,
+          frozen: width > 991 ? 'right' : false
+        }
+      ]
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [width, pathname]
   )
 
   const handleEndReached = () => {
@@ -155,6 +206,41 @@ function StatisticalList(props) {
   const onFilter = values => {
     setFilters(prevState => ({ ...prevState, ...values, pi: 1 }))
   }
+
+  const ExportExcel = () => {
+    setIsLoadingEx(true)
+    checkGG(() => {
+      const newFilter = {
+        ...filters,
+        filter: {
+          ...filters.filter,
+          From: filters.filter.From
+            ? moment(filters.filter.From).format('DD/MM/YYYY')
+            : '',
+          To: filters.filter.To
+            ? moment(filters.filter.To).format('DD/MM/YYYY')
+            : '',
+          Result: filters.filter.Result ? filters.filter.Result.value : '',
+          UserID: filters.filter.UserID ? filters.filter.UserID.value : ''
+        },
+        pi: 1,
+        ps: PageTotal
+      }
+
+      telesalesApi.getListStatisticals(newFilter).then(({ data }) => {
+        window?.EzsExportExcel &&
+          window?.EzsExportExcel({
+            Url: 'telesale-statistical',
+            Data: {
+              data: data,
+              params: filters
+            },
+            hideLoading: () => setIsLoadingEx(false)
+          })
+      })
+    })
+  }
+
   return (
     <div className="d-flex h-100 telesales-list">
       <Sidebar
@@ -175,7 +261,7 @@ function StatisticalList(props) {
             </span>
           </div>
           <div className="w-85px w-md-auto d-flex">
-            <Navbar />
+            <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
             <button
               type="button"
               className="btn btn-primary d-lg-none ml-5px"
