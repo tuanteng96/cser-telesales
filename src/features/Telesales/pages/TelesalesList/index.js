@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite'
 import Sidebar from './components/Sidebar'
@@ -192,6 +192,7 @@ function TelesalesList(props) {
   })
 
   const { width } = useWindowSize()
+  const { pathname } = useLocation()
 
   useEffect(() => {
     getListTelesales()
@@ -426,7 +427,10 @@ function TelesalesList(props) {
             </a>
             <Link
               className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
-              to={`${rowData.ID}`}
+              to={`${rowData.ID}/dich-vu`}
+              state={{
+                from: pathname
+              }}
             >
               <i className="fa-regular fa-arrow-right pt-2px"></i>
             </Link>
@@ -438,6 +442,7 @@ function TelesalesList(props) {
         frozen: width > 991 ? 'right' : false
       }
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [width]
   )
 

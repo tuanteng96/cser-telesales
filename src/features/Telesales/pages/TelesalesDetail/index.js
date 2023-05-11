@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import { PriceHelper } from 'src/helpers/PriceHelper'
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -35,6 +35,8 @@ function TelesalesDetail(props) {
   const { isProfile, onHideProfile } = useContext(TelesalesContext)
   const navigate = useNavigate()
 
+  const { state } = useLocation()
+
   useEffect(() => {
     getMemberTelesales()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,7 +48,11 @@ function TelesalesDetail(props) {
       .getMemberIDTelesales(MemberID)
       .then(({ data }) => {
         if (data.error) {
-          navigate('/danh-sach')
+          navigate(state?.from || '/danh-sach', {
+            state: {
+              filters: state?.filters || null
+            }
+          })
         } else {
           setListProds(() => data.prods.map(item => ({ ...item, Ids: uuid() })))
           setMemberCurrent(data.member)
@@ -67,13 +73,25 @@ function TelesalesDetail(props) {
         <div className="border-bottom px-18px py-15px text-uppercase fw-600 font-size-lg d-flex align-items-center">
           <div
             className="w-40px h-40px border rounded-circle cursor-pointer position-relative mr-10px d-none d-xxl-block"
-            onClick={() => navigate('/danh-sach')}
+            onClick={() =>
+              navigate(state?.from || '/danh-sach', {
+                state: {
+                  filters: state?.filters || null
+                }
+              })
+            }
           >
             <i className="fa-regular fa-arrow-left position-absolute left-12px top-12px"></i>
           </div>
           <div
             className="w-40px h-40px border rounded-circle cursor-pointer position-relative mr-10px d-xxl-none"
-            onClick={() => navigate('/danh-sach')}
+            onClick={() =>
+              navigate(state?.from || '/danh-sach', {
+                state: {
+                  filters: state?.filters || null
+                }
+              })
+            }
           >
             <i className="fa-regular fa-arrow-left position-absolute left-12px top-12px"></i>
           </div>

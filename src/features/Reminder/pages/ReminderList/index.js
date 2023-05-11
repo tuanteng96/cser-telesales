@@ -14,7 +14,7 @@ import * as Yup from 'yup'
 
 import moment from 'moment'
 import 'moment/locale/vi'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 moment.locale('vi')
 
@@ -174,29 +174,34 @@ function ReminderList(props) {
     teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false,
     User: auth?.Info?.User
   }))
+  const { pathname, state } = useLocation()
   const [ListReminder, setListReminder] = useState([])
   const [loading, setLoading] = useState(false)
   const [PageCount, setPageCount] = useState(0)
   const [PageTotal, setPageTotal] = useState(0)
   const [btnLoading, setBtnLoading] = useState(false)
   const [IsLoadingEx, setIsLoadingEx] = useState(false)
-  const [filters, setFilters] = useState({
-    DateTo: '', // DD-MM-YYYY
-    DateFrom: '', // DD-MM-YYYY
-    StockID: CrStockID,
-    IsNoti: {
-      value: 0,
-      label: 'Chưa nhắc'
-    }, // 0, 1
-    UserID: !teleAdv
-      ? {
-          label: User.FullName,
-          value: User.ID
+  const [filters, setFilters] = useState(
+    state?.filters
+      ? state?.filters
+      : {
+          DateTo: '', // DD-MM-YYYY
+          DateFrom: '', // DD-MM-YYYY
+          StockID: CrStockID,
+          IsNoti: {
+            value: 0,
+            label: 'Chưa nhắc'
+          }, // 0, 1
+          UserID: !teleAdv
+            ? {
+                label: User.FullName,
+                value: User.ID
+              }
+            : '',
+          Pi: 1,
+          Ps: 15
         }
-      : '',
-    Pi: 1,
-    Ps: 15
-  })
+  )
 
   const { onOpenSidebar } = useContext(ReminderContext)
 
@@ -266,7 +271,8 @@ function ReminderList(props) {
           <Link
             className="text-black"
             style={{ textDecoration: 'none' }}
-            to={`/danh-sach/${rowData?.member?.ID}`}
+            to={`/danh-sach/${rowData?.member?.ID}/dich-vu`}
+            state={{ from: pathname, filters: filters }}
           >
             <div className="fw-600">{rowData?.member?.FullName}</div>
             <div className="font-number">{rowData?.member?.MobilePhone}</div>
@@ -340,7 +346,7 @@ function ReminderList(props) {
         sortable: false
       }
     ],
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    [pathname, filters] // eslint-disable-line react-hooks/exhaustive-deps
   )
 
   const onSubmit = async values => {

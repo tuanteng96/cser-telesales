@@ -40,24 +40,28 @@ function StatisticalList(props) {
   const [PageTotal, setPageTotal] = useState(0)
   const [IsLoadingEx, setIsLoadingEx] = useState(false)
 
-  const { pathname } = useLocation()
+  const { pathname, state } = useLocation()
 
-  const [filters, setFilters] = useState({
-    filter: {
-      UserID: !teleAdv
-        ? {
-            label: User.FullName,
-            value: User.ID
-          }
-        : '',
-      From: '',
-      To: '',
-      StockID: CrStockID,
-      Result: ''
-    },
-    pi: 1,
-    ps: 20
-  })
+  const [filters, setFilters] = useState(
+    state?.filters
+      ? state?.filters
+      : {
+          filter: {
+            UserID: !teleAdv
+              ? {
+                  label: User.FullName,
+                  value: User.ID
+                }
+              : '',
+            From: '',
+            To: '',
+            StockID: CrStockID,
+            Result: ''
+          },
+          pi: 1,
+          ps: 20
+        }
+  )
 
   const { width } = useWindowSize()
 
@@ -179,8 +183,8 @@ function StatisticalList(props) {
             <div className="d-flex">
               <Link
                 className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
-                to={`/danh-sach/${rowData.MemberID}`}
-                state={{ previousPath: pathname }}
+                to={`/danh-sach/${rowData.MemberID}/dich-vu`}
+                state={{ from: pathname, filters: filters }}
               >
                 <i className="fa-regular fa-arrow-right pt-2px"></i>
               </Link>
@@ -194,7 +198,7 @@ function StatisticalList(props) {
       ]
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [width, pathname]
+    [width, pathname, filters]
   )
 
   const handleEndReached = () => {
