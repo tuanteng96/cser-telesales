@@ -79,11 +79,11 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                         className="select-control"
                         menuPosition="fixed"
                         menuPlacement="bottom"
-                        name="UserId"
+                        name="UserID"
                         onChange={otp => {
-                          setFieldValue('UserId', otp, false)
+                          setFieldValue('UserID', otp, false)
                         }}
-                        value={values.UserId}
+                        value={values.UserID}
                         isClearable={true}
                         adv={true}
                       />

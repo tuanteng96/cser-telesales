@@ -188,7 +188,7 @@ function ReminderList(props) {
       value: 0,
       label: 'Chưa nhắc'
     }, // 0, 1
-    UserId: !teleAdv
+    UserID: !teleAdv
       ? {
           label: User.FullName,
           value: User.ID
@@ -213,7 +213,7 @@ function ReminderList(props) {
         ? moment(filters.DateFrom).format('DD/MM/YYYY')
         : '',
       DateTo: filters.DateTo ? moment(filters.DateTo).format('DD/MM/YYYY') : '',
-      UserId: filters.UserId ? filters.UserId.value : '',
+      UserID: filters.UserID ? filters.UserID.value : '',
       IsNoti: filters.IsNoti ? filters.IsNoti.value : '',
       Pi: callback ? 1 : filters.Pi
     }
@@ -417,7 +417,7 @@ function ReminderList(props) {
         DateTo: filters.DateTo
           ? moment(filters.DateTo).format('DD/MM/YYYY')
           : '',
-        UserId: filters.UserId ? filters.UserId.value : '',
+        UserID: filters.UserID ? filters.UserID.value : '',
         IsNoti: filters.IsNoti ? filters.IsNoti.value : '',
         pi: 1,
         ps: PageTotal
