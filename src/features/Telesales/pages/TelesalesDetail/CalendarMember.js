@@ -94,7 +94,11 @@ function CalendarMember(props) {
         CurrentStockID,
         u_id_z4aDf2
       })
-      if (hasTags && !hasTagsSelectd) {
+      if (
+        hasTags &&
+        !hasTagsSelectd &&
+        window?.top?.GlobalConfig?.Admin?.kpiAuto
+      ) {
         let newData = {
           items: [
             {
@@ -118,7 +122,11 @@ function CalendarMember(props) {
         onHideModalBook()
         setBtnLoading(false)
         resetForm()
-        if (hasTags && !hasTagsSelectd) {
+        if (
+          hasTags &&
+          !hasTagsSelectd &&
+          window?.top?.GlobalConfig?.Admin?.kpiAuto
+        ) {
           window.getMemberTelesales && window.getMemberTelesales()
         }
       })
