@@ -62,13 +62,19 @@ function CalendarMember(props) {
     const hasTags =
       TagsList &&
       TagsList.some(
-        x => x.options && x.options.some(s => s.value === 'Đặt lịch thành công')
+        x =>
+          x.options &&
+          x.options.some(
+            s =>
+              window?.top?.GlobalConfig?.Admin?.kpiSuccess &&
+              s.value === window?.top?.GlobalConfig?.Admin?.kpiSuccess
+          )
       )
-    const hasTagsSelectd =
-      !TagsSelected ||
-      (TagsSelected &&
-        TagsSelected.some(x => x.value === 'Đặt lịch thành công'))
-
+    const hasTagsSelectd = TagsSelected
+      ? TagsSelected.some(
+          x => x.value === window?.top?.GlobalConfig?.Admin?.kpiSuccess
+        )
+      : false
     setBtnLoading(true)
     const objBooking = {
       ...values,
@@ -80,7 +86,7 @@ function CalendarMember(props) {
           : '',
       BookDate: moment(values.BookDate).format('YYYY-MM-DD HH:mm'),
       Status: 'XAC_NHAN',
-      CreateBy: hasTags && !hasTagsSelectd ? 'tele' : ''
+      CreateBy: 'tele'
     }
 
     const CurrentStockID = Cookies.get('StockID')
@@ -97,7 +103,7 @@ function CalendarMember(props) {
       if (
         hasTags &&
         !hasTagsSelectd &&
-        window?.top?.GlobalConfig?.Admin?.kpiAuto
+        window?.top?.GlobalConfig?.Admin?.kpiSuccess
       ) {
         let newData = {
           items: [
@@ -105,7 +111,10 @@ function CalendarMember(props) {
               MemberID: MemberID,
               TeleTags: [
                 ...(TagsSelected || []),
-                { value: 'Đặt lịch thành công', label: 'Đặt lịch thành công' }
+                {
+                  value: window?.top?.GlobalConfig?.Admin?.kpiSuccess,
+                  label: window?.top?.GlobalConfig?.Admin?.kpiSuccess
+                }
               ]
                 .map(item => item.value)
                 .join(',')
@@ -125,7 +134,7 @@ function CalendarMember(props) {
         if (
           hasTags &&
           !hasTagsSelectd &&
-          window?.top?.GlobalConfig?.Admin?.kpiAuto
+          window?.top?.GlobalConfig?.Admin?.kpiSuccess
         ) {
           window.getMemberTelesales && window.getMemberTelesales()
         }

@@ -110,7 +110,10 @@ function AuthInit(props) {
                 order: 100,
                 isvisible: false
               }
-            ]
+            ],
+            kpiSuccess: 'Đặt lịch thành công',
+            kpiFinish: 'Khách đến làm dịch vụ',
+            kpiCancel: 'Khách hủy'
           }
         }
       }
