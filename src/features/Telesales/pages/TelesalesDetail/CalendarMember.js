@@ -13,6 +13,7 @@ import moment from 'moment'
 import 'moment/locale/vi'
 import clsx from 'clsx'
 import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
+import { useTeleDetail } from './TelesalesDetailLayout'
 
 moment.locale('vi')
 
@@ -31,6 +32,9 @@ function CalendarMember(props) {
   const { AuthCrStockID } = useSelector(({ auth }) => ({
     AuthCrStockID: auth?.Info?.CrStockID
   }))
+
+  const { TagsList, TagsSelected } = useTeleDetail()
+
   useEffect(() => {
     getListBook()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -55,6 +59,16 @@ function CalendarMember(props) {
   }
 
   const onSubmit = async (values, { resetForm }) => {
+    const hasTags =
+      TagsList &&
+      TagsList.some(
+        x => x.options && x.options.some(s => s.value === 'Đặt lịch thành công')
+      )
+    const hasTagsSelectd =
+      !TagsSelected ||
+      (TagsSelected &&
+        TagsSelected.some(x => x.value === 'Đặt lịch thành công'))
+
     setBtnLoading(true)
     const objBooking = {
       ...values,
@@ -65,7 +79,8 @@ function CalendarMember(props) {
           ? values.UserServiceIDs.map(item => item.value).toString()
           : '',
       BookDate: moment(values.BookDate).format('YYYY-MM-DD HH:mm'),
-      Status: 'XAC_NHAN'
+      Status: 'XAC_NHAN',
+      CreateBy: hasTags && !hasTagsSelectd ? 'tele' : ''
     }
 
     const CurrentStockID = Cookies.get('StockID')
@@ -79,6 +94,22 @@ function CalendarMember(props) {
         CurrentStockID,
         u_id_z4aDf2
       })
+      if (hasTags && !hasTagsSelectd) {
+        let newData = {
+          items: [
+            {
+              MemberID: MemberID,
+              TeleTags: [
+                ...(TagsSelected || []),
+                { value: 'Đặt lịch thành công', label: 'Đặt lịch thành công' }
+              ]
+                .map(item => item.value)
+                .join(',')
+            }
+          ]
+        }
+        await telesalesApi.editTagsMember(newData)
+      }
       getListBook(false, () => {
         window.top?.toastr &&
           window.top?.toastr.success('Đặt lịch thành công', '', {
@@ -87,6 +118,9 @@ function CalendarMember(props) {
         onHideModalBook()
         setBtnLoading(false)
         resetForm()
+        if (hasTags && !hasTagsSelectd) {
+          window.getMemberTelesales && window.getMemberTelesales()
+        }
       })
     } catch (error) {
       setBtnLoading(prevState => ({

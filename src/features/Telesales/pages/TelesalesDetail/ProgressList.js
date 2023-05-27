@@ -4,6 +4,7 @@ import SelectProgress from 'src/components/Selects/SelectProgress'
 import { useNavigate, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import { TelesalesContext } from '../..'
+import { useTeleDetail } from './TelesalesDetailLayout'
 
 ProgressList.propTypes = {
   initialValues: PropTypes.string,
@@ -17,6 +18,8 @@ function ProgressList({ initialValues, MemberLoading, ...props }) {
   const { onOpenProfile } = useContext(TelesalesContext)
   const navigate = useNavigate()
 
+  const { setTagsSelected } = useTeleDetail()
+
   useEffect(() => {
     if (initialValues) {
       setValues(() =>
@@ -25,8 +28,14 @@ function ProgressList({ initialValues, MemberLoading, ...props }) {
           value: item
         }))
       )
+      setTagsSelected(
+        initialValues.split(',').map(item => ({
+          label: item,
+          value: item
+        }))
+      )
     }
-  }, [initialValues])
+  }, [initialValues, setTagsSelected])
 
   const onSubmit = otp => {
     setLoading(true)
@@ -43,6 +52,7 @@ function ProgressList({ initialValues, MemberLoading, ...props }) {
       .then(response => {
         setValues(otp)
         setLoading(false)
+        setTagsSelected(otp)
       })
       .catch(error => console.log(error))
   }

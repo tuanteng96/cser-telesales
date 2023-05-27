@@ -5,7 +5,7 @@ import { LayoutSplashScreen } from 'src/layout/_core/SplashScreen'
 import { setProfile } from './AuthSlice'
 
 function checkInfo(fn) {
-  if (window.top.Info && window.top.token) {
+  if (window.top.Info && window.top.token && window.top.GlobalConfig) {
     fn()
   } else {
     setTimeout(() => {
@@ -61,7 +61,58 @@ function AuthInit(props) {
           }
         }
         window.token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMzExNDEwMzE2NyIsIm5iZiI6MTY4Mzc2NzAzMiwiZXhwIjoxNjg0MzcxODMyLCJpYXQiOjE2ODM3NjcwMzJ9.cVt7w8wfBfxvFLOjbGDHh9SVYjb1Wlc3d3d7UYmis-M'
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMzExNDEwMzM3MSIsIm5iZiI6MTY4NTE1MjQzNSwiZXhwIjoxNjg1NzU3MjM1LCJpYXQiOjE2ODUxNTI0MzV9.n75tWCFnLLG2C_PaTdwrVv875yx-x0Xhj6pqD5aBUD4'
+        window.GlobalConfig = {
+          Admin: {
+            kpiSortColumn: [
+              {
+                key: 'index',
+                order: 0,
+                isvisible: false
+              },
+              {
+                key: 'FullName',
+                order: 1,
+                isvisible: false
+              },
+              {
+                key: 'CreateDate',
+                order: 2,
+                isvisible: false
+              },
+              {
+                key: 'ByStock.Title',
+                order: 3,
+                isvisible: false
+              },
+              {
+                key: 'Staffs',
+                order: 4,
+                isvisible: false
+              },
+              {
+                key: 'TeleTags',
+                order: 5,
+                isvisible: false
+              },
+              {
+                key: 'TopTele',
+                order: 6,
+                isvisible: false
+              },
+              {
+                key: 'TeleNote',
+                order: 7,
+                isvisible: false
+              },
+              {
+                key: 'action',
+                order: 100,
+                isvisible: false
+              }
+            ]
+          }
+        }
       }
       checkInfo(() => {
         dispatch(
@@ -73,7 +124,7 @@ function AuthInit(props) {
         setShowSplashScreen(false)
       })
     }
-    if (!window.top.Info || !window.top.token) {
+    if (!window.top.Info || !window.top.token || !window.top.GlobalConfig) {
       requestUser()
     } else {
       dispatch(

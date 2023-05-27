@@ -3,6 +3,7 @@ import Select from 'react-select'
 import PropTypes from 'prop-types'
 import configApi from 'src/api/config.api'
 import clsx from 'clsx'
+import { useTeleDetail } from 'src/features/Telesales/pages/TelesalesDetail/TelesalesDetailLayout'
 
 SelectProgress.propTypes = {
   onChange: PropTypes.func
@@ -11,6 +12,7 @@ SelectProgress.propTypes = {
 function SelectProgress({ onChange, value, isLoading, className, ...props }) {
   const [loading, setLoading] = useState(false)
   const [options, setOptions] = useState([])
+  const { setTagsList } = useTeleDetail()
 
   useEffect(() => {
     getAllProgress()
@@ -33,6 +35,7 @@ function SelectProgress({ onChange, value, isLoading, className, ...props }) {
           }))
       }))
       setOptions(newResult)
+      setTagsList && setTagsList(newResult)
       setLoading(false)
     }
   }

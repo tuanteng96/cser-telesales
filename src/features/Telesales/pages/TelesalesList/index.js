@@ -140,6 +140,8 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
   )
 }
 
+const columnsSort = window?.top?.GlobalConfig?.Admin?.kpiSortColumn || null
+
 function TelesalesList(props) {
   const { User, teleAdv, CrStockID, filtersRedux } = useSelector(
     ({ auth, telesales }) => ({
@@ -286,162 +288,179 @@ function TelesalesList(props) {
   }
 
   const columns = useMemo(
-    () => [
-      {
-        key: 'index',
-        title: 'STT',
-        dataKey: 'index',
-        cellRenderer: ({ rowIndex }) => rowIndex + 1,
-        width: 60,
-        sortable: false,
-        align: 'center'
-      },
-      {
-        key: 'FullName',
-        title: 'Họ và tên',
-        dataKey: 'FullName',
-        cellRenderer: ({ rowData }) => (
-          <div>
-            <div className="fw-600">{rowData?.FullName}</div>
-            <div className="font-number">{rowData?.MobilePhone}</div>
-          </div>
-        ),
-        width: 250,
-        sortable: false
-      },
-      {
-        key: 'CreateDate',
-        title: 'Ngày tạo',
-        dataKey: 'CreateDate',
-        cellRenderer: ({ rowData }) => (
-          <div>{moment(rowData?.CreateDate).format('DD-MM-YYYY')}</div>
-        ),
-        width: 180,
-        sortable: false
-      },
-      {
-        key: 'ByStock.Title',
-        title: 'Cơ sở',
-        dataKey: 'ByStock.Title',
-        width: 250,
-        sortable: false
-      },
-      {
-        key: 'Staffs',
-        title: 'Nhân viên phụ trách',
-        dataKey: 'Staffs',
-        width: 250,
-        sortable: false,
-        cellRenderer: ({ rowData, container }) => (
-          <EditableCell
-            rowData={rowData}
-            container={container}
-            hideEditing={() => setIsEditing(false)}
-            showEditing={() => setIsEditing(true)}
-          />
-        )
-      },
-      {
-        key: 'TeleTags',
-        title: 'Trạng thái',
-        dataKey: 'TeleTags',
-        width: 200,
-        sortable: false
-      },
-      {
-        key: 'TopTele',
-        title: 'Liên hệ gần nhất',
-        cellRenderer: ({ rowData }) => (
-          <>
-            {rowData.TopTele && rowData.TopTele.length > 0 ? (
-              <div className="d-flex align-items-center w-100">
-                <Text className="flex-1 pr-10px" tooltipMaxWidth={280}>
-                  {rowData.TopTele[0].Content}
-                </Text>
-                <OverlayTrigger
-                  rootClose
-                  trigger="click"
-                  key="auto"
-                  placement="auto"
-                  overlay={
-                    <Popover id={`popover-positioned-top`}>
-                      <Popover.Body className="p-0 max-h-300px overflow-auto">
-                        {rowData.TopTele.map((item, index) => (
-                          <div
-                            className={clsx(
-                              'p-15px',
-                              rowData.TopTele.length - 1 !== index &&
-                                'border-bottom'
-                            )}
-                            key={index}
-                          >
-                            {item.Content}
-                            <div className="font-number mt-5px text-muted">
-                              Ngày{' '}
-                              {moment(item.CreateDate).format(
-                                'DD-MM-YYYY HH:mm'
+    () => {
+      let newColumns = [
+        {
+          key: 'index',
+          title: 'STT',
+          dataKey: 'index',
+          cellRenderer: ({ rowIndex }) => rowIndex + 1,
+          width: 60,
+          sortable: false,
+          align: 'center'
+        },
+        {
+          key: 'FullName',
+          title: 'Họ và tên',
+          dataKey: 'FullName',
+          cellRenderer: ({ rowData }) => (
+            <div>
+              <div className="fw-600">{rowData?.FullName}</div>
+              <div className="font-number">{rowData?.MobilePhone}</div>
+            </div>
+          ),
+          width: 250,
+          sortable: false
+        },
+        {
+          key: 'CreateDate',
+          title: 'Ngày tạo',
+          dataKey: 'CreateDate',
+          cellRenderer: ({ rowData }) => (
+            <div>{moment(rowData?.CreateDate).format('DD-MM-YYYY')}</div>
+          ),
+          width: 180,
+          sortable: false
+        },
+        {
+          key: 'ByStock.Title',
+          title: 'Cơ sở',
+          dataKey: 'ByStock.Title',
+          width: 250,
+          sortable: false
+        },
+        {
+          key: 'Staffs',
+          title: 'Nhân viên phụ trách',
+          dataKey: 'Staffs',
+          width: 250,
+          sortable: false,
+          cellRenderer: ({ rowData, container }) => (
+            <EditableCell
+              rowData={rowData}
+              container={container}
+              hideEditing={() => setIsEditing(false)}
+              showEditing={() => setIsEditing(true)}
+            />
+          )
+        },
+        {
+          key: 'TeleTags',
+          title: 'Trạng thái',
+          dataKey: 'TeleTags',
+          width: 200,
+          sortable: false
+        },
+        {
+          key: 'TopTele',
+          title: 'Liên hệ gần nhất',
+          cellRenderer: ({ rowData }) => (
+            <>
+              {rowData.TopTele && rowData.TopTele.length > 0 ? (
+                <div className="d-flex align-items-center w-100">
+                  <Text className="flex-1 pr-10px" tooltipMaxWidth={280}>
+                    {rowData.TopTele[0].Content}
+                  </Text>
+                  <OverlayTrigger
+                    rootClose
+                    trigger="click"
+                    key="auto"
+                    placement="auto"
+                    overlay={
+                      <Popover id={`popover-positioned-top`}>
+                        <Popover.Body className="p-0 max-h-300px overflow-auto">
+                          {rowData.TopTele.map((item, index) => (
+                            <div
+                              className={clsx(
+                                'p-15px',
+                                rowData.TopTele.length - 1 !== index &&
+                                  'border-bottom'
                               )}
+                              key={index}
+                            >
+                              {item.Content}
+                              <div className="font-number mt-5px text-muted">
+                                Ngày{' '}
+                                {moment(item.CreateDate).format(
+                                  'DD-MM-YYYY HH:mm'
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </Popover.Body>
-                    </Popover>
-                  }
-                >
-                  <i className="fa-solid fa-circle-info text-warning font-size-lg cursor-pointer"></i>
-                </OverlayTrigger>
-              </div>
-            ) : (
-              <>Chưa có liên hệ</>
-            )}
-          </>
-        ),
-        dataKey: 'TopTele',
-        width: 250,
-        sortable: false
-      },
-      {
-        key: 'TeleNote',
-        title: 'Ghi chú',
-        dataKey: 'TeleNote',
-        width: 353,
-        sortable: false
-      },
-      {
-        key: 'action',
-        title: 'Thao tác',
-        dataKey: 'action',
-        cellRenderer: ({ rowData }) => (
-          <div className="d-flex">
-            <a
-              href={`tel:${rowData?.MobilePhone}`}
-              className="w-38px h-38px rounded-circle btn btn-success shadow mx-4px p-0 position-relative"
-            >
-              <img
-                className="w-23px position-absolute top-7px right-7px"
-                src={AssetsHelpers.toAbsoluteUrl(
-                  '/_assets/images/icon-call.png'
-                )}
-                alt=""
-              />
-            </a>
-            <Link
-              className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
-              to={`${rowData.ID}/dich-vu`}
-              state={{
-                from: pathname
-              }}
-            >
-              <i className="fa-regular fa-arrow-right pt-2px"></i>
-            </Link>
-          </div>
-        ),
-        align: 'center',
-        width: 130,
-        sortable: false,
-        frozen: width > 991 ? 'right' : false
+                          ))}
+                        </Popover.Body>
+                      </Popover>
+                    }
+                  >
+                    <i className="fa-solid fa-circle-info text-warning font-size-lg cursor-pointer"></i>
+                  </OverlayTrigger>
+                </div>
+              ) : (
+                <>Chưa có liên hệ</>
+              )}
+            </>
+          ),
+          dataKey: 'TopTele',
+          width: 250,
+          sortable: false
+        },
+        {
+          key: 'TeleNote',
+          title: 'Ghi chú',
+          dataKey: 'TeleNote',
+          width: 353,
+          sortable: false
+        },
+        {
+          key: 'action',
+          title: 'Thao tác',
+          dataKey: 'action',
+          cellRenderer: ({ rowData }) => (
+            <div className="d-flex">
+              <a
+                href={`tel:${rowData?.MobilePhone}`}
+                className="w-38px h-38px rounded-circle btn btn-success shadow mx-4px p-0 position-relative"
+              >
+                <img
+                  className="w-23px position-absolute top-7px right-7px"
+                  src={AssetsHelpers.toAbsoluteUrl(
+                    '/_assets/images/icon-call.png'
+                  )}
+                  alt=""
+                />
+              </a>
+              <Link
+                className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
+                to={`${rowData.ID}/dich-vu`}
+                state={{
+                  from: pathname
+                }}
+              >
+                <i className="fa-regular fa-arrow-right pt-2px"></i>
+              </Link>
+            </div>
+          ),
+          align: 'center',
+          width: 130,
+          sortable: false,
+          frozen: width > 991 ? 'right' : false
+        }
+      ]
+      if (columnsSort && columnsSort.length > 0) {
+        newColumns = newColumns
+          .map(clm => {
+            let newClm = { ...clm }
+            const indexSort = columnsSort.findIndex(x => x.key === clm.key)
+            if (indexSort > -1) {
+              newClm['order'] = columnsSort[indexSort]['order']
+              newClm['isvisible'] = columnsSort[indexSort]['isvisible']
+            }
+            return newClm
+          })
+          .sort((a, b) => a.order - b.order)
+          .filter(x => !x.isvisible)
       }
-    ],
+      return newColumns
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [width]
   )
