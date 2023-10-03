@@ -2,7 +2,9 @@ import http from './configs/http'
 
 const moreApi = {
   getProduct: key => {
-    return http.get(`/api/gl/select2?cmd=prod&cate_namedich_vu,san_pham=&ignore_all=1&q=${key}`)
+    return http.get(
+      `/api/gl/select2?cmd=prod&cate_name=dich_vu,san_pham&ignore_all=1&q=${key}&&ignore_rootsv=1`
+    )
   },
   getProductService: key => {
     return http.get(
