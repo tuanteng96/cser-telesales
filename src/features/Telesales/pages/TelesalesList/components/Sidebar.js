@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import configApi from 'src/api/config.api'
-import SelectProductService from 'src/components/Selects/SelectProductService'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import { NumericFormat } from 'react-number-format'
@@ -13,10 +12,12 @@ import telesalesApi from 'src/api/telesales.api'
 import { useSelector } from 'react-redux'
 import { TelesalesContext } from 'src/features/Telesales'
 import SelectStocks from 'src/components/Selects/SelectStocks'
+import SelectProduct from 'src/components/Selects/SelectProduct'
 
 import vi from 'date-fns/locale/vi' // the locale you want
 import MemberTransferImport from './MemberTransferImport'
 import { Dropdown } from 'react-bootstrap'
+
 
 registerLocale('vi', vi) // register it with the name you want
 
@@ -298,7 +299,8 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     <label className="font-label text-muted mb-5px">
                       Tìm theo SP, DV khách quan tâm
                     </label>
-                    <SelectProductService
+                    <SelectProduct
+                      className="select-control"
                       isMulti
                       menuPosition="fixed"
                       menuPlacement="top"
