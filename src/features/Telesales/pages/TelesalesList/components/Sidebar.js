@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux'
 import { TelesalesContext } from 'src/features/Telesales'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectProduct from 'src/components/Selects/SelectProduct'
-
+import Select from 'react-select'
 import vi from 'date-fns/locale/vi' // the locale you want
 import MemberTransferImport from './MemberTransferImport'
 import { Dropdown } from 'react-bootstrap'
@@ -25,6 +25,17 @@ Sidebar.propTypes = {
   filters: PropTypes.object,
   onSubmit: PropTypes.func
 }
+
+const OsList = [
+  {
+    value: 0,
+    label: 'Hết thẻ'
+  },
+  {
+    value: 1,
+    label: 'Còn thẻ'
+  }
+]
 
 function Sidebar({ filters, onSubmit, loading, onRefresh }) {
   const [ListType, setListType] = useState([])
@@ -490,6 +501,23 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       }}
                       onBlur={handleBlur}
                       autoComplete="off"
+                    />
+                  </div>
+                  <div className="form-group mb-15px">
+                    <label className="font-label text-muted mb-5px">
+                      Thẻ dịch vụ
+                    </label>
+                    <Select
+                      classNamePrefix="select"
+                      options={OsList}
+                      className="select-control"
+                      name="osCount"
+                      value={values?.filter?.osCount}
+                      onChange={otp => {
+                        setFieldValue('filter.osCount', otp)
+                      }}
+                      placeholder="Chọn"
+                      isClearable
                     />
                   </div>
                   {teleAdv && (

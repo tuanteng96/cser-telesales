@@ -46,7 +46,7 @@ function AuthInit(props) {
               ParentID: 778
             }
           ],
-          CrStockID: 8975, //8975
+          CrStockID: 11343, //8975
           rightsSum: {
             tele: {
               hasRight: true,
@@ -61,7 +61,7 @@ function AuthInit(props) {
           }
         }
         window.token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwMzExNDEwMzM3MSIsIm5iZiI6MTY4NTE1MjQzNSwiZXhwIjoxNjg1NzU3MjM1LCJpYXQiOjE2ODUxNTI0MzV9.n75tWCFnLLG2C_PaTdwrVv875yx-x0Xhj6pqD5aBUD4'
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjU3Mzg1NzkwNTczODYzMTciLCJuYmYiOjE3MTQ5NzU2NDQsImV4cCI6MTgwMTM3NTY0NCwiaWF0IjoxNzE0OTc1NjQ0fQ.XBsdd0wS-VgLj-XQZPhAY0L3xq60xKX-N2O6HFDU34g'
         window.GlobalConfig = {
           Admin: {
             kpiSortColumn: [
