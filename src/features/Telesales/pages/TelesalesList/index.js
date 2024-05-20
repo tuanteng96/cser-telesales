@@ -188,7 +188,8 @@ function TelesalesList(props) {
       StockID: filtersRedux.StockID || CrStockID,
       CreateFrom: filtersRedux.CreateFrom || '',
       CreateTo: filtersRedux.CreateTo || '',
-      osCount: ''
+      osCount: '',
+      ServiceCardIDs: ''
     },
     pi: 1,
     ps: 20
@@ -247,7 +248,10 @@ function TelesalesList(props) {
         CreateTo: filters.filter.CreateTo
           ? moment(filters.filter.CreateTo).format('DD/MM/YYYY')
           : '',
-        osCount: filters.filter.osCount ? filters.filter.osCount?.value : ''
+        osCount: filters.filter.osCount ? filters.filter.osCount?.value : '',
+        ServiceCardIDs: filters?.filter?.ServiceCardIDs
+          ? filters?.filter?.ServiceCardIDs.map(x => x.value).toString()
+          : ''
       },
       pi: callback ? 1 : filters.pi
     }

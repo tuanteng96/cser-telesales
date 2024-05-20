@@ -17,6 +17,7 @@ import Select from 'react-select'
 import vi from 'date-fns/locale/vi' // the locale you want
 import MemberTransferImport from './MemberTransferImport'
 import { Dropdown } from 'react-bootstrap'
+import SelectServiceCard from 'src/components/Selects/SelectServiceCard'
 
 
 registerLocale('vi', vi) // register it with the name you want
@@ -34,6 +35,10 @@ const OsList = [
   {
     value: 1,
     label: 'Còn thẻ'
+  },
+  {
+    value: 2,
+    label: 'Chưa mua'
   }
 ]
 
@@ -505,7 +510,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                   </div>
                   <div className="form-group mb-15px">
                     <label className="font-label text-muted mb-5px">
-                      Thẻ dịch vụ
+                      Loại thẻ dịch vụ
                     </label>
                     <Select
                       classNamePrefix="select"
@@ -518,6 +523,28 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       }}
                       placeholder="Chọn"
                       isClearable
+                    />
+                  </div>
+                  <div className="form-group mb-15px">
+                    <label className="font-label text-muted mb-5px">
+                      Dịch vụ thẻ
+                    </label>
+                    <SelectServiceCard
+                      isMulti
+                      name="ServiceCardIDs"
+                      value={values?.filter?.ServiceCardIDs}
+                      onChange={otp => {
+                        setFieldValue('filter.ServiceCardIDs', otp)
+                      }}
+                      isClearable
+                      menuPosition="fixed"
+                      styles={{
+                        menuPortal: base => ({
+                          ...base,
+                          zIndex: 9999
+                        })
+                      }}
+                      menuPortalTarget={document.body}
                     />
                   </div>
                   {teleAdv && (

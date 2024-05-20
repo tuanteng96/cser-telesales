@@ -11,6 +11,11 @@ const moreApi = {
       `/api/gl/select2?cmd=prod&cate_name=san_pham,dich_vu&ignore_all=1&q=${key}`
     )
   },
+  getAllServiceCard: key => {
+    return http.get(
+      `/api/gl/select2?cmd=prod&fee=0&ignore_all=1&srv=1&q&no_root=1&q=${key}`
+    )
+  },
   getAllStaffs: key => {
     return http.get(`/api/gl/select2?cmd=user&q=${key}`)
   },
