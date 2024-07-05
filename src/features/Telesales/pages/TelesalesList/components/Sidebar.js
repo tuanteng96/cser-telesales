@@ -36,10 +36,10 @@ const OsList = [
     value: 1,
     label: 'Còn thẻ'
   },
-  {
-    value: 2,
-    label: 'Chưa mua'
-  }
+  // {
+  //   value: 2,
+  //   label: 'Chưa mua'
+  // }
 ]
 
 function Sidebar({ filters, onSubmit, loading, onRefresh }) {

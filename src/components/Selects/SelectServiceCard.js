@@ -12,7 +12,7 @@ function SelectServiceCard({ onChange, value, ...props }) {
     const { data } = await moreApi.getAllServiceCard(search)
     const newData =
       data.data && data.data.length > 0
-        ? data.data.map(item => ({
+        ? data.data.filter(x => x.suffix !== "Thẻ PP").map(item => ({
             ...item,
             label: item.text,
             value: item.id

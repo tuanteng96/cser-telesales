@@ -11,6 +11,7 @@ import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectStaffsService from 'src/components/Selects/SelectStaffsService'
+import Select, { components } from "react-select";
 moment.locale('vi')
 
 CalendarMemberBook.propTypes = {
@@ -31,10 +32,15 @@ const initialValue = {
   Desc: '',
   StockID: 0,
   UserServiceIDs: '',
-  AtHome: false
+  AtHome: false,
+  AmountPeople: {
+    label: "1 khách",
+    value: 1,
+  },
+  TagSetting: "",
 }
 
-function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
+function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
   let { MemberID } = useParams()
   const [initialValues, setInitialValues] = useState(initialValue)
   const { AuthCrStockID } = useSelector(({ auth }) => ({
@@ -47,7 +53,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
     ),
     AuthCrStockID: auth.Info.CrStockID
   }))
-
+  
   useEffect(() => {
     setInitialValues(prevState => ({ ...prevState, StockID: AuthCrStockID }))
   }, [AuthCrStockID])
@@ -231,6 +237,57 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading }) {
                           ? 'Không có nhân viên'
                           : 'Không tìm thấy nhân viên'
                       }
+                    />
+                    {window?.top?.GlobalConfig?.APP?.SL_khach && (
+                      <Select
+                        //isSearchable
+                        isClearable
+                        classNamePrefix="select"
+                        className="mt-2 select-control"
+                        options={Array(10)
+                          .fill()
+                          .map((_, x) => ({
+                            label: x + 1 + " khách",
+                            value: x + 1,
+                          }))}
+                        placeholder="Chọn số khách"
+                        value={values.AmountPeople}
+                        onChange={(value) =>
+                          setFieldValue("AmountPeople", value)
+                        }
+                        blurInputOnSelect={true}
+                        noOptionsMessage={() => "Không có dữ liệu."}
+                        menuPortalTarget={document.body}
+                        menuPosition="fixed"
+                        styles={{
+                          menuPortal: (base) => ({
+                            ...base,
+                            zIndex: 9999,
+                          }),
+                        }}
+                      />
+                    )}
+
+                    <Select
+                      //isSearchable
+                      isMulti
+                      isClearable
+                      classNamePrefix="select"
+                      className="mt-2 select-control"
+                      options={TagsList}
+                      placeholder="Chọn tags"
+                      value={values.TagSetting}
+                      onChange={(value) => setFieldValue("TagSetting", value)}
+                      blurInputOnSelect={true}
+                      noOptionsMessage={() => "Không có dữ liệu."}
+                      menuPortalTarget={document.body}
+                      menuPosition="fixed"
+                      styles={{
+                        menuPortal: (base) => ({
+                          ...base,
+                          zIndex: 9999,
+                        }),
+                      }}
                     />
                     <textarea
                       name="Desc"

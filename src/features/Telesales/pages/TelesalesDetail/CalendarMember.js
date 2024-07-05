@@ -14,6 +14,7 @@ import 'moment/locale/vi'
 import clsx from 'clsx'
 import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import { useTeleDetail } from './TelesalesDetailLayout'
+import configApi from 'src/api/config.api'
 
 moment.locale('vi')
 
@@ -32,13 +33,34 @@ function CalendarMember(props) {
   const { AuthCrStockID } = useSelector(({ auth }) => ({
     AuthCrStockID: auth?.Info?.CrStockID
   }))
+  const [SettingCalendar, setSettingCalendar] = useState({
+    Tags: '',
+    OriginalServices: []
+  })
 
   const { TagsList, TagsSelected } = useTeleDetail()
 
   useEffect(() => {
     getListBook()
+    getSettingCalendar()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const getSettingCalendar = () => {
+    configApi.getConfigName('ArticleRel').then(({ data }) => {
+      let rs = {
+        Tags: '',
+        OriginalServices: []
+      }
+      if (data?.data && data?.data.length > 0) {
+        const result = JSON.parse(data?.data[0].Value)
+        if (result) {
+          rs = result
+        }
+      }
+      setSettingCalendar(rs)
+    })
+  }
 
   const getListBook = (isLoading = true, callback) => {
     const filters = {
@@ -76,6 +98,20 @@ function CalendarMember(props) {
         )
       : false
     setBtnLoading(true)
+
+    let Desc = ''
+    if (window?.top?.GlobalConfig?.APP?.SL_khach && values.AmountPeople) {
+      Desc =
+        (Desc ? Desc + '\n' : '') +
+        `Số lượng khách: ${values.AmountPeople.value}`
+    }
+    if (values.TagSetting && values.TagSetting.length > 0) {
+      Desc =
+        (Desc ? Desc + '\n' : '') +
+        `Tags: ${values.TagSetting.map(x => x.value).toString()}`
+    }
+    Desc = (Desc ? Desc + '\n' : '') + `Ghi chú: ${values.Desc}`
+
     const objBooking = {
       ...values,
       MemberID: MemberID,
@@ -86,7 +122,8 @@ function CalendarMember(props) {
           : '',
       BookDate: moment(values.BookDate).format('YYYY-MM-DD HH:mm'),
       Status: 'XAC_NHAN',
-      CreateBy: 'tele'
+      CreateBy: 'tele',
+      Desc
     }
 
     const CurrentStockID = Cookies.get('StockID')
@@ -309,6 +346,14 @@ function CalendarMember(props) {
         onHide={onHideModalBook}
         btnLoading={btnLoading}
         onSubmit={onSubmit}
+        TagsList={
+          SettingCalendar?.Tags
+            ? SettingCalendar?.Tags.split(',').map(x => ({
+                label: x,
+                value: x
+              }))
+            : []
+        }
       />
       <ModalCalendarIframe show={isModalCalendar} onHide={onHideModal} />
     </div>
