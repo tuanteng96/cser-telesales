@@ -71,23 +71,42 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     />
                   </div>
                   {teleAdv && (
-                    <div className="mb-15px form-group">
-                      <label className="font-label text-muted mb-5px">
-                        Nhân viên
-                      </label>
-                      <SelectStaffs
-                        className="select-control"
-                        menuPosition="fixed"
-                        menuPlacement="bottom"
-                        name="UserID"
-                        onChange={otp => {
-                          setFieldValue('UserID', otp, false)
-                        }}
-                        value={values.UserID}
-                        isClearable={true}
-                        adv={true}
-                      />
-                    </div>
+                    <>
+                      <div className="mb-15px form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Nhân viên tạo lịch nhắc
+                        </label>
+                        <SelectStaffs
+                          className="select-control"
+                          menuPosition="fixed"
+                          menuPlacement="bottom"
+                          name="UserID"
+                          onChange={otp => {
+                            setFieldValue('UserID', otp, false)
+                          }}
+                          value={values.UserID}
+                          isClearable={true}
+                          adv={true}
+                        />
+                      </div>
+                      <div className="mb-15px form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Nhân viên có KH có lịch nhắc
+                        </label>
+                        <SelectStaffs
+                          className="select-control"
+                          menuPosition="fixed"
+                          menuPlacement="bottom"
+                          name="ReminderUserID"
+                          onChange={otp => {
+                            setFieldValue('ReminderUserID', otp, false)
+                          }}
+                          value={values.ReminderUserID}
+                          isClearable={true}
+                          adv={true}
+                        />
+                      </div>
+                    </>
                   )}
                   <div className="mb-15px form-group">
                     <label className="font-label text-muted mb-5px">

@@ -36,7 +36,7 @@ function AuthInit(props) {
               ParentID: 0
             },
             {
-              ID: 11375,
+              ID: 11389,
               Title: 'Cser Hà Nội',
               ParentID: 778
             },
@@ -46,16 +46,16 @@ function AuthInit(props) {
               ParentID: 778
             }
           ],
-          CrStockID: 11375, //8975
+          CrStockID: 11389, //8975
           rightsSum: {
             tele: {
               hasRight: true,
-              stocks: [{ ID: 8975, Title: 'Cser Hà Nội' }],
+              stocks: [{ ID: 11389, Title: 'Cser Hà Nội' }],
               IsAllStock: false
             },
             teleAdv: {
               hasRight: true,
-              stocks: [{ ID: 10053, Title: 'Cser Hồ Chí Minh' }],
+              stocks: [{ ID: 11389, Title: 'Cser Hà Nội' }],
               IsAllStock: false
             }
           }
