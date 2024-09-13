@@ -58,7 +58,7 @@ const telesalesApi = {
   },
   getListBookMember: ({ From = null, To = null, StockID = '', MemberID }) => {
     return http.get(
-      `/api/v3/mbookadmin?cmd=getbooks&memberid=${MemberID}&from=${From}&to=${To}&stockid=${StockID}&status=XAC_NHAN&UserServiceIDs=&StatusMember=&StatusBook=&StatusAtHome=`
+      `/api/v3/mbookadmin?cmd=getbooks&memberid=${MemberID}&from=${From}&to=${To}&stockid=${StockID}&status=XAC_NHAN&UserServiceIDs=&StatusMember=&StatusBook=&StatusAtHome=&Tags=`
     )
   },
   addMemberBooking: (data, { CurrentStockID, u_id_z4aDf2 }) => {

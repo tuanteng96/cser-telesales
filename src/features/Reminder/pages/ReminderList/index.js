@@ -220,7 +220,9 @@ function ReminderList(props) {
         : '',
       DateTo: filters.DateTo ? moment(filters.DateTo).format('DD/MM/YYYY') : '',
       UserID: filters.UserID ? filters.UserID.value : '',
-      ReminderUserID: filters.ReminderUserID ? filters.ReminderUserID.value : '',
+      ReminderUserID: filters.ReminderUserID
+        ? filters.ReminderUserID.value
+        : '',
       IsNoti: filters.IsNoti ? filters.IsNoti.value : '',
       Pi: callback ? 1 : filters.Pi
     }
@@ -426,9 +428,12 @@ function ReminderList(props) {
           ? moment(filters.DateTo).format('DD/MM/YYYY')
           : '',
         UserID: filters.UserID ? filters.UserID.value : '',
+        ReminderUserID: filters.ReminderUserID
+          ? filters.ReminderUserID.value
+          : '',
         IsNoti: filters.IsNoti ? filters.IsNoti.value : '',
-        pi: 1,
-        ps: PageTotal
+        Pi: 1,
+        Ps: PageTotal
       }
 
       telesalesApi.getMemberTeleNoti(newFilter).then(({ data }) => {

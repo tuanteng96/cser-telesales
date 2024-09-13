@@ -36,7 +36,7 @@ function AuthInit(props) {
               ParentID: 0
             },
             {
-              ID: 11389,
+              ID: 11333,
               Title: 'Cser Hà Nội',
               ParentID: 778
             },
@@ -46,22 +46,22 @@ function AuthInit(props) {
               ParentID: 778
             }
           ],
-          CrStockID: 11389, //8975
+          CrStockID: 11333, //8975
           rightsSum: {
             tele: {
               hasRight: true,
-              stocks: [{ ID: 11389, Title: 'Cser Hà Nội' }],
+              stocks: [{ ID: 11333, Title: 'Cser Hà Nội' }],
               IsAllStock: false
             },
             teleAdv: {
               hasRight: true,
-              stocks: [{ ID: 11389, Title: 'Cser Hà Nội' }],
+              stocks: [{ ID: 11333, Title: 'Cser Hà Nội' }],
               IsAllStock: false
             }
           }
         }
         window.token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjU3Mzg1NzkwNTczODY2MTQiLCJuYmYiOjE3MjAxOTA0MDgsImV4cCI6MTgwNjU5MDQwOCwiaWF0IjoxNzIwMTkwNDA4fQ.HeMJvVW0FjxLSpb5znH7wnZh2B0g0SPPtbdyhI48Zyo"
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjU3Mzg1NzkwNTczODYxMjIiLCJuYmYiOjE3MTQyMTEzNTEsImV4cCI6MTgwMDYxMTM1MSwiaWF0IjoxNzE0MjExMzUxfQ.Du5lmGkDY1_LMKnmrd8DfXHtgZ5ZeWXtYh0jR-by6Q4'
         window.GlobalConfig = {
           Admin: {
             kpiSortColumn: [
