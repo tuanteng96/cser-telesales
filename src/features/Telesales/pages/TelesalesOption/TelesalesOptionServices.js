@@ -122,6 +122,7 @@ function TelesalesOptionServices(props) {
         loading={loading}
         pageCount={1}
         rowHeight={50}
+        rowClassName={({ rowData }) => rowData.Index === 1 && 'bg-light-danger'}
       />
       <ModalOptionService
         show={visibleModal}

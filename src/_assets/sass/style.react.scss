@@ -21,3 +21,7 @@
   './vendors/plugins/react-base-table';
 // 5: Layout
 @import './layout/init';
+
+.bg-light-danger {
+  background: rgb(246 78 96 / 28%);
+}

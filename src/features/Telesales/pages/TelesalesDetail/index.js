@@ -55,12 +55,44 @@ function TelesalesDetail(props) {
             }
           })
         } else {
-          setListProds(() => data.prods.map(item => ({ ...item, Ids: uuid() })))
+          setListProds(() =>
+            data.prods
+              .map(item => ({
+                ...item,
+                Ids: uuid(),
+                Index: getIndexProds(item)
+              }))
+              .sort((a, b) => a.Index - b.Index)
+          )
           setMemberCurrent(data.member)
           setLoadingMember(false)
         }
       })
       .catch(error => console.log(error))
+  }
+
+  const getIndexProds = item => {
+    if (item.BH > 0) {
+      if (
+        moment().diff(moment(item.EndDate, 'YYYY-MM-DD HH:mm'), 'minutes') >
+          0 ||
+        item.Done === item.Total
+      ) {
+        return 1
+      } else {
+        return 0
+      }
+    } else {
+      if (
+        moment().diff(moment(item.EndDate, 'YYYY-MM-DD HH:mm'), 'minutes') >
+          0 ||
+        item.BH_Total === item.BH_Done
+      ) {
+        return 1
+      } else {
+        return 0
+      }
+    }
   }
 
   window.getMemberTelesales = getMemberTelesales
