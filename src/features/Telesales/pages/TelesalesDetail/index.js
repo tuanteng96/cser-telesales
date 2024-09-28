@@ -45,6 +45,7 @@ function TelesalesDetail(props) {
 
   const getMemberTelesales = () => {
     setLoadingMember(true)
+    
     telesalesApi
       .getMemberIDTelesales(MemberID)
       .then(({ data }) => {
@@ -76,7 +77,7 @@ function TelesalesDetail(props) {
       if (
         moment().diff(moment(item.EndDate, 'YYYY-MM-DD HH:mm'), 'minutes') >
           0 ||
-        item.Done === item.Total
+          item.BH_Total === item.BH_Done
       ) {
         return 1
       } else {
@@ -86,7 +87,7 @@ function TelesalesDetail(props) {
       if (
         moment().diff(moment(item.EndDate, 'YYYY-MM-DD HH:mm'), 'minutes') >
           0 ||
-        item.BH_Total === item.BH_Done
+          item.Done === item.Total
       ) {
         return 1
       } else {
