@@ -158,6 +158,7 @@ function TelesalesList(props) {
   const [IsEditing, setIsEditing] = useState(false)
   const [isModal, setIsModal] = useState(false)
   const [IsLoadingEx, setIsLoadingEx] = useState(false)
+  const [active, setActive] = useState('')
 
   const { onOpenSidebar } = useContext(TelesalesContext)
   const dispatch = useDispatch()
@@ -440,6 +441,7 @@ function TelesalesList(props) {
                 state={{
                   from: pathname
                 }}
+                onClick={() => setActive(rowData.ID)}
               >
                 <i className="fa-regular fa-arrow-right pt-2px"></i>
               </Link>
@@ -605,6 +607,7 @@ function TelesalesList(props) {
               onScroll={() => IsEditing && document.body.click()}
               //onPagesChange={onPagesChange}
               //rowRenderer={rowRenderer}
+              rowClassName={({rowData}) => rowData?.ID === active && "bg-active"}
             />
           </div>
         </div>
