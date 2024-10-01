@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite'
 import Sidebar from './components/Sidebar'
@@ -556,25 +556,26 @@ function TelesalesList(props) {
   }
 
   return (
-    <div className="d-flex h-100 telesales-list">
-      <Sidebar
-        filters={filters}
-        loading={loading}
-        onSubmit={onFilter}
-        onRefresh={onRefresh}
-      />
-      <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
-        <div className="border-bottom py-10px fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
-          <div className="flex-1">
-            <span className="text-uppercase ">Danh sách khách hàng -</span>
-            <span className="text-danger pl-3px">{PageTotal}</span>
-            <span className="pl-5px font-label text-muted font-size-sm text-none">
-              khách hàng
-            </span>
-          </div>
-          <div className="w-85px w-md-auto d-flex">
-            <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
-            {/* <button
+    <>
+      <div className="d-flex h-100 telesales-list">
+        <Sidebar
+          filters={filters}
+          loading={loading}
+          onSubmit={onFilter}
+          onRefresh={onRefresh}
+        />
+        <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
+          <div className="border-bottom py-10px fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
+            <div className="flex-1">
+              <span className="text-uppercase ">Danh sách khách hàng -</span>
+              <span className="text-danger pl-3px">{PageTotal}</span>
+              <span className="pl-5px font-label text-muted font-size-sm text-none">
+                khách hàng
+              </span>
+            </div>
+            <div className="w-85px w-md-auto d-flex">
+              <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
+              {/* <button
               type="button"
               className="btn btn-primary"
               onClick={onOpenModal}
@@ -582,33 +583,39 @@ function TelesalesList(props) {
               <i className="far fa-bells pr-5px"></i>
               <span className="d-none d-md-inline-block">Lịch nhắc</span>
             </button> */}
-            <button
-              type="button"
-              className="btn btn-primary d-lg-none ml-5px"
-              onClick={onOpenSidebar}
-            >
-              <i className="fa-solid fa-filters"></i>
-            </button>
+              <button
+                type="button"
+                className="btn btn-primary d-lg-none ml-5px"
+                onClick={onOpenSidebar}
+              >
+                <i className="fa-solid fa-filters"></i>
+              </button>
+            </div>
+          </div>
+          <div className="flex-grow-1">
+            <ReactBaseTableInfinite
+              rowKey="ID"
+              columns={columns}
+              data={ListTelesales}
+              loading={loading}
+              pageCount={PageCount}
+              onEndReachedThreshold={300}
+              onEndReached={handleEndReached}
+              rowHeight={60}
+              onScroll={() => IsEditing && document.body.click()}
+              //onPagesChange={onPagesChange}
+              //rowRenderer={rowRenderer}
+            />
           </div>
         </div>
-        <div className="flex-grow-1">
-          <ReactBaseTableInfinite
-            rowKey="ID"
-            columns={columns}
-            data={ListTelesales}
-            loading={loading}
-            pageCount={PageCount}
-            onEndReachedThreshold={300}
-            onEndReached={handleEndReached}
-            rowHeight={60}
-            onScroll={() => IsEditing && document.body.click()}
-            //onPagesChange={onPagesChange}
-            //rowRenderer={rowRenderer}
-          />
-        </div>
+        <ReminderCalendar
+          show={isModal}
+          onHide={onHideModal}
+          filters={filters}
+        />
       </div>
-      <ReminderCalendar show={isModal} onHide={onHideModal} filters={filters} />
-    </div>
+      <Outlet />
+    </>
   )
 }
 

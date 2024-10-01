@@ -4,7 +4,7 @@ import '../../_assets/sass/pages/_telesales.scss'
 
 export const TelesalesContext = React.createContext()
 
-function Telesales(props) {
+function Telesales({ children }) {
   const [isSidebar, setIsSidebar] = useState(false)
   const [isProfile, setIsProfile] = useState(false)
 
@@ -35,7 +35,7 @@ function Telesales(props) {
         onOpenProfile: onOpenProfile
       }}
     >
-      <Outlet />
+      {children}
     </TelesalesContext.Provider>
   )
 }

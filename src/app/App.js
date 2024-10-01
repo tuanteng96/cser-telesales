@@ -30,11 +30,12 @@ function App({ store, persistor }) {
               path="/danh-sach"
               element={
                 <UnauthenticateGuard>
-                  <Telesales />
+                  <Telesales>
+                    <TelesalesList />
+                  </Telesales>
                 </UnauthenticateGuard>
               }
             >
-              <Route index element={<TelesalesList />} />
               <Route path=":MemberID" element={<TelesalesDetail />}>
                 <Route index element={<Navigate to="dich-vu" replace />} />
                 <Route path="dich-vu" element={<TelesalesOptionServices />} />
@@ -50,6 +51,37 @@ function App({ store, persistor }) {
                 <Route path="*" element={<Navigate to="/dich-vu" replace />} />
               </Route>
             </Route>
+            {/* <Route
+              path="/danh-sach"
+              element={
+                <UnauthenticateGuard>
+                  <Telesales />
+                </UnauthenticateGuard>
+              }
+            >
+              <Route index element={<TelesalesList />}>
+                <Route path=":MemberID" element={<TelesalesDetail />}>
+                  <Route index element={<Navigate to="dich-vu" replace />} />
+                  <Route path="dich-vu" element={<TelesalesOptionServices />} />
+                  <Route
+                    path="san-pham"
+                    element={<TelesalesOptionProducts />}
+                  />
+                  <Route
+                    path="lich-su-mua-hang"
+                    element={<TelesalesOptionBuying />}
+                  />
+                  <Route
+                    path="lich-su-du-dung-dv"
+                    element={<TelesalesOptionUse />}
+                  />
+                  <Route
+                    path="*"
+                    element={<Navigate to="/dich-vu" replace />}
+                  />
+                </Route>
+              </Route>
+            </Route> */}
             <Route
               path="/thong-ke"
               element={

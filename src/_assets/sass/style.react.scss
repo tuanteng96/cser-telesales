@@ -25,3 +25,12 @@
 .bg-light-danger {
   background: rgb(246 78 96 / 28%);
 }
+
+.telesales-detail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #fff;
+  z-index: 100;
+  width: 100%;
+}
