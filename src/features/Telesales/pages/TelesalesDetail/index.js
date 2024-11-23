@@ -264,6 +264,20 @@ function TelesalesDetail(props) {
                   </div>
                 </div>
               </div>
+              <div className="w-50 p-8px">
+                <div className="border rounded-sm d-flex align-items-center flex-column px-10px py-15px">
+                  <div className="text-uppercase font-size-min fw-700 text-muted">
+                    Tích điểm
+                  </div>
+                  <div className="font-number font-size-md fw-600 mt-3px text-danger">
+                    {loadingMember && (
+                      <Skeleton count={1} width={50} height={22} />
+                    )}
+                    {!loadingMember &&
+                      PriceHelper.formatVND(MemberCurrent?.Present?.points)}
+                  </div>
+                </div>
+              </div>
             </div>
             <NoteMember
               initialValues={MemberCurrent?.TeleNote}

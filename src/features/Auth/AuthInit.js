@@ -36,7 +36,7 @@ function AuthInit(props) {
               ParentID: 0
             },
             {
-              ID: 11409,
+              ID: 11424,
               Title: 'Cser Hà Nội',
               ParentID: 778
             },
@@ -46,7 +46,7 @@ function AuthInit(props) {
               ParentID: 778
             }
           ],
-          CrStockID: 11409, //8975
+          CrStockID: 11424, //8975
           rightsSum: {
             tele: {
               hasRight: true,
@@ -61,7 +61,7 @@ function AuthInit(props) {
           }
         }
         window.token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjQwMCIsIm5iZiI6MTcyNzMzNjY3OSwiZXhwIjoxODEzNzM2Njc5LCJpYXQiOjE3MjczMzY2Nzl9.O4KC7bD-eB2H0JEEEvFwSYNu4CKSLVDE0_3AVnKM6BU'
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjcwNSIsIm5iZiI6MTczMTkxNjY5NywiZXhwIjoxODE4MzE2Njk3LCJpYXQiOjE3MzE5MTY2OTd9.fe8WYRUllu708jHHKxpvJi4xnTy-tu0fs5b_XL_LUkQ'
         window.GlobalConfig = {
           Admin: {
             kpiSortColumn: [
