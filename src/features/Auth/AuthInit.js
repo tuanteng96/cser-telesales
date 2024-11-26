@@ -39,11 +39,6 @@ function AuthInit(props) {
               ID: 11424,
               Title: 'Cser Hà Nội',
               ParentID: 778
-            },
-            {
-              ID: 10053,
-              Title: 'Cser Hồ Chí Minh',
-              ParentID: 778
             }
           ],
           CrStockID: 11424, //8975
@@ -61,7 +56,7 @@ function AuthInit(props) {
           }
         }
         window.token =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjcwNSIsIm5iZiI6MTczMTkxNjY5NywiZXhwIjoxODE4MzE2Njk3LCJpYXQiOjE3MzE5MTY2OTd9.fe8WYRUllu708jHHKxpvJi4xnTy-tu0fs5b_XL_LUkQ'
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBdXRoMlR5cGUiOiJVc2VyRW50IiwiSUQiOiIxIiwiVG9rZW5JZCI6IjEwNjEzMzEwNjcxOSIsIm5iZiI6MTczMjA3NzM3NywiZXhwIjoxODE4NDc3Mzc3LCJpYXQiOjE3MzIwNzczNzd9.HJETcqgnjguCfpEUkIy71pFGjXEZrqNNuP1wla95480'
         window.GlobalConfig = {
           Admin: {
             kpiSortColumn: [
