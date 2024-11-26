@@ -170,14 +170,20 @@ function ModalOptionService({ onHide, show, OsItems }) {
             {rowData.Attachs && rowData.Attachs.length > 0 ? (
               rowData.Attachs.map((x, i) => (
                 <a
-                  className="block"
+                  className="block border"
                   href={AssetsHelpers.toUrlServer('/upload/image/' + x.Src)}
                   key={i}
                   target="_blank"
                   rel="noreferrer"
+                  style={{
+                    aspectRatio: '1'
+                  }}
                 >
                   <img
-                    className="w-100"
+                    style={{
+                      objectFit: 'cover'
+                    }}
+                    className="w-100 h-100"
                     src={AssetsHelpers.toUrlServer('/upload/image/' + x.Src)}
                     alt=""
                   />
