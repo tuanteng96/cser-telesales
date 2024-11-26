@@ -94,28 +94,32 @@ function ModalOptionService({ onHide, show, OsItems }) {
         title: 'Lưu ý',
         dataKey: 'LUU_Y',
         width: 200,
-        sortable: false
+        sortable: false,
+        hidden: !window?.top?.GlobalConfig?.Admin?.os_4_chi_tiet
       },
       {
         key: 'DANH_GIA',
         title: 'Đánh giá',
         dataKey: 'DANH_GIA',
         width: 200,
-        sortable: false
+        sortable: false,
+        hidden: !window?.top?.GlobalConfig?.Admin?.os_4_chi_tiet
       },
       {
         key: 'THU_THUAT',
         title: 'Thủ thuật',
         dataKey: 'THU_THUAT',
         width: 200,
-        sortable: false
+        sortable: false,
+        hidden: !window?.top?.GlobalConfig?.Admin?.os_4_chi_tiet
       },
       {
         key: 'TINH_TRANG',
         title: 'Tình trạng',
         dataKey: 'TINH_TRANG',
         width: 200,
-        sortable: false
+        sortable: false,
+        hidden: !window?.top?.GlobalConfig?.Admin?.os_4_chi_tiet
       },
       {
         key: 'Rate',
