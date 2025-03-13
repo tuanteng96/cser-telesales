@@ -315,7 +315,6 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     <label className="font-label text-muted mb-5px">
                       Nhóm khách hàng
                     </label>
-                    {console.log(values)}
                     <SelectGroupsMember
                       className="select-control"
                       menuPosition="fixed"
