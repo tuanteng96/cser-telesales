@@ -190,7 +190,8 @@ function TelesalesList(props) {
       CreateFrom: filtersRedux.CreateFrom || '',
       CreateTo: filtersRedux.CreateTo || '',
       osCount: '',
-      ServiceCardIDs: ''
+      ServiceCardIDs: '',
+      GroupsID: ''
     },
     pi: 1,
     ps: 20
@@ -252,7 +253,8 @@ function TelesalesList(props) {
         osCount: filters.filter.osCount ? filters.filter.osCount?.value : '',
         ServiceCardIDs: filters?.filter?.ServiceCardIDs
           ? filters?.filter?.ServiceCardIDs.map(x => x.value).toString()
-          : ''
+          : '',
+        GroupsID: filters?.filter?.GroupsID?.value || ''
       },
       pi: callback ? 1 : filters.pi
     }
@@ -607,7 +609,9 @@ function TelesalesList(props) {
               onScroll={() => IsEditing && document.body.click()}
               //onPagesChange={onPagesChange}
               //rowRenderer={rowRenderer}
-              rowClassName={({rowData}) => rowData?.ID === active && "bg-active"}
+              rowClassName={({ rowData }) =>
+                rowData?.ID === active && 'bg-active'
+              }
             />
           </div>
         </div>

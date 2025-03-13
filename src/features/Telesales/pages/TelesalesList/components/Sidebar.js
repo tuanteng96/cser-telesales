@@ -18,7 +18,7 @@ import vi from 'date-fns/locale/vi' // the locale you want
 import MemberTransferImport from './MemberTransferImport'
 import { Dropdown } from 'react-bootstrap'
 import SelectServiceCard from 'src/components/Selects/SelectServiceCard'
-
+import SelectGroupsMember from 'src/components/Selects/SelectGroupsMember'
 
 registerLocale('vi', vi) // register it with the name you want
 
@@ -35,7 +35,7 @@ const OsList = [
   {
     value: 1,
     label: 'Còn thẻ'
-  },
+  }
   // {
   //   value: 2,
   //   label: 'Chưa mua'
@@ -309,6 +309,23 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       onChange={otp => {
                         setFieldValue('filter.StockID', otp ? otp.value : '')
                       }}
+                    />
+                  </div>
+                  <div className="mb-15px form-group">
+                    <label className="font-label text-muted mb-5px">
+                      Nhóm khách hàng
+                    </label>
+                    {console.log(values)}
+                    <SelectGroupsMember
+                      className="select-control"
+                      menuPosition="fixed"
+                      menuPlacement="top"
+                      name="filter.GroupsID"
+                      onChange={otp => {
+                        setFieldValue('filter.GroupsID', otp, false)
+                      }}
+                      value={values.filter.GroupsID}
+                      isClearable={true}
                     />
                   </div>
                   <div className="mb-15px form-group">

@@ -30,6 +30,7 @@ const moreApi = {
     return http.get(
       `/api/v3/mbook?cmd=getroot&memberid=${MemberID}&ps=15&pi=1&key=${Key}=&stockid=${StockID}`
     )
-  }
+  },
+  getGroupsMember: () => http.get(`/api/v3/member23?cmd=dataForAdd`)
 }
 export default moreApi
