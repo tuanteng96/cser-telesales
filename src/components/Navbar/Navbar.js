@@ -1,27 +1,40 @@
 import clsx from 'clsx'
 import React from 'react'
 import { Dropdown } from 'react-bootstrap'
+import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { useWindowSize } from 'src/hooks/useWindowSize'
 
 function Navbar({ ExportExcel, IsLoadingEx }) {
   const { width } = useWindowSize()
+
+  const { AuthID, auth } = useSelector(({ auth }) => ({
+    AuthID: auth?.Info?.User?.ID,
+    auth: auth
+  }))
+
+  console.log(AuthID)
+  
   return (
     <>
       {width > 767 ? (
         <>
-          <button
-            id="export-excel"
-            className={clsx(
-              'btn btn-success fw-500 py-6px d-flex align-items-center mr-8px',
-              IsLoadingEx && 'spinner spinner-white spinner-right mr-3'
-            )}
-            type="button"
-            onClick={ExportExcel}
-            disabled={IsLoadingEx}
-          >
-            Xuất Excel
-          </button>
+          {(window?.top?.GlobalConfig?.Admin?.byAdminExcel
+            ? AuthID === 1
+            : !window?.top?.GlobalConfig?.Admin?.byAdminExcel) && (
+            <button
+              id="export-excel"
+              className={clsx(
+                'btn btn-success fw-500 py-6px d-flex align-items-center mr-8px',
+                IsLoadingEx && 'spinner spinner-white spinner-right mr-3'
+              )}
+              type="button"
+              onClick={ExportExcel}
+              disabled={IsLoadingEx}
+            >
+              Xuất Excel
+            </button>
+          )}
           <NavLink
             to="/danh-sach"
             className={({ isActive }) =>
@@ -63,17 +76,21 @@ function Navbar({ ExportExcel, IsLoadingEx }) {
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <button
-              className={clsx(
-                'text-primary fw-500 d-block py-8px text-decoration-none',
-                IsLoadingEx && 'spinner spinner-white spinner-right mr-3'
-              )}
-              type="button"
-              onClick={ExportExcel}
-              disabled={IsLoadingEx}
-            >
-              Xuất Excel
-            </button>
+            {(window?.top?.GlobalConfig?.Admin?.byAdminExcel
+              ? AuthID === 1
+              : !window?.top?.GlobalConfig?.Admin?.byAdminExcel) && (
+              <button
+                className={clsx(
+                  'text-primary fw-500 d-block py-8px text-decoration-none',
+                  IsLoadingEx && 'spinner spinner-white spinner-right mr-3'
+                )}
+                type="button"
+                onClick={ExportExcel}
+                disabled={IsLoadingEx}
+              >
+                Xuất Excel
+              </button>
+            )}
             <NavLink
               to="/danh-sach"
               className={({ isActive }) =>
