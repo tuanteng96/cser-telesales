@@ -12,8 +12,6 @@ function Navbar({ ExportExcel, IsLoadingEx }) {
     AuthID: auth?.Info?.User?.ID,
     auth: auth
   }))
-
-  console.log(AuthID)
   
   return (
     <>

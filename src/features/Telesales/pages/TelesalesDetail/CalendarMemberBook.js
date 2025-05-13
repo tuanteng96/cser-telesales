@@ -123,6 +123,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                     </span> */}
                     </label>
                     <DatePicker
+                      minDate={new Date()}
                       name="BookDate"
                       selected={
                         values.BookDate ? new Date(values.BookDate) : ''
