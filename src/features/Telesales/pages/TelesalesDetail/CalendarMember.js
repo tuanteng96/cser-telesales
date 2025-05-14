@@ -126,6 +126,42 @@ function CalendarMember(props) {
       Desc
     }
 
+    let History = {
+      ...(values?.History || {}),
+      Edit: values?.History?.Edit
+        ? [
+            ...values?.History?.Edit,
+            {
+              CreateDate: moment().format('HH:mm DD-MM-YYYY'),
+              Staff: {
+                ID: window?.top?.Info?.User?.ID,
+                FullName: window?.top?.Info?.User?.FullName
+              },
+              Booking: {
+                ...objBooking,
+                UserServices: values.UserServiceIDs,
+                Roots: values.RootIdS
+              }
+            }
+          ]
+        : [
+            {
+              CreateDate: moment().format('HH:mm DD-MM-YYYY'),
+              Staff: {
+                ID: window?.top?.Info?.User?.ID,
+                FullName: window?.top?.Info?.User?.FullName
+              },
+              Booking: {
+                ...objBooking,
+                UserServices: values.UserServiceIDs,
+                Roots: values.RootIdS
+              }
+            }
+          ]
+    }
+
+    objBooking.History = History
+
     const CurrentStockID = Cookies.get('StockID')
     const u_id_z4aDf2 = Cookies.get('u_id_z4aDf2')
 
@@ -188,17 +224,69 @@ function CalendarMember(props) {
     const CurrentStockID = Cookies.get('StockID')
     const u_id_z4aDf2 = Cookies.get('u_id_z4aDf2')
 
+    let objBooking = {
+      ...item,
+      MemberID: item.Member.ID,
+      RootIdS: item.RootIds,
+      UserServiceIDs: item.UserServiceIDs,
+      BookDate: moment(item.BookDate).format('YYYY-MM-DD HH:mm'),
+      Status: 'TU_CHOI'
+    }
+
+    let History = {
+      ...(item?.History || {}),
+      Edit: item?.History?.Edit
+        ? [
+            ...item?.History?.Edit,
+            {
+              CreateDate: moment().format('HH:mm DD-MM-YYYY'),
+              Staff: {
+                ID: window?.top?.Info?.User?.ID,
+                FullName: window?.top?.Info?.User?.FullName
+              },
+              Booking: {
+                ...objBooking,
+                UserServices: item.UserServices,
+                Roots: item.Roots,
+                Members: {
+                  label: item?.Member?.FullName,
+                  value: item?.Member?.ID,
+                  phone: item?.Member?.MobilePhone,
+                  FullName: item?.Member?.FullName,
+                  ID: item?.Member?.ID
+                }
+              },
+              isCSKH: true
+            }
+          ]
+        : [
+            {
+              CreateDate: moment().format('HH:mm DD-MM-YYYY'),
+              Staff: {
+                ID: window?.top?.Info?.User?.ID,
+                FullName: window?.top?.Info?.User?.FullName
+              },
+              Booking: {
+                ...objBooking,
+                UserServices: item.UserServices,
+                Roots: item.Roots,
+                Members: {
+                  label: item?.Member?.FullName,
+                  value: item?.Member?.ID,
+                  phone: item?.Member?.MobilePhone,
+                  FullName: item?.Member?.FullName,
+                  ID: item?.Member?.ID
+                }
+              },
+              isCSKH: true
+            }
+          ]
+    }
+
+    objBooking.History = History
+
     const dataPost = {
-      booking: [
-        {
-          ...item,
-          MemberID: item.MemberID.value,
-          RootIdS: item.RootIds,
-          UserServiceIDs: item.UserServiceIDs,
-          BookDate: moment(item.BookDate).format('YYYY-MM-DD HH:mm'),
-          Status: 'TU_CHOI'
-        }
-      ]
+      booking: [objBooking]
     }
     Swal.fire({
       title: 'Thực hiện hủy lịch ?',
@@ -240,6 +328,7 @@ function CalendarMember(props) {
   }
 
   const onOpenModalBook = () => {
+    console.log()
     setIsModalBook(true)
   }
 

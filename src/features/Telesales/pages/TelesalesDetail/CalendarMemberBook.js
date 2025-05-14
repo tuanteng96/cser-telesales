@@ -11,7 +11,8 @@ import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectStaffsService from 'src/components/Selects/SelectStaffsService'
-import Select, { components } from "react-select";
+import Select, { components } from 'react-select'
+import telesalesApi from 'src/api/telesales.api'
 moment.locale('vi')
 
 CalendarMemberBook.propTypes = {
@@ -34,15 +35,17 @@ const initialValue = {
   UserServiceIDs: '',
   AtHome: false,
   AmountPeople: {
-    label: "1 khách",
-    value: 1,
+    label: '1 khách',
+    value: 1
   },
-  TagSetting: "",
+  TagSetting: ''
 }
 
 function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
   let { MemberID } = useParams()
   const [initialValues, setInitialValues] = useState(initialValue)
+  const [MemberCurrent, setMemberCurrent] = useState(null)
+  const [loading, setLoading] = useState(false)
   const { AuthCrStockID } = useSelector(({ auth }) => ({
     AuthStocks: auth.Info.Stocks.filter(item => item.ParentID !== 0).map(
       item => ({
@@ -53,10 +56,41 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
     ),
     AuthCrStockID: auth.Info.CrStockID
   }))
-  
+
   useEffect(() => {
-    setInitialValues(prevState => ({ ...prevState, StockID: AuthCrStockID }))
-  }, [AuthCrStockID])
+    getMemberTelesales()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [MemberID])
+
+  const getMemberTelesales = () => {
+    setLoading(true)
+
+    telesalesApi
+      .getMemberIDTelesales(MemberID)
+      .then(({ data }) => {
+        if (data.error) {
+          onHide()
+        } else {
+          setMemberCurrent(data.member)
+          setLoading(false)
+        }
+      })
+      .catch(error => console.log(error))
+  }
+
+  useEffect(() => {
+    setInitialValues(prevState => ({
+      ...prevState,
+      StockID: AuthCrStockID,
+      Members: {
+        label: MemberCurrent?.FullName,
+        value: MemberCurrent?.ID,
+        phone: MemberCurrent?.MobilePhone,
+        FullName: MemberCurrent?.FullName,
+        ID: MemberCurrent?.ID
+      }
+    }))
+  }, [AuthCrStockID, MemberCurrent])
 
   const loadOptionsServices = (inputValue, callback, stockID) => {
     const filters = {
@@ -248,23 +282,21 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                         options={Array(10)
                           .fill()
                           .map((_, x) => ({
-                            label: x + 1 + " khách",
-                            value: x + 1,
+                            label: x + 1 + ' khách',
+                            value: x + 1
                           }))}
                         placeholder="Chọn số khách"
                         value={values.AmountPeople}
-                        onChange={(value) =>
-                          setFieldValue("AmountPeople", value)
-                        }
+                        onChange={value => setFieldValue('AmountPeople', value)}
                         blurInputOnSelect={true}
-                        noOptionsMessage={() => "Không có dữ liệu."}
+                        noOptionsMessage={() => 'Không có dữ liệu.'}
                         menuPortalTarget={document.body}
                         menuPosition="fixed"
                         styles={{
-                          menuPortal: (base) => ({
+                          menuPortal: base => ({
                             ...base,
-                            zIndex: 9999,
-                          }),
+                            zIndex: 9999
+                          })
                         }}
                       />
                     )}
@@ -278,16 +310,16 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                       options={TagsList}
                       placeholder="Chọn tags"
                       value={values.TagSetting}
-                      onChange={(value) => setFieldValue("TagSetting", value)}
+                      onChange={value => setFieldValue('TagSetting', value)}
                       blurInputOnSelect={true}
-                      noOptionsMessage={() => "Không có dữ liệu."}
+                      noOptionsMessage={() => 'Không có dữ liệu.'}
                       menuPortalTarget={document.body}
                       menuPosition="fixed"
                       styles={{
-                        menuPortal: (base) => ({
+                        menuPortal: base => ({
                           ...base,
-                          zIndex: 9999,
-                        }),
+                          zIndex: 9999
+                        })
                       }}
                     />
                     <textarea
@@ -302,19 +334,26 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                   </div>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-between">
-                  <div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '10px'
+                    }}
+                  >
                     <button
                       type="submit"
                       className={`btn btn-sm btn-primary mr-2 font-size-base ${
-                        btnLoading ? 'spinner spinner-white spinner-right' : ''
+                        btnLoading || loading
+                          ? 'spinner spinner-white spinner-right'
+                          : ''
                       } w-auto my-0 mr-0 h-auto`}
-                      disabled={btnLoading}
+                      disabled={btnLoading || loading}
                     >
                       Đặt lịch ngay
                     </button>
                     <button
                       type="button"
-                      className="btn btn-sm btn-secondary d-md-none"
+                      className="btn btn-sm btn-secondary d-md-none font-size-base"
                       onClick={onHide}
                     >
                       Đóng
