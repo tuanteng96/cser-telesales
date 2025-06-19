@@ -304,8 +304,8 @@ function TelesalesDetail(props) {
               <InterestedProducts />
               <CalendarMember />
               <NotificationMember />
-              <NotiListMember />
               <CareHistory />
+              <NotiListMember />
             </PerfectScrollbar>
 
             <div className="flex-fill telesales-options">
