@@ -11,7 +11,7 @@ import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectStaffsService from 'src/components/Selects/SelectStaffsService'
-import Select, { components } from 'react-select'
+import Select from 'react-select'
 import telesalesApi from 'src/api/telesales.api'
 moment.locale('vi')
 

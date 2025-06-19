@@ -4,6 +4,9 @@ const telesalesApi = {
   getListMemberTelesales: data => {
     return http.post('/api/v3/tele23@member_search', JSON.stringify(data))
   },
+  getListMemberNoteTelesales: id => {
+    return http.get(`/api/v3/membercare?cmd=get&mid=${id}`)
+  },
   setUserIDTelesales: data => {
     return http.post(
       '/api/v3/tele23@member_setTeleUserID',

@@ -19,6 +19,7 @@ import clsx from 'clsx'
 import { TelesalesContext } from '../..'
 import NotificationMember from './NotificationMember'
 import TelesalesDetailLayout from './TelesalesDetailLayout'
+import NotiListMember from './NotiListMember'
 
 moment.locale('vi')
 
@@ -45,7 +46,7 @@ function TelesalesDetail(props) {
 
   const getMemberTelesales = () => {
     setLoadingMember(true)
-    
+
     telesalesApi
       .getMemberIDTelesales(MemberID)
       .then(({ data }) => {
@@ -77,7 +78,7 @@ function TelesalesDetail(props) {
       if (
         moment().diff(moment(item.EndDate, 'YYYY-MM-DD HH:mm'), 'minutes') >
           0 ||
-          item.BH_Total === item.BH_Done
+        item.BH_Total === item.BH_Done
       ) {
         return 1
       } else {
@@ -87,7 +88,7 @@ function TelesalesDetail(props) {
       if (
         moment().diff(moment(item.EndDate, 'YYYY-MM-DD HH:mm'), 'minutes') >
           0 ||
-          item.Done === item.Total
+        item.Done === item.Total
       ) {
         return 1
       } else {
@@ -303,6 +304,7 @@ function TelesalesDetail(props) {
               <InterestedProducts />
               <CalendarMember />
               <NotificationMember />
+              <NotiListMember />
               <CareHistory />
             </PerfectScrollbar>
 
