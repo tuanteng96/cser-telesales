@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
@@ -21,6 +21,8 @@ function NotiListMember(props) {
   const [loading, setLoading] = useState(false)
   const [List, setList] = useState([])
 
+  let elRef = useRef()
+
   useEffect(() => {
     getNotiList()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,8 +40,33 @@ function NotiListMember(props) {
       .catch(error => console.log(error))
   }
 
+  useEffect(() => {
+    if (elRef?.current) {
+      let elems = elRef?.current?.getElementsByTagName('img')
+      for (var i = 0; i < elems.length; i++) {
+        elems[i].onclick = e => {
+          window.top?.$ &&
+            window?.top?.$?.magnificPopup?.open({
+              items: {
+                src: e.srcElement.getAttribute('src')
+              },
+              type: 'image'
+            })
+        }
+      }
+    }
+  }, [elRef, List])
+
+  const fixedContentDomain = content => {
+    if (!content) return ''
+    return content.replace(
+      /src=\"\//g,
+      'src="' + window.top.location.origin + '/'
+    )
+  }
+
   return (
-    <div className="border-bottom">
+    <div>
       <div className="text-uppercase d-flex justify-content-between align-items-center pt-18px pl-18px pr-18px pb-10px">
         <span className="fw-600 text-primary">Ghi chú</span>
       </div>
@@ -75,31 +102,35 @@ function NotiListMember(props) {
         {!loading && (
           <>
             {List && List.length > 0 ? (
-              List.map((item, index) => (
-                <div
-                  className={clsx(
-                    'bg-light rounded-sm p-15px',
-                    List.length - 1 !== index && 'mb-12px'
-                  )}
-                  key={index}
-                >
-                  <div className="d-flex fw-500" style={{ gap: '5px' }}>
-                    <span className="font-number">
-                      {moment(item.CreateDate).format('HH:mm DD-MM-YYYY')}
-                    </span>
-                    <span>-</span>
-                    <span>{item.User.FullName}</span>
-                    {item.IsImportant && (
-                      <span className="text-danger">(Quan trọng)</span>
-                    )}
-                  </div>
-
+              <div ref={elRef}>
+                {List.map((item, index) => (
                   <div
-                    className="mt-5px fw-300"
-                    dangerouslySetInnerHTML={{ __html: item.Content }}
-                  ></div>
-                </div>
-              ))
+                    className={clsx(
+                      'bg-light rounded-sm p-15px',
+                      List.length - 1 !== index && 'mb-12px'
+                    )}
+                    key={index}
+                  >
+                    <div className="d-flex fw-500" style={{ gap: '5px' }}>
+                      <span className="font-number">
+                        {moment(item.CreateDate).format('HH:mm DD-MM-YYYY')}
+                      </span>
+                      <span>-</span>
+                      <span>{item.User.FullName}</span>
+                      {item.IsImportant && (
+                        <span className="text-danger">(Quan trọng)</span>
+                      )}
+                    </div>
+
+                    <div
+                      className="mt-5px fw-300 content"
+                      dangerouslySetInnerHTML={{
+                        __html: fixedContentDomain(item.Content)
+                      }}
+                    ></div>
+                  </div>
+                ))}
+              </div>
             ) : (
               <div className="w-100 d-flex align-items-center justify-content-center">
                 <div className="text-center">

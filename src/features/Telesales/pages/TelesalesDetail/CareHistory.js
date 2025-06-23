@@ -128,7 +128,7 @@ function CareHistory(props) {
   }
 
   return (
-    <div>
+    <div className="border-bottom">
       <div className="text-uppercase d-flex justify-content-between align-items-center pt-18px pl-18px pr-18px pb-10px">
         <span className="fw-600 text-primary">Lịch sử chăm sóc</span>
         <OverlayTrigger

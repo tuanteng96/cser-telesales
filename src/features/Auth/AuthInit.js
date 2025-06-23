@@ -46,12 +46,12 @@ function AuthInit(props) {
             tele: {
               hasRight: true,
               stocks: [{ ID: 11557, Title: 'Cser Hà Nội' }],
-              IsAllStock: false
+              IsAllStock: true
             },
             teleAdv: {
               hasRight: true,
               stocks: [{ ID: 11557, Title: 'Cser Hà Nội' }],
-              IsAllStock: false
+              IsAllStock: true
             }
           }
         }
