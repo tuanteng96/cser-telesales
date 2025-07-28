@@ -24,7 +24,8 @@ const perfectScrollbarOptions = {
 
 const initialValues = {
   Content: '',
-  Result: ''
+  Result: '',
+  IsPublic: false
 }
 
 const AddWishListSchema = Yup.object().shape({
@@ -65,7 +66,7 @@ function CareHistory(props) {
       .catch(error => console.log(error))
   }
 
-  const onSubmit = values => {
+  const onSubmit = async values => {
     setBtnLoading(true)
     const newData = {
       items: [
@@ -77,6 +78,25 @@ function CareHistory(props) {
         }
       ],
       delete: []
+    }
+
+    if (values.IsPublic) {
+      var bodyFormData = new FormData()
+      bodyFormData.append(
+        'data',
+        JSON.stringify({
+          ID: 0,
+          Target: '',
+          MemberID: MemberID,
+          Content: encodeURI(`${values.Result.value}. ${values.Content}`),
+          IsNoti: false,
+          NotiDate: '',
+          IsEd: 0,
+          IsPublic: 0,
+          IsImportant: false
+        })
+      )
+      await telesalesApi.addNoteMember(bodyFormData)
     }
     telesalesApi
       .addCareHistory(newData)
@@ -173,7 +193,7 @@ function CareHistory(props) {
                             isClearable={true}
                           />
                         </div>
-                        <div className="form-group">
+                        <div className="form-group mb-15px">
                           <label>Ghi chú</label>
                           <textarea
                             name="Content"
@@ -187,6 +207,19 @@ function CareHistory(props) {
                             onChange={handleChange}
                             onBlur={handleBlur}
                           ></textarea>
+                        </div>
+                        <div className="form-group">
+                          <label className="checkbox d-flex cursor-pointer">
+                            <input
+                              type="checkbox"
+                              name="IsPublic"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              checked={values.IsPublic}
+                            />
+                            <span className="checkbox-icon"></span>
+                            <span>Cho phép lễ tân xem</span>
+                          </label>
                         </div>
                       </Popover.Body>
                       <div className="font-weight-bold d-flex justify-content-between py-10px px-3 border-top">

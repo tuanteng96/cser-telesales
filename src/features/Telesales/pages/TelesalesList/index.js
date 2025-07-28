@@ -250,7 +250,7 @@ function TelesalesList(props) {
         CreateTo: filters.filter.CreateTo
           ? moment(filters.filter.CreateTo).format('DD/MM/YYYY')
           : '',
-        osCount: filters.filter.osCount ? filters.filter.osCount?.value : '',
+        osCount: filters.filter.osCount ? filters.filter.osCount?.value : '0,1',
         ServiceCardIDs: filters?.filter?.ServiceCardIDs
           ? filters?.filter?.ServiceCardIDs.map(x => x.value).toString()
           : '',
@@ -505,11 +505,12 @@ function TelesalesList(props) {
           ? filters.filter.tele_user_id.value
           : ''
       }
+      
       const newFilter = {
         ...filters,
         filter: {
           ...filters.filter,
-          osCount: filters?.filter?.osCount ? filters?.filter?.osCount : "0,1",
+          osCount: filters.filter.osCount ? filters.filter.osCount?.value : "0,1",
           tele_user_id: tele_user_id_new,
           tele_process: filters.filter.tele_process
             ? filters.filter.tele_process.join(',')

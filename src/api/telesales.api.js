@@ -87,6 +87,7 @@ const telesalesApi = {
   },
   getListStatisticals: data => {
     return http.post('/api/v3/Tele23@list_tele', JSON.stringify(data))
-  }
+  },
+  addNoteMember: data => http.post('/api/v3/membernoti?cmd=add', data)
 }
 export default telesalesApi
