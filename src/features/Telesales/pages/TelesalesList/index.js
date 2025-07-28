@@ -509,6 +509,7 @@ function TelesalesList(props) {
         ...filters,
         filter: {
           ...filters.filter,
+          osCount: filters?.filter?.osCount ? filters?.filter?.osCount : "0,1",
           tele_user_id: tele_user_id_new,
           tele_process: filters.filter.tele_process
             ? filters.filter.tele_process.join(',')
