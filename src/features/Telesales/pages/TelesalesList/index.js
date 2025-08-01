@@ -314,7 +314,9 @@ function TelesalesList(props) {
           dataKey: 'FullName',
           cellRenderer: ({ rowData }) => (
             <div>
-              <div className="fw-600">{rowData?.FullName}</div>
+              <div className="fw-600 truncate-multi-line">
+                {rowData?.FullName}
+              </div>
               <div className="font-number">{rowData?.MobilePhone}</div>
             </div>
           ),
@@ -505,12 +507,10 @@ function TelesalesList(props) {
           ? filters.filter.tele_user_id.value
           : ''
       }
-      
       const newFilter = {
         ...filters,
         filter: {
           ...filters.filter,
-          osCount: filters.filter.osCount ? filters.filter.osCount?.value : "0,1",
           tele_user_id: tele_user_id_new,
           tele_process: filters.filter.tele_process
             ? filters.filter.tele_process.join(',')
@@ -541,13 +541,21 @@ function TelesalesList(props) {
             : '',
           CreateTo: filters.filter.CreateTo
             ? moment(filters.filter.CreateTo).format('DD/MM/YYYY')
-            : ''
+            : '',
+          osCount: filters.filter.osCount
+            ? filters.filter.osCount?.value
+            : '0,1',
+          ServiceCardIDs: filters?.filter?.ServiceCardIDs
+            ? filters?.filter?.ServiceCardIDs.map(x => x.value).toString()
+            : '',
+          GroupsID: filters?.filter?.GroupsID?.value || ''
         },
         pi: 1,
         ps: PageTotal
       }
 
       telesalesApi.getListMemberTelesales(newFilter).then(({ data }) => {
+        
         window?.EzsExportExcel &&
           window?.EzsExportExcel({
             Url: 'telesale',
@@ -607,7 +615,7 @@ function TelesalesList(props) {
               pageCount={PageCount}
               onEndReachedThreshold={300}
               onEndReached={handleEndReached}
-              rowHeight={60}
+              rowHeight={80}
               onScroll={() => IsEditing && document.body.click()}
               //onPagesChange={onPagesChange}
               //rowRenderer={rowRenderer}

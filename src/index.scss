@@ -11,3 +11,12 @@
         max-width: 100% !important;
     }
 }
+
+.truncate-multi-line {
+  display: -webkit-box; /* Required for -webkit-line-clamp */
+  -webkit-line-clamp: 2; /* Limits the text to 3 lines before truncation */
+  -webkit-box-orient: vertical; /* Required with -webkit-line-clamp */
+  overflow: hidden; /* Hides overflowing content */
+  text-overflow: ellipsis; /* Displays an ellipsis for truncated text */
+}
+
