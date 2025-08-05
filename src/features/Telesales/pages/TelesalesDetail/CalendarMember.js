@@ -65,8 +65,8 @@ function CalendarMember(props) {
   const getListBook = (isLoading = true, callback) => {
     const filters = {
       MemberID: MemberID,
-      From: moment().format('YYYY-MM-DD'),
-      To: moment().add(50, 'year').format('YYYY-MM-DD'),
+      From: moment().subtract(10, "days").format('YYYY-MM-DD'),
+      To: moment().add(20, 'days').format('YYYY-MM-DD'),
       StockID: AuthCrStockID
     }
     isLoading && setLoading(true)
