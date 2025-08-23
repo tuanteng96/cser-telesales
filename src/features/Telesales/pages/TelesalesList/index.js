@@ -250,7 +250,7 @@ function TelesalesList(props) {
         CreateTo: filters.filter.CreateTo
           ? moment(filters.filter.CreateTo).format('DD/MM/YYYY')
           : '',
-        osCount: filters.filter.osCount ? filters.filter.osCount?.value : '0,1',
+        osCount: filters.filter.osCount ? filters.filter.osCount?.value : '',
         ServiceCardIDs: filters?.filter?.ServiceCardIDs
           ? filters?.filter?.ServiceCardIDs.map(x => x.value).toString()
           : '',
