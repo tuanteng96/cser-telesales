@@ -555,7 +555,6 @@ function TelesalesList(props) {
       }
 
       telesalesApi.getListMemberTelesales(newFilter).then(({ data }) => {
-        
         window?.EzsExportExcel &&
           window?.EzsExportExcel({
             Url: 'telesale',

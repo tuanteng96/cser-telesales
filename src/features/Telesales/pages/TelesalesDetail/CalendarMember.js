@@ -23,7 +23,7 @@ const perfectScrollbarOptions = {
   wheelPropagation: false
 }
 
-function CalendarMember(props) {
+function CalendarMember({ MemberCurrent }) {
   let { MemberID } = useParams()
   const [loading, setLoading] = useState(false)
   const [ListBooks, setListBooks] = useState([])
@@ -65,7 +65,7 @@ function CalendarMember(props) {
   const getListBook = (isLoading = true, callback) => {
     const filters = {
       MemberID: MemberID,
-      From: moment().subtract(10, "days").format('YYYY-MM-DD'),
+      From: moment().subtract(10, 'days').format('YYYY-MM-DD'),
       To: moment().add(20, 'days').format('YYYY-MM-DD'),
       StockID: AuthCrStockID
     }
@@ -123,7 +123,20 @@ function CalendarMember(props) {
       BookDate: moment(values.BookDate).format('YYYY-MM-DD HH:mm'),
       Status: 'XAC_NHAN',
       CreateBy: 'tele',
-      Desc
+      Desc,
+      InfoMore: {
+        Member: {
+          ID: MemberCurrent?.ID || '',
+          FullName: MemberCurrent?.FullName || '',
+          MobilePhone: MemberCurrent?.MobilePhone || ''
+        },
+        Roots: values.RootIdS
+          ? values.RootIdS.map(item => ({
+              ID: item.value,
+              Title: item.label
+            }))
+          : null
+      }
     }
 
     let History = {
@@ -230,7 +243,20 @@ function CalendarMember(props) {
       RootIdS: item.RootIds,
       UserServiceIDs: item.UserServiceIDs,
       BookDate: moment(item.BookDate).format('YYYY-MM-DD HH:mm'),
-      Status: 'TU_CHOI'
+      Status: 'TU_CHOI',
+      InfoMore: {
+        Member: {
+          ID: MemberCurrent?.ID || '',
+          FullName: MemberCurrent?.FullName || '',
+          MobilePhone: MemberCurrent?.MobilePhone || ''
+        },
+        Roots: item.Roots
+          ? item.Roots.map(x => ({
+              ID: x.ID,
+              Title: x.Title
+            }))
+          : null
+      }
     }
 
     let History = {
@@ -328,7 +354,6 @@ function CalendarMember(props) {
   }
 
   const onOpenModalBook = () => {
-    console.log()
     setIsModalBook(true)
   }
 

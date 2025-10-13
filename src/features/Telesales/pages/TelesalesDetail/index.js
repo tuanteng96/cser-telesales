@@ -302,7 +302,7 @@ function TelesalesDetail(props) {
               style={{ position: 'relative' }}
             >
               <InterestedProducts />
-              <CalendarMember />
+              <CalendarMember MemberCurrent={MemberCurrent} />
               <NotificationMember />
               <CareHistory />
               <NotiListMember />
