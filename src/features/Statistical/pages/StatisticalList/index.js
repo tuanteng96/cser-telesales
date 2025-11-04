@@ -56,7 +56,9 @@ function StatisticalList(props) {
             From: '',
             To: '',
             StockID: CrStockID,
-            Result: ''
+            Result: '',
+            tele_process: '',
+            GroupsID: ''
           },
           pi: 1,
           ps: 20
@@ -85,7 +87,11 @@ function StatisticalList(props) {
           ? moment(filters.filter.To).format('DD/MM/YYYY')
           : '',
         Result: filters.filter.Result ? filters.filter.Result.value : '',
-        UserID: filters.filter.UserID ? filters.filter.UserID.value : ''
+        UserID: filters.filter.UserID ? filters.filter.UserID.value : '',
+        GroupsID: filters?.filter?.GroupsID?.value || '',
+        tele_process: filters.filter.tele_process
+          ? filters.filter.tele_process.join(',')
+          : ''
       },
       pi: callback ? 1 : filters.pi
     }
