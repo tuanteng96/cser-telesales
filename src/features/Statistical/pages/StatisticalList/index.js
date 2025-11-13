@@ -154,6 +154,16 @@ function StatisticalList(props) {
           sortable: false
         },
         {
+          key: 'CreateDate',
+          title: 'Ngày tạo',
+          dataKey: 'CreateDate',
+          cellRenderer: ({ rowData }) => (
+            <div>{moment(rowData?.CreateDate).format('HH:mm DD-MM-YYYY')}</div>
+          ),
+          width: 180,
+          sortable: false
+        },
+        {
           key: 'StockTitle',
           title: 'Cơ sở',
           dataKey: 'StockTitle',
