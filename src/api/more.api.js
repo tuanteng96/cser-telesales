@@ -28,7 +28,7 @@ const moreApi = {
   },
   getRootServices: ({ MemberID, StockID, Key }) => {
     return http.get(
-      `/api/v3/mbook?cmd=getroot&memberid=${MemberID}&ps=15&pi=1&key=${Key}=&stockid=${StockID}`
+      `/api/v3/mbook?cmd=getroot&memberid=${MemberID}&ps=15&pi=1&key=${Key}=&stockid=${StockID}${window?.top?.GlobalConfig?.Admin?.dat_lich_hien_dv_an ? "&isrootpublic=-1" : ""}`
     )
   },
   getGroupsMember: () => http.get(`/api/v3/member23?cmd=dataForAdd`)

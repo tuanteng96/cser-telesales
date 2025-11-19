@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import AsyncSelect from 'react-select/async'
 import { Modal } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import { Form, Formik } from 'formik'
@@ -11,8 +10,11 @@ import moreApi from 'src/api/more.api'
 import { useParams } from 'react-router-dom'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectStaffsService from 'src/components/Selects/SelectStaffsService'
-import Select from 'react-select'
+import Select, { components } from 'react-select'
 import telesalesApi from 'src/api/telesales.api'
+import { AsyncPaginate } from 'react-select-async-paginate'
+import clsx from 'clsx'
+
 moment.locale('vi')
 
 CalendarMemberBook.propTypes = {
@@ -24,6 +26,17 @@ CalendarMemberBook.defaultProps = {
   show: false,
   onHide: null,
   onSubmit: null
+}
+
+const ServiceOptionColor = props => {
+  const { data } = props
+  return (
+    <components.Option {...props}>
+      <span className={clsx(!data.IsRootPublic && 'text-danger')}>
+        {data.label}
+      </span>
+    </components.Option>
+  )
 }
 
 const initialValue = {
@@ -92,20 +105,24 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
     }))
   }, [AuthCrStockID, MemberCurrent])
 
-  const loadOptionsServices = (inputValue, callback, stockID) => {
+  const loadOptionsServices = async (inputValue, stockID) => {
     const filters = {
       Key: inputValue,
       StockID: stockID,
       MemberID: MemberID
     }
-    setTimeout(async () => {
-      const { data } = await moreApi.getRootServices(filters)
-      const dataResult = data.lst.map(item => ({
-        value: item.ID,
-        label: item.Title
-      }))
-      callback(dataResult)
-    }, 300)
+    const { data } = await moreApi.getRootServices(filters)
+    const dataResult = data?.lst
+      ? data.lst.map(item => ({
+          ...item,
+          value: item.ID,
+          label: item?.IsRootPublic ? item.Title : `${item.Title} (Ẩn)`
+        }))
+      : []
+    return {
+      options: dataResult,
+      hasMore: false
+    }
   }
 
   const CalendarSchema = Yup.object().shape({
@@ -203,7 +220,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                   </div>
                   <div className="form-group form-group-ezs border-top px-20px pt-15px mb-15px">
                     <label className="mb-1 d-none d-md-block">Dịch vụ</label>
-                    <AsyncSelect
+                    <AsyncPaginate
                       key={`${'No-Member'}-${values.StockID}`}
                       menuPosition="fixed"
                       isMulti
@@ -223,15 +240,14 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                       name="RootIdS"
                       placeholder="Chọn dịch vụ"
                       cacheOptions
-                      loadOptions={(v, callback) =>
-                        loadOptionsServices(v, callback, values.StockID)
-                      }
+                      loadOptions={v => loadOptionsServices(v, values.StockID)}
                       defaultOptions
                       noOptionsMessage={({ inputValue }) =>
                         !inputValue
                           ? 'Không có dịch vụ'
                           : 'Không tìm thấy dịch vụ'
                       }
+                      components={{ Option: ServiceOptionColor }}
                     />
 
                     <div className="d-flex align-items-center justify-content-between mt-15px">
