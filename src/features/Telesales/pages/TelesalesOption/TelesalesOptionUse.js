@@ -89,7 +89,7 @@ function TelesalesOptionUse(props) {
         width: 250,
         cellRenderer: ({ rowData }) => (
           <Text tooltipMaxWidth={250}>
-            {rowData.ProdTitle} ({rowData.Title})
+            {rowData.ProdTitle} ({rowData.ProdService2 || rowData.Title})
           </Text>
         ),
         sortable: false,
