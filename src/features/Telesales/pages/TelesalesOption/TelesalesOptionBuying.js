@@ -6,6 +6,7 @@ import uuid from 'react-uuid'
 
 import moment from 'moment'
 import 'moment/locale/vi'
+import { Dropdown } from 'react-bootstrap'
 
 moment.locale('vi')
 
@@ -14,6 +15,7 @@ function TelesalesOptionBuying(props) {
   const [loading, setLoading] = useState(false)
   const [ListData, setListData] = useState([])
   const [filters, setFilters] = useState({
+    ProdOrService: '',
     MemberID: MemberID,
     pi: 1,
     ps: 20
@@ -81,7 +83,37 @@ function TelesalesOptionBuying(props) {
         width: 350,
         sortable: false,
         className: 'flex-fill',
-        headerClassName: 'flex-fill'
+        headerClassName: 'flex-fill',
+        headerRenderer: ({ column }) => {
+          return (
+            <div className="d-flex w-100 justify-content-between align-items-center">
+              <div className="text-uppercase">{column.title}</div>
+              <div>
+                <select
+                  style={{
+                    border: '1px solid #eaeaeb',
+                    padding: '4px 7px',
+                    borderRadius: '3px',
+                    outline: 'none'
+                  }}
+                  onChange={e => {
+                    setFilters(prevState => ({
+                      ...prevState,
+                      ProdOrService: e.target.value
+                    }))
+                  }}
+                >
+                  <option value="">Tất cả</option>
+                  <option value="0">Sản phẩm</option>
+                  <option value="1">Dịch vụ</option>
+                  <option value="2">Phụ phí</option>
+                  <option value="3">Nguyên vật liệu</option>
+                  <option value="4">Thẻ tiền</option>
+                </select>
+              </div>
+            </div>
+          )
+        }
       },
       {
         key: 'Qty',

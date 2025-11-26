@@ -22,9 +22,9 @@ const telesalesApi = {
   editNoteMember: data => {
     return http.post('/api/v3/tele23@edit_note', JSON.stringify(data))
   },
-  getListBuydingProduct: ({ MemberID, pi, ps }) => {
+  getListBuydingProduct: ({ MemberID, pi, ps, ProdOrService }) => {
     return http.get(
-      `/api/v3/member23?cmd=da_mua&memberid=${MemberID}&pi=${pi}&ps=${ps}`
+      `/api/v3/member23?cmd=da_mua&memberid=${MemberID}&pi=${pi}&ps=${ps}&ProdOrService=${ProdOrService}`
     )
   },
   getHisUseServices: MemberID => {
