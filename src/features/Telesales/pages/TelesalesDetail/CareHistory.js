@@ -59,7 +59,7 @@ function CareHistory(props) {
     telesalesApi
       .getCareHistory(filters)
       .then(({ data }) => {
-        setList(data.data)
+        setList(data.data ? data.data.filter(x => x.Type === "PROCESS") : [])
         setLoading(false)
         callback && callback()
       })
