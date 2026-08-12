@@ -479,6 +479,38 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     </div>
                   </div>
                   <div className="mb-15px form-group">
+                    <label className="font-label text-muted mb-5px">
+                      Phát sinh đơn hàng trong khoảng thời gian
+                    </label>
+                    <div className="d-flex">
+                      <div className="flex-fill">
+                        <DatePicker
+                          onChange={date => {
+                            setFieldValue('filter.OrderFrom', date, false)
+                          }}
+                          selected={values.filter.OrderFrom}
+                          placeholderText="Từ ngày"
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                        />
+                      </div>
+                      <div className="w-35px d-flex align-items-center justify-content-center">
+                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                      </div>
+                      <div className="flex-fill">
+                        <DatePicker
+                          onChange={date => {
+                            setFieldValue('filter.OrderTo', date, false)
+                          }}
+                          selected={values.filter.OrderTo}
+                          placeholderText="Đến ngày"
+                          className="form-control"
+                          dateFormat="dd/MM/yyyy"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-15px form-group">
                     <label className="font-label text-muted">
                       Số ngày khách chưa đến cơ sở
                     </label>
@@ -499,6 +531,22 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       onBlur={handleBlur}
                       autoComplete="off"
                     />
+                    <label className="checkbox d-flex cursor-pointer mt-12px">
+                      <input
+                        type="checkbox"
+                        name="filter.last_used_type"
+                        value={values.filter.last_used_type}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <span className="checkbox-icon"></span>
+                      <span
+                        className="font-label italic text-muted"
+                        style={{ fontStyle: 'italic', lineHeight: '17px' }}
+                      >
+                        Lọc chính xác số ngày khách chưa đến cơ sở
+                      </span>
+                    </label>
                   </div>
                   <div
                     className={`${clsx('form-group', teleAdv && 'mb-15px')}`}

@@ -191,7 +191,10 @@ function TelesalesList(props) {
       CreateTo: filtersRedux.CreateTo || '',
       osCount: '',
       ServiceCardIDs: '',
-      GroupsID: ''
+      GroupsID: '',
+      OrderFrom: filtersRedux.OrderFrom || '',
+      OrderTo: filtersRedux.OrderTo || '',
+      last_used_type: filtersRedux.last_used_type || false
     },
     pi: 1,
     ps: 20
@@ -215,6 +218,22 @@ function TelesalesList(props) {
         ? filters.filter.tele_user_id.value
         : ''
     }
+    let order_from_to = ''
+
+    if (filters.filter.OrderFrom && filters.filter.OrderTo) {
+      order_from_to = `${moment(filters.filter.OrderFrom).format(
+        'YYYY-MM-DD'
+      )},${moment(filters.filter.OrderTo).format('YYYY-MM-DD')}`
+    } else if (filters.filter.OrderFrom) {
+      order_from_to = `${moment(filters.filter.OrderFrom).format(
+        'YYYY-MM-DD'
+      )},${moment(filters.filter.OrderFrom).format('YYYY-MM-DD')}`
+    } else if (filters.filter.OrderTo) {
+      order_from_to = `${moment(filters.filter.OrderTo).format(
+        'YYYY-MM-DD'
+      )},${moment(filters.filter.OrderTo).format('YYYY-MM-DD')}`
+    }
+
     const newFilter = {
       ...filters,
       filter: {
@@ -254,10 +273,15 @@ function TelesalesList(props) {
         ServiceCardIDs: filters?.filter?.ServiceCardIDs
           ? filters?.filter?.ServiceCardIDs.map(x => x.value).toString()
           : '',
-        GroupsID: filters?.filter?.GroupsID?.value || ''
+        GroupsID: filters?.filter?.GroupsID?.value || '',
+        order_from_to,
+        last_used_type: filters.filter.last_used_type ? 1 : ''
       },
       pi: callback ? 1 : filters.pi
     }
+
+    delete newFilter.filter.OrderFrom
+    delete newFilter.filter.OrderTo
 
     telesalesApi
       .getListMemberTelesales(newFilter)
