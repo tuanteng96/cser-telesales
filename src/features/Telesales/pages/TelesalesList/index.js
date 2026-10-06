@@ -194,7 +194,12 @@ function TelesalesList(props) {
       GroupsID: '',
       OrderFrom: filtersRedux.OrderFrom || '',
       OrderTo: filtersRedux.OrderTo || '',
-      last_used_type: filtersRedux.last_used_type || false
+      last_used_type: filtersRedux.last_used_type || false,
+      bookStocks: filtersRedux.bookStocks || '',
+      service_stock: filtersRedux.service_stock || '',
+      order_stock: filtersRedux.order_stock || '',
+      ServiceUseFrom: '',
+      ServiceUseTo: ''
     },
     pi: 1,
     ps: 20
@@ -219,6 +224,7 @@ function TelesalesList(props) {
         : ''
     }
     let order_from_to = ''
+    let service_from_to = ''
 
     if (filters.filter.OrderFrom && filters.filter.OrderTo) {
       order_from_to = `${moment(filters.filter.OrderFrom).format(
@@ -232,6 +238,20 @@ function TelesalesList(props) {
       order_from_to = `${moment(filters.filter.OrderTo).format(
         'YYYY-MM-DD'
       )},${moment(filters.filter.OrderTo).format('YYYY-MM-DD')}`
+    }
+
+    if (filters.filter.ServiceUseFrom && filters.filter.ServiceUseTo) {
+      service_from_to = `${moment(filters.filter.ServiceUseFrom).format(
+        'YYYY-MM-DD'
+      )},${moment(filters.filter.ServiceUseTo).format('YYYY-MM-DD')}`
+    } else if (filters.filter.ServiceUseFrom) {
+      service_from_to = `${moment(filters.filter.ServiceUseFrom).format(
+        'YYYY-MM-DD'
+      )},${moment(filters.filter.ServiceUseFrom).format('YYYY-MM-DD')}`
+    } else if (filters.filter.ServiceUseTo) {
+      service_from_to = `${moment(filters.filter.ServiceUseTo).format(
+        'YYYY-MM-DD'
+      )},${moment(filters.filter.ServiceUseTo).format('YYYY-MM-DD')}`
     }
 
     const newFilter = {
@@ -275,13 +295,25 @@ function TelesalesList(props) {
           : '',
         GroupsID: filters?.filter?.GroupsID?.value || '',
         order_from_to,
-        last_used_type: filters.filter.last_used_type ? 1 : ''
+        last_used_type: filters.filter.last_used_type ? 1 : '',
+        bookStocks: filters?.filter?.bookStocks
+          ? filters?.filter?.bookStocks.map(x => x.value).toString()
+          : '',
+        service_stock: filters?.filter?.service_stock
+          ? filters?.filter?.service_stock.map(x => x.value).toString()
+          : '',
+        order_stock: filters?.filter?.order_stock
+          ? filters?.filter?.order_stock.map(x => x.value).toString()
+          : '',
+        service_from_to
       },
       pi: callback ? 1 : filters.pi
     }
 
     delete newFilter.filter.OrderFrom
     delete newFilter.filter.OrderTo
+    delete newFilter.filter.ServiceUseFrom
+    delete newFilter.filter.ServiceUseTo
 
     telesalesApi
       .getListMemberTelesales(newFilter)

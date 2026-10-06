@@ -6,7 +6,6 @@ import uuid from 'react-uuid'
 
 import moment from 'moment'
 import 'moment/locale/vi'
-import { Dropdown } from 'react-bootstrap'
 
 moment.locale('vi')
 

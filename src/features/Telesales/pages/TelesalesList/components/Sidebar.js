@@ -42,6 +42,46 @@ const OsList = [
   // }
 ]
 
+const INITIAL_OPEN_SECTIONS = ['tags']
+
+function FilterSection({ sectionKey, title, children }) {
+  const [isOpen, setIsOpen] = useState(() =>
+    INITIAL_OPEN_SECTIONS.includes(sectionKey)
+  )
+  return (
+    <details
+      className="telesales-filter-section"
+      open={isOpen}
+      onToggle={event => setIsOpen(event.currentTarget.open)}
+    >
+      <summary className="telesales-filter-section__header">
+        <span>{title}</span>
+        <svg
+          className="telesales-filter-section__icon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </summary>
+      <div className="telesales-filter-section__body">{children}</div>
+    </details>
+  )
+}
+
+FilterSection.propTypes = {
+  sectionKey: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired
+}
+
 function Sidebar({ filters, onSubmit, loading, onRefresh }) {
   const [ListType, setListType] = useState([])
   const [loadingType, setLoadingType] = useState(false)
@@ -219,432 +259,614 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                     </div>
                   )}
                 </div>
-                <div className="flex-grow-1 p-15px overflow-auto">
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted">Từ khóa</label>
+                <div
+                  className="flex-grow-1 p-15px overflow-auto d-flex flex-column"
+                  style={{
+                    gap: '12px'
+                  }}
+                >
+                  <div className="form-group">
+                    <label className="font-label" style={{ fontWeight: '600' }}>
+                      Tìm kiếm
+                    </label>
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Nhập từ khóa"
+                      placeholder="Nhập tên, số điện thoại, ID khách hàng ..."
                       name="filter.key"
                       value={values.filter.key}
                       onChange={handleChange}
                       onBlur={handleBlur}
                     />
                   </div>
-                  {loadingType &&
-                    Array(2)
-                      .fill()
-                      .map((item, index) => (
-                        <div className="mb-15px form-group" key={index}>
-                          <label className="font-label text-muted">
-                            <Skeleton count={1} width={100} />
-                          </label>
-                          <div className="checkbox-list mt-8px">
-                            {Array(2)
-                              .fill()
-                              .map((x, idx) => (
-                                <label
-                                  className="checkbox d-flex cursor-pointer"
-                                  key={idx}
-                                >
-                                  <input
-                                    type="checkbox"
-                                    name="filter.tele_process"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                  />
-                                  <span className="checkbox-icon"></span>
-                                  <span className="fw-500 font-label">
-                                    <Skeleton count={1} width={100} />
-                                  </span>
-                                </label>
-                              ))}
-                          </div>
-                        </div>
-                      ))}
-                  {!loadingType &&
-                    ListType &&
-                    ListType.map((type, index) => (
-                      <div className="mb-15px form-group" key={index}>
-                        <label className="font-label text-muted">
-                          {type.Title}
-                        </label>
-                        <div className="checkbox-list mt-8px">
-                          {type.Children &&
-                            type.Children.map((x, idx) => (
-                              <label
-                                className="checkbox d-flex cursor-pointer"
-                                key={idx}
-                              >
-                                <input
-                                  type="checkbox"
-                                  name="filter.tele_process"
-                                  value={x.Title}
-                                  onChange={handleChange}
-                                  onBlur={handleBlur}
-                                  checked={values?.filter?.tele_process.includes(
-                                    x.Title
-                                  )}
-                                />
-                                <span className="checkbox-icon"></span>
-                                <span className="fw-500 font-label">
-                                  {x.Title}
-                                </span>
+                  <FilterSection sectionKey="tags" title="Phân loạn theo tags">
+                    <div
+                      className="d-flex flex-column"
+                      style={{
+                        gap: '16px'
+                      }}
+                    >
+                      {loadingType &&
+                        Array(2)
+                          .fill()
+                          .map((item, index) => (
+                            <div className="form-group" key={index}>
+                              <label className="font-label text-muted">
+                                <Skeleton count={1} width={100} />
                               </label>
-                            ))}
-                        </div>
-                      </div>
-                    ))}
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Cơ sở
-                    </label>
-                    <SelectStocks
-                      name="filter.StockID"
-                      placeholder="Chọn cơ cở"
-                      classNamePrefix="select"
-                      className="select-control"
-                      value={values?.filter?.StockID}
-                      onChange={otp => {
-                        setFieldValue('filter.StockID', otp ? otp.value : '')
-                      }}
-                    />
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Nhóm khách hàng
-                    </label>
-                    <SelectGroupsMember
-                      className="select-control"
-                      menuPosition="fixed"
-                      menuPlacement="top"
-                      name="filter.GroupsID"
-                      onChange={otp => {
-                        setFieldValue('filter.GroupsID', otp, false)
-                      }}
-                      value={values.filter.GroupsID}
-                      isClearable={true}
-                    />
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Tìm theo SP, DV khách quan tâm
-                    </label>
-                    <SelectProduct
-                      className="select-control"
-                      isMulti
-                      menuPosition="fixed"
-                      menuPlacement="top"
-                      name="filter.wishlist"
-                      onChange={otp => {
-                        setFieldValue('filter.wishlist', otp, false)
-                      }}
-                      value={values.filter.wishlist}
-                      isClearable={true}
-                    />
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Ngày tạo khách hàng
-                    </label>
-                    <div className="d-flex">
-                      <div className="flex-fill">
-                        <DatePicker
-                          calendarClassName="hide-header"
-                          onChange={date => {
-                            setFieldValue('filter.CreateFrom', date, false)
-                          }}
-                          selected={values.filter.CreateFrom}
-                          placeholderText="Từ ngày"
-                          className="form-control"
-                          dateFormat="dd/MM"
-                          dateFormatCalendar="MMMM"
-                        />
-                      </div>
-                      <div className="w-35px d-flex align-items-center justify-content-center">
-                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
-                      </div>
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.CreateTo', date, false)
-                          }}
-                          selected={values.filter.CreateTo}
-                          placeholderText="Đến ngày"
-                          className="form-control"
-                          dateFormat="dd/MM"
-                          dateFormatCalendar="MMMM"
-                        />
-                      </div>
+                              <div className="checkbox-list mt-8px">
+                                {Array(2)
+                                  .fill()
+                                  .map((x, idx) => (
+                                    <label
+                                      className="checkbox d-flex cursor-pointer"
+                                      key={idx}
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        name="filter.tele_process"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                      />
+                                      <span className="checkbox-icon"></span>
+                                      <span className="fw-500 font-label">
+                                        <Skeleton count={1} width={100} />
+                                      </span>
+                                    </label>
+                                  ))}
+                              </div>
+                            </div>
+                          ))}
+                      {!loadingType &&
+                        ListType &&
+                        ListType.map((type, index) => (
+                          <div className="form-group" key={index}>
+                            <label className="font-label text-muted">
+                              {type.Title}
+                            </label>
+                            <div className="checkbox-list mt-8px">
+                              {type.Children &&
+                                type.Children.map((x, idx) => (
+                                  <label
+                                    className="checkbox d-flex cursor-pointer"
+                                    key={idx}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      name="filter.tele_process"
+                                      value={x.Title}
+                                      onChange={handleChange}
+                                      onBlur={handleBlur}
+                                      checked={values?.filter?.tele_process.includes(
+                                        x.Title
+                                      )}
+                                    />
+                                    <span className="checkbox-icon"></span>
+                                    <span className="fw-500 font-label">
+                                      {x.Title}
+                                    </span>
+                                  </label>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
                     </div>
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Khách hàng sinh nhật
-                    </label>
-                    <div className="d-flex">
-                      <div className="flex-fill">
-                        <DatePicker
-                          calendarClassName="hide-header"
-                          onChange={date => {
-                            setFieldValue('filter.birthDateFrom', date, false)
-                          }}
-                          selected={values.filter.birthDateFrom}
-                          placeholderText="Từ ngày"
-                          className="form-control"
-                          dateFormat="dd/MM"
-                          dateFormatCalendar="MMMM"
-                        />
-                      </div>
-                      <div className="w-35px d-flex align-items-center justify-content-center">
-                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
-                      </div>
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.birthDateTo', date, false)
-                          }}
-                          selected={values.filter.birthDateTo}
-                          placeholderText="Đến ngày"
-                          className="form-control"
-                          dateFormat="dd/MM"
-                          dateFormatCalendar="MMMM"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Khách có đặt lịch
-                    </label>
-                    <div className="d-flex">
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.bookDateFrom', date, false)
-                          }}
-                          selected={values.filter.bookDateFrom}
-                          placeholderText="Từ ngày"
-                          className="form-control"
-                          dateFormat="dd/MM/yyyy"
-                        />
-                      </div>
-                      <div className="w-35px d-flex align-items-center justify-content-center">
-                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
-                      </div>
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.bookDateTo', date, false)
-                          }}
-                          selected={values.filter.bookDateTo}
-                          placeholderText="Đến ngày"
-                          className="form-control"
-                          dateFormat="dd/MM/yyyy"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Khách có lịch nhắc
-                    </label>
-                    <div className="d-flex">
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.NotiFrom', date, false)
-                          }}
-                          selected={values.filter.NotiFrom}
-                          placeholderText="Từ ngày"
-                          className="form-control"
-                          dateFormat="dd/MM/yyyy"
-                        />
-                      </div>
-                      <div className="w-35px d-flex align-items-center justify-content-center">
-                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
-                      </div>
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.NotiTo', date, false)
-                          }}
-                          selected={values.filter.NotiTo}
-                          placeholderText="Đến ngày"
-                          className="form-control"
-                          dateFormat="dd/MM/yyyy"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted mb-5px">
-                      Phát sinh đơn hàng trong khoảng thời gian
-                    </label>
-                    <div className="d-flex">
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.OrderFrom', date, false)
-                          }}
-                          selected={values.filter.OrderFrom}
-                          placeholderText="Từ ngày"
-                          className="form-control"
-                          dateFormat="dd/MM/yyyy"
-                        />
-                      </div>
-                      <div className="w-35px d-flex align-items-center justify-content-center">
-                        <i className="fa-regular fa-arrow-right-long text-muted"></i>
-                      </div>
-                      <div className="flex-fill">
-                        <DatePicker
-                          onChange={date => {
-                            setFieldValue('filter.OrderTo', date, false)
-                          }}
-                          selected={values.filter.OrderTo}
-                          placeholderText="Đến ngày"
-                          className="form-control"
-                          dateFormat="dd/MM/yyyy"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-15px form-group">
-                    <label className="font-label text-muted">
-                      Số ngày khách chưa đến cơ sở
-                    </label>
-                    <NumericFormat
-                      allowNegative={false}
-                      name="filter.last_used"
-                      placeholder="Nhập số ngày"
-                      className={`form-control`}
-                      //isNumericString={true}
-                      //thousandSeparator={true}
-                      value={values.filter.last_used}
-                      onValueChange={val => {
-                        setFieldValue(
-                          'filter.last_used',
-                          val.floatValue ? val.floatValue : val.value
-                        )
+                  </FilterSection>
+                  <FilterSection sectionKey="general" title="Thông tin chung">
+                    <div
+                      className="d-flex flex-column"
+                      style={{
+                        gap: '12px'
                       }}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                    />
-                    <label className="checkbox d-flex cursor-pointer mt-12px">
-                      <input
-                        type="checkbox"
-                        name="filter.last_used_type"
-                        value={values.filter.last_used_type}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <span className="checkbox-icon"></span>
-                      <span
-                        className="font-label italic text-muted"
-                        style={{ fontStyle: 'italic', lineHeight: '17px' }}
-                      >
-                        Lọc chính xác số ngày khách chưa đến cơ sở
-                      </span>
-                    </label>
-                  </div>
-                  <div
-                    className={`${clsx('form-group', teleAdv && 'mb-15px')}`}
-                  >
-                    <label className="font-label text-muted">
-                      Khách hết sản phẩm trong số ngày tới
-                    </label>
-                    <NumericFormat
-                      allowNegative={false}
-                      name="filter.remains"
-                      placeholder="Nhập số ngày"
-                      className={`form-control`}
-                      //isNumericString={true}
-                      //thousandSeparator={true}
-                      value={values.filter.remains}
-                      onValueChange={val => {
-                        setFieldValue(
-                          'filter.remains',
-                          val.floatValue ? val.floatValue : val.value
-                        )
-                      }}
-                      onBlur={handleBlur}
-                      autoComplete="off"
-                    />
-                  </div>
-                  <div className="form-group mb-15px">
-                    <label className="font-label text-muted mb-5px">
-                      Loại thẻ dịch vụ
-                    </label>
-                    <Select
-                      classNamePrefix="select"
-                      options={OsList}
-                      className="select-control"
-                      name="osCount"
-                      value={values?.filter?.osCount}
-                      onChange={otp => {
-                        setFieldValue('filter.osCount', otp)
-                      }}
-                      placeholder="Chọn"
-                      isClearable
-                    />
-                  </div>
-                  <div className="form-group mb-15px">
-                    <label className="font-label text-muted mb-5px">
-                      Dịch vụ thẻ
-                    </label>
-                    <SelectServiceCard
-                      isMulti
-                      name="ServiceCardIDs"
-                      value={values?.filter?.ServiceCardIDs}
-                      onChange={otp => {
-                        setFieldValue('filter.ServiceCardIDs', otp)
-                      }}
-                      isClearable
-                      menuPosition="fixed"
-                      styles={{
-                        menuPortal: base => ({
-                          ...base,
-                          zIndex: 9999
-                        })
-                      }}
-                      menuPortalTarget={document.body}
-                    />
-                  </div>
-                  {teleAdv && (
-                    <>
+                    >
                       <div className="form-group">
                         <label className="font-label text-muted mb-5px">
-                          Chọn theo nhân viên
+                          Cơ sở
                         </label>
-                        <SelectStaffs
-                          adv={true}
+                        <SelectStocks
+                          name="filter.StockID"
+                          placeholder="Chọn cơ cở"
+                          classNamePrefix="select"
+                          className="select-control"
+                          value={values?.filter?.StockID}
+                          onChange={otp => {
+                            setFieldValue(
+                              'filter.StockID',
+                              otp ? otp.value : ''
+                            )
+                          }}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Nhóm khách hàng
+                        </label>
+                        <SelectGroupsMember
                           className="select-control"
                           menuPosition="fixed"
                           menuPlacement="top"
-                          name="filter.tele_user_id"
+                          name="filter.GroupsID"
                           onChange={otp => {
-                            setFieldValue('filter.tele_user_id', otp, false)
+                            setFieldValue('filter.GroupsID', otp, false)
                           }}
-                          value={values.filter.tele_user_id}
+                          value={values.filter.GroupsID}
                           isClearable={true}
                         />
                       </div>
-                      <label className="checkbox d-flex cursor-pointer mt-20px">
-                        <input
-                          type="checkbox"
-                          name="filter.emptyStaff"
-                          value={values.filter.emptyStaff}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Ngày tạo khách hàng
+                        </label>
+                        <div className="d-flex">
+                          <div className="flex-fill">
+                            <DatePicker
+                              calendarClassName="hide-header"
+                              onChange={date => {
+                                setFieldValue('filter.CreateFrom', date, false)
+                              }}
+                              selected={values.filter.CreateFrom}
+                              placeholderText="Từ ngày"
+                              className="form-control"
+                              dateFormat="dd/MM"
+                              dateFormatCalendar="MMMM"
+                            />
+                          </div>
+                          <div className="w-35px d-flex align-items-center justify-content-center">
+                            <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                          </div>
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue('filter.CreateTo', date, false)
+                              }}
+                              selected={values.filter.CreateTo}
+                              placeholderText="Đến ngày"
+                              className="form-control"
+                              dateFormat="dd/MM"
+                              dateFormatCalendar="MMMM"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Khách hàng sinh nhật
+                        </label>
+                        <div className="d-flex">
+                          <div className="flex-fill">
+                            <DatePicker
+                              calendarClassName="hide-header"
+                              onChange={date => {
+                                setFieldValue(
+                                  'filter.birthDateFrom',
+                                  date,
+                                  false
+                                )
+                              }}
+                              selected={values.filter.birthDateFrom}
+                              placeholderText="Từ ngày"
+                              className="form-control"
+                              dateFormat="dd/MM"
+                              dateFormatCalendar="MMMM"
+                            />
+                          </div>
+                          <div className="w-35px d-flex align-items-center justify-content-center">
+                            <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                          </div>
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue('filter.birthDateTo', date, false)
+                              }}
+                              selected={values.filter.birthDateTo}
+                              placeholderText="Đến ngày"
+                              className="form-control"
+                              dateFormat="dd/MM"
+                              dateFormatCalendar="MMMM"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      {teleAdv && (
+                        <div>
+                          <div className="form-group">
+                            <label className="font-label text-muted mb-5px">
+                              Nhân viên quản lý
+                            </label>
+                            <SelectStaffs
+                              adv={true}
+                              className="select-control"
+                              menuPosition="fixed"
+                              menuPlacement="top"
+                              name="filter.tele_user_id"
+                              onChange={otp => {
+                                setFieldValue('filter.tele_user_id', otp, false)
+                              }}
+                              value={values.filter.tele_user_id}
+                              isClearable={true}
+                            />
+                          </div>
+                          <label className="checkbox d-flex cursor-pointer mt-12px">
+                            <input
+                              type="checkbox"
+                              name="filter.emptyStaff"
+                              value={values.filter.emptyStaff}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                            <span className="checkbox-icon"></span>
+                            <span className="fw-500 font-label">
+                              Chưa chọn nhân viên quản lý
+                            </span>
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  </FilterSection>
+                  <FilterSection
+                    sectionKey="notes"
+                    title="Ghi chú và lịch nhắc"
+                  >
+                    <div
+                      className="d-flex flex-column"
+                      style={{
+                        gap: '12px'
+                      }}
+                    >
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          SP, DV khách quan tâm
+                        </label>
+                        <SelectProduct
+                          className="select-control"
+                          isMulti
+                          menuPosition="fixed"
+                          menuPlacement="top"
+                          name="filter.wishlist"
+                          onChange={otp => {
+                            setFieldValue('filter.wishlist', otp, false)
+                          }}
+                          value={values.filter.wishlist}
+                          isClearable={true}
                         />
-                        <span className="checkbox-icon"></span>
-                        <span className="fw-500 font-label">
-                          Chưa chọn nhân viên phụ trách
-                        </span>
-                      </label>
-                    </>
-                  )}
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Khách có lịch nhắc
+                        </label>
+                        <div className="d-flex">
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue('filter.NotiFrom', date, false)
+                              }}
+                              selected={values.filter.NotiFrom}
+                              placeholderText="Từ ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                          <div className="w-35px d-flex align-items-center justify-content-center">
+                            <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                          </div>
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue('filter.NotiTo', date, false)
+                              }}
+                              selected={values.filter.NotiTo}
+                              placeholderText="Đến ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </FilterSection>
+                  <FilterSection sectionKey="booking" title="Theo đặt lịch">
+                    <div
+                      className="d-flex flex-column"
+                      style={{
+                        gap: '12px'
+                      }}
+                    >
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Khách có đặt lịch
+                        </label>
+                        <div className="d-flex">
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue(
+                                  'filter.bookDateFrom',
+                                  date,
+                                  false
+                                )
+                              }}
+                              selected={values.filter.bookDateFrom}
+                              placeholderText="Từ ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                          <div className="w-35px d-flex align-items-center justify-content-center">
+                            <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                          </div>
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue('filter.bookDateTo', date, false)
+                              }}
+                              selected={values.filter.bookDateTo}
+                              placeholderText="Đến ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Tại cơ sở
+                        </label>
+                        <SelectStocks
+                          hideAll={true}
+                          isMulti
+                          name="filter.bookStocks"
+                          placeholder="Chọn cơ cở"
+                          classNamePrefix="select"
+                          className="select-control"
+                          value={values?.filter?.bookStocks}
+                          onChange={otp => {
+                            setFieldValue('filter.bookStocks', otp)
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </FilterSection>
+                  <FilterSection
+                    sectionKey="orders"
+                    title="Theo phát sinh mua hàng"
+                  >
+                    <div
+                      className="d-flex flex-column"
+                      style={{
+                        gap: '12px'
+                      }}
+                    >
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Phát sinh đơn hàng trong khoảng thời gian
+                        </label>
+                        <div className="d-flex">
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue('filter.OrderFrom', date, false)
+                              }}
+                              selected={values.filter.OrderFrom}
+                              placeholderText="Từ ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                          <div className="w-35px d-flex align-items-center justify-content-center">
+                            <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                          </div>
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue('filter.OrderTo', date, false)
+                              }}
+                              selected={values.filter.OrderTo}
+                              placeholderText="Đến ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Tại cơ sở
+                        </label>
+                        <SelectStocks
+                          hideAll={true}
+                          isMulti
+                          name="filter.service_stock"
+                          placeholder="Chọn cơ cở"
+                          classNamePrefix="select"
+                          className="select-control"
+                          value={values?.filter?.service_stock}
+                          onChange={otp => {
+                            setFieldValue('filter.service_stock', otp)
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </FilterSection>
+                  <FilterSection
+                    sectionKey="services"
+                    title="Theo dịch vụ thực hiện"
+                  >
+                    <div
+                      className="d-flex flex-column"
+                      style={{
+                        gap: '12px'
+                      }}
+                    >
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Khách làm dịch vụ trong khoảng thời gian
+                        </label>
+                        <div className="d-flex">
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue(
+                                  'filter.ServiceUseFrom',
+                                  date,
+                                  false
+                                )
+                              }}
+                              selected={values.filter.ServiceUseFrom}
+                              placeholderText="Từ ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                          <div className="w-35px d-flex align-items-center justify-content-center">
+                            <i className="fa-regular fa-arrow-right-long text-muted"></i>
+                          </div>
+                          <div className="flex-fill">
+                            <DatePicker
+                              onChange={date => {
+                                setFieldValue(
+                                  'filter.ServiceUseTo',
+                                  date,
+                                  false
+                                )
+                              }}
+                              selected={values.filter.ServiceUseTo}
+                              placeholderText="Đến ngày"
+                              className="form-control"
+                              dateFormat="dd/MM/yyyy"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Tại cơ sở
+                        </label>
+                        <SelectStocks
+                          hideAll={true}
+                          isMulti
+                          name="filter.order_stock"
+                          placeholder="Chọn cơ cở"
+                          classNamePrefix="select"
+                          className="select-control"
+                          value={values?.filter?.order_stock}
+                          onChange={otp => {
+                            setFieldValue('filter.order_stock', otp)
+                          }}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Loại thẻ dịch vụ
+                        </label>
+                        <Select
+                          classNamePrefix="select"
+                          options={OsList}
+                          className="select-control"
+                          name="osCount"
+                          value={values?.filter?.osCount}
+                          onChange={otp => {
+                            setFieldValue('filter.osCount', otp)
+                          }}
+                          placeholder="Chọn"
+                          isClearable
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="font-label text-muted mb-5px">
+                          Dịch vụ thẻ
+                        </label>
+                        <SelectServiceCard
+                          isMulti
+                          name="ServiceCardIDs"
+                          value={values?.filter?.ServiceCardIDs}
+                          onChange={otp => {
+                            setFieldValue('filter.ServiceCardIDs', otp)
+                          }}
+                          isClearable
+                          menuPosition="fixed"
+                          styles={{
+                            menuPortal: base => ({
+                              ...base,
+                              zIndex: 9999
+                            })
+                          }}
+                          menuPortalTarget={document.body}
+                        />
+                      </div>
+                    </div>
+                  </FilterSection>
+                  <FilterSection
+                    sectionKey="frequency"
+                    title="Theo tần suất & dự kiến"
+                  >
+                    <div
+                      className="d-flex flex-column"
+                      style={{
+                        gap: '12px'
+                      }}
+                    >
+                      <div className="form-group">
+                        <label className="font-label text-muted">
+                          Số ngày khách chưa đến cơ sở
+                        </label>
+                        <NumericFormat
+                          allowNegative={false}
+                          name="filter.last_used"
+                          placeholder="Nhập số ngày"
+                          className={`form-control`}
+                          //isNumericString={true}
+                          //thousandSeparator={true}
+                          value={values.filter.last_used}
+                          onValueChange={val => {
+                            setFieldValue(
+                              'filter.last_used',
+                              val.floatValue ? val.floatValue : val.value
+                            )
+                          }}
+                          onBlur={handleBlur}
+                          autoComplete="off"
+                        />
+                        <label className="checkbox d-flex cursor-pointer mt-12px">
+                          <input
+                            type="checkbox"
+                            name="filter.last_used_type"
+                            value={values.filter.last_used_type}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                          <span className="checkbox-icon"></span>
+                          <span
+                            className="font-label italic text-muted"
+                            style={{ fontStyle: 'italic', lineHeight: '17px' }}
+                          >
+                            Lọc chính xác số ngày khách chưa đến cơ sở
+                          </span>
+                        </label>
+                      </div>
+                      <div className={`${clsx('form-group')}`}>
+                        <label className="font-label text-muted">
+                          Khách hết sản phẩm trong số ngày tới
+                        </label>
+                        <NumericFormat
+                          allowNegative={false}
+                          name="filter.remains"
+                          placeholder="Nhập số ngày"
+                          className={`form-control`}
+                          //isNumericString={true}
+                          //thousandSeparator={true}
+                          value={values.filter.remains}
+                          onValueChange={val => {
+                            setFieldValue(
+                              'filter.remains',
+                              val.floatValue ? val.floatValue : val.value
+                            )
+                          }}
+                          onBlur={handleBlur}
+                          autoComplete="off"
+                        />
+                      </div>
+                    </div>
+                  </FilterSection>
                 </div>
                 <div className="border-top p-15px d-flex">
                   <button

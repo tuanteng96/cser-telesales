@@ -63,7 +63,8 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
         >
           {formikProps => {
             // errors, touched, handleChange, handleBlur
-            const { values, setFieldValue, handleChange, handleBlur } = formikProps
+            const { values, setFieldValue, handleChange, handleBlur } =
+              formikProps
 
             return (
               <Form className="d-flex flex-column h-100">

@@ -11,7 +11,7 @@ SelectStocks.defaultProps = {
   allStock: true
 }
 
-function SelectStocks({ value, allStock, ...props }) {
+function SelectStocks({ value, allStock, hideAll = false, ...props }) {
   const [StocksList, setStocksList] = useState([])
   const { PermissionStocks, Stocks } = useSelector(({ auth }) => ({
     Stocks: auth?.Info?.Stocks || [],
@@ -44,9 +44,13 @@ function SelectStocks({ value, allStock, ...props }) {
     <Select
       placeholder="Chọn cơ cở"
       classNamePrefix="select"
-      options={StocksList}
+      options={StocksList?.filter(x => (hideAll ? x?.value : !hideAll))}
       className="select-control"
-      value={StocksList.filter(item => Number(value) === Number(item.value))}
+      value={
+        props.isMulti
+          ? value
+          : StocksList.filter(item => Number(value) === Number(item.value))
+      }
       {...props}
     />
   )
