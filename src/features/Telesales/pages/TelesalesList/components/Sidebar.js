@@ -675,13 +675,13 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                         <SelectStocks
                           hideAll={true}
                           isMulti
-                          name="filter.service_stock"
+                          name="filter.order_stock"
                           placeholder="Chọn cơ cở"
                           classNamePrefix="select"
                           className="select-control"
-                          value={values?.filter?.service_stock}
+                          value={values?.filter?.order_stock}
                           onChange={otp => {
-                            setFieldValue('filter.service_stock', otp)
+                            setFieldValue('filter.order_stock', otp)
                           }}
                         />
                       </div>
@@ -744,13 +744,13 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                         <SelectStocks
                           hideAll={true}
                           isMulti
-                          name="filter.order_stock"
+                          name="filter.service_stock"
                           placeholder="Chọn cơ cở"
                           classNamePrefix="select"
                           className="select-control"
-                          value={values?.filter?.order_stock}
+                          value={values?.filter?.service_stock}
                           onChange={otp => {
-                            setFieldValue('filter.order_stock', otp)
+                            setFieldValue('filter.service_stock', otp)
                           }}
                         />
                       </div>

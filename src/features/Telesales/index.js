@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Outlet } from 'react-router-dom'
 import '../../_assets/sass/pages/_telesales.scss'
 
 export const TelesalesContext = React.createContext()

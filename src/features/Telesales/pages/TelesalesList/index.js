@@ -370,10 +370,17 @@ function TelesalesList(props) {
           dataKey: 'FullName',
           cellRenderer: ({ rowData }) => (
             <div>
-              <div className="fw-600 truncate-multi-line">
+              <div className="fw-600 truncate-multi-line tw-mb-1">
                 {rowData?.FullName}
               </div>
-              <div className="font-number">{rowData?.MobilePhone}</div>
+              <div className="tw-flex gap-2">
+                <div className="font-number">{rowData?.MobilePhone}</div>
+                {rowData?.GroupNames && (
+                  <div className="tw-items-center tw-text-[13px] tw-px-2 tw-rounded tw-text-[#187de4] tw-bg-[#e1f0ff]">
+                    {rowData?.GroupNames}
+                  </div>
+                )}
+              </div>
             </div>
           ),
           width: 250,
@@ -381,19 +388,15 @@ function TelesalesList(props) {
         },
         {
           key: 'CreateDate',
-          title: 'Ngày tạo',
+          title: 'Ngày tạo / Cơ sở',
           dataKey: 'CreateDate',
           cellRenderer: ({ rowData }) => (
-            <div>{moment(rowData?.CreateDate).format('DD-MM-YYYY')}</div>
+            <div>
+              <div>{moment(rowData?.CreateDate).format('DD-MM-YYYY')}</div>
+              <div className="tw-italic">{rowData?.ByStock?.Title}</div>
+            </div>
           ),
           width: 180,
-          sortable: false
-        },
-        {
-          key: 'ByStock.Title',
-          title: 'Cơ sở',
-          dataKey: 'ByStock.Title',
-          width: 250,
           sortable: false
         },
         {
@@ -424,42 +427,52 @@ function TelesalesList(props) {
           cellRenderer: ({ rowData }) => (
             <>
               {rowData.TopTele && rowData.TopTele.length > 0 ? (
-                <div className="d-flex align-items-center w-100">
-                  <Text className="flex-1 pr-10px" tooltipMaxWidth={280}>
-                    {rowData.TopTele[0].Content}
-                  </Text>
-                  <OverlayTrigger
-                    rootClose
-                    trigger="click"
-                    key="auto"
-                    placement="auto"
-                    overlay={
-                      <Popover id={`popover-positioned-top`}>
-                        <Popover.Body className="p-0 max-h-300px overflow-auto">
-                          {rowData.TopTele.map((item, index) => (
-                            <div
-                              className={clsx(
-                                'p-15px',
-                                rowData.TopTele.length - 1 !== index &&
-                                  'border-bottom'
-                              )}
-                              key={index}
-                            >
-                              {item.Content}
-                              <div className="font-number mt-5px text-muted">
-                                Ngày{' '}
-                                {moment(item.CreateDate).format(
-                                  'DD-MM-YYYY HH:mm'
+                <div className="tw-w-full">
+                  <div className="d-flex align-items-center w-100">
+                    <Text className="flex-1 pr-10px" tooltipMaxWidth={280}>
+                      {rowData.TopTele[0].Content}
+                    </Text>
+                    <OverlayTrigger
+                      rootClose
+                      trigger="click"
+                      key="auto"
+                      placement="auto"
+                      overlay={
+                        <Popover id={`popover-positioned-top`}>
+                          <Popover.Body className="p-0 max-h-300px overflow-auto">
+                            {rowData.TopTele.map((item, index) => (
+                              <div
+                                className={clsx(
+                                  'p-15px',
+                                  rowData.TopTele.length - 1 !== index &&
+                                    'border-bottom'
                                 )}
+                                key={index}
+                              >
+                                {item.Content}
+                                <div className="font-number mt-5px text-muted">
+                                  Ngày{' '}
+                                  {moment(item.CreateDate).format(
+                                    'DD-MM-YYYY HH:mm'
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                        </Popover.Body>
-                      </Popover>
-                    }
-                  >
-                    <i className="fa-solid fa-circle-info text-warning font-size-lg cursor-pointer"></i>
-                  </OverlayTrigger>
+                            ))}
+                          </Popover.Body>
+                        </Popover>
+                      }
+                    >
+                      <i className="fa-solid fa-circle-info text-warning font-size-lg cursor-pointer"></i>
+                    </OverlayTrigger>
+                  </div>
+                  <div>
+                    {moment(rowData.TopTele[0].CreateDate).format(
+                      'DD-MM-YYYY HH:mm'
+                    )}
+                  </div>
+                  <div className="tw-italic">
+                    Đơn hàng gần nhất #{rowData?.Present?.lastOrderID}
+                  </div>
                 </div>
               ) : (
                 <>Chưa có liên hệ</>

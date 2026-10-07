@@ -60,7 +60,7 @@ function NotiListMember(props) {
   const fixedContentDomain = content => {
     if (!content) return ''
     return content.replace(
-      /src=\"\//g,
+      /src="\//g,
       'src="' + window.top.location.origin + '/'
     )
   }

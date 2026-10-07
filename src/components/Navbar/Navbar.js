@@ -8,11 +8,11 @@ import { useWindowSize } from 'src/hooks/useWindowSize'
 function Navbar({ ExportExcel, IsLoadingEx }) {
   const { width } = useWindowSize()
 
-  const { AuthID, auth } = useSelector(({ auth }) => ({
+  const { AuthID } = useSelector(({ auth }) => ({
     AuthID: auth?.Info?.User?.ID,
     auth: auth
   }))
-  
+
   return (
     <>
       {width > 767 ? (
