@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { OverlayTrigger, Popover } from 'react-bootstrap'
-import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
 import clsx from 'clsx'
-import { useParams } from 'react-router-dom'
+import { useOutletContext, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import Skeleton from 'react-loading-skeleton'
 import Swal from 'sweetalert2'
 import { useSelector } from 'react-redux'
-import SelectTeleHis from 'src/components/Selects/SelectTeleHis'
 import PerfectScrollbar from 'react-perfect-scrollbar'
+import PickerCareHistory from './PickerCareHistory'
 
 import moment from 'moment'
 import 'moment/locale/vi'
@@ -22,21 +19,11 @@ const perfectScrollbarOptions = {
   wheelPropagation: false
 }
 
-const initialValues = {
-  Content: '',
-  Result: '',
-  IsPublic: false
-}
-
-const AddWishListSchema = Yup.object().shape({
-  Content: Yup.string().required('Nhập ghi chú')
-})
-
 function CareHistory(props) {
   let { MemberID } = useParams()
+  const { onRefresh } = useOutletContext()
   const [loading, setLoading] = useState(false)
   const [List, setList] = useState([])
-  const [btnLoading, setBtnLoading] = useState(false)
 
   const { teleAdv } = useSelector(({ auth }) => ({
     teleAdv: auth?.Info?.rightsSum?.teleAdv || false
@@ -66,54 +53,6 @@ function CareHistory(props) {
       .catch(error => console.log(error))
   }
 
-  const onSubmit = async values => {
-    setBtnLoading(true)
-    const newData = {
-      items: [
-        {
-          MemberID: MemberID,
-          Content: values.Content,
-          Type: 'PROCESS',
-          Result: values.Result ? values.Result.value : ''
-        }
-      ],
-      delete: []
-    }
-
-    if (values.IsPublic) {
-      var bodyFormData = new FormData()
-      bodyFormData.append(
-        'data',
-        JSON.stringify({
-          ID: 0,
-          Target: '',
-          MemberID: MemberID,
-          Content: encodeURI(`${values.Result.value}. ${values.Content}`),
-          IsNoti: false,
-          NotiDate: '',
-          IsEd: 0,
-          IsPublic: 0,
-          IsImportant: false
-        })
-      )
-      await telesalesApi.addNoteMember(bodyFormData)
-    }
-    telesalesApi
-      .addCareHistory(newData)
-      .then(response => {
-        getCareHistoryList(false, () => {
-          setBtnLoading(false)
-          setLoading(false)
-          window.top?.toastr &&
-            window.top?.toastr.success('Thêm mới lịch sử thành công', '', {
-              timeOut: 1500
-            })
-          document.body.click()
-        })
-      })
-      .catch(error => console.log(error))
-  }
-
   const onDelete = item => {
     const newData = {
       delete: [item.ID]
@@ -133,6 +72,7 @@ function CareHistory(props) {
           telesalesApi
             .addCareHistory(newData)
             .then(response => {
+              onRefresh()
               getCareHistoryList(false, () => {
                 window.top?.toastr &&
                   window.top?.toastr.success('Xóa lịch sử thành công', '', {
@@ -151,98 +91,23 @@ function CareHistory(props) {
     <div className="border-bottom">
       <div className="text-uppercase d-flex justify-content-between align-items-center pt-18px pl-18px pr-18px pb-10px">
         <span className="fw-600 text-primary">Lịch sử chăm sóc</span>
-        <OverlayTrigger
-          rootClose
-          trigger="click"
-          key="top"
-          placement="auto"
-          overlay={
-            <Popover id={`popover-positioned-top`} className="popover-lg">
-              <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validationSchema={AddWishListSchema}
-                enableReinitialize={true}
-              >
-                {formikProps => {
-                  const {
-                    values,
-                    touched,
-                    errors,
-                    setFieldValue,
-                    handleBlur,
-                    handleChange
-                  } = formikProps
-                  return (
-                    <Form>
-                      <Popover.Header className="font-weight-bold text-uppercase d-flex justify-content-between py-3">
-                        Thêm mới lịch sử
-                      </Popover.Header>
-                      <Popover.Body>
-                        <div className="form-group mb-15px">
-                          <label>Kết quả</label>
-                          <SelectTeleHis
-                            isLoading={false}
-                            className="w-100 flex-1"
-                            placeholder="Chọn kết quả"
-                            name="Result"
-                            onChange={otp => {
-                              setFieldValue('Result', otp, false)
-                            }}
-                            value={values.Result}
-                            isClearable={true}
-                          />
-                        </div>
-                        <div className="form-group mb-15px">
-                          <label>Ghi chú</label>
-                          <textarea
-                            name="Content"
-                            className={`form-control ${
-                              errors?.Content && touched?.Content
-                                ? 'is-invalid solid-invalid'
-                                : ''
-                            }`}
-                            rows="5"
-                            value={values.Content}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          ></textarea>
-                        </div>
-                        <div className="form-group">
-                          <label className="checkbox d-flex cursor-pointer">
-                            <input
-                              type="checkbox"
-                              name="IsPublic"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              checked={values.IsPublic}
-                            />
-                            <span className="checkbox-icon"></span>
-                            <span>Cho phép lễ tân xem</span>
-                          </label>
-                        </div>
-                      </Popover.Body>
-                      <div className="font-weight-bold d-flex justify-content-between py-10px px-3 border-top">
-                        <button
-                          type="submit"
-                          className={clsx(
-                            'btn btn-success py-2 font-size-sm',
-                            btnLoading && 'spinner spinner-white spinner-right'
-                          )}
-                          disabled={btnLoading}
-                        >
-                          Thêm mới
-                        </button>
-                      </div>
-                    </Form>
-                  )
-                }}
-              </Formik>
-            </Popover>
-          }
+        <PickerCareHistory
+          memberId={MemberID}
+          onSaved={() => {
+            onRefresh()
+            getCareHistoryList(false)
+          }}
         >
-          <button className="btn btn-xs btn-success">Thêm mới</button>
-        </OverlayTrigger>
+          {({ open }) => (
+            <button
+              type="button"
+              className="btn btn-xs btn-success"
+              onClick={open}
+            >
+              Thêm mới
+            </button>
+          )}
+        </PickerCareHistory>
       </div>
       <PerfectScrollbar
         options={perfectScrollbarOptions}
@@ -293,7 +158,7 @@ function CareHistory(props) {
                       moment(item.CreateDate).format('DD-MM-YYYY') ===
                         moment().format('DD-MM-YYYY')) && (
                       <span
-                        className="fw-500 text-danger cursor-pointer text-underline font-size-sm"
+                        className="cursor-pointer fw-500 text-danger text-underline font-size-sm"
                         onClick={() => onDelete(item)}
                       >
                         Xóa

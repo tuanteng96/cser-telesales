@@ -3,7 +3,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import clsx from 'clsx'
-import { useParams } from 'react-router-dom'
+import { useOutletContext, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import Skeleton from 'react-loading-skeleton'
 import Swal from 'sweetalert2'
@@ -31,6 +31,7 @@ const AddNotiSchema = Yup.object().shape({
 
 function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
   let { MemberID } = useParams()
+  const { onRefresh } = useOutletContext()
   const [initialValues, setInitialValues] = useState({
     noti: {
       MemberID: MemberID,
@@ -206,6 +207,7 @@ function NotificationMember(props) {
     telesalesApi
       .addNotiMember(newData)
       .then(response => {
+        onRefresh()
         getNotiList(false, () => {
           setBtnLoading(false)
           setLoading(false)
@@ -244,6 +246,7 @@ function NotificationMember(props) {
           telesalesApi
             .deleteNotiMember(newData)
             .then(response => {
+              onRefresh()
               getNotiList(false, () => {
                 window.top?.toastr &&
                   window.top?.toastr.success('Xóa lịch nhắc thành công', '', {

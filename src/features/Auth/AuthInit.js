@@ -36,21 +36,41 @@ function AuthInit(props) {
               ParentID: 0
             },
             {
-              ID: 12731,
+              ID: 12746,
               Title: 'Cser Hà Nội',
               ParentID: 778
             }
           ],
-          CrStockID: 12731, //8975
+          CrStockID: 12746, //8975
+          rightTree: {
+            groups: [
+              {
+                group: 'Phần mềm',
+                rights: [
+                  {
+                    name: 'tele',
+                    subs: [
+                      {
+                        name: 'nang_cao',
+                        name_and_group: 'nang_cao_tele',
+                        hasRight: true,
+                        IsAllStock: true
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
           rightsSum: {
             tele: {
               hasRight: true,
-              stocks: [{ ID: 12731, Title: 'Cser Hà Nội' }],
+              stocks: [{ ID: 12746, Title: 'Cser Hà Nội' }],
               IsAllStock: true
             },
             teleAdv: {
               hasRight: true,
-              stocks: [{ ID: 12731, Title: 'Cser Hà Nội' }],
+              stocks: [{ ID: 12746, Title: 'Cser Hà Nội' }],
               IsAllStock: true
             }
           }

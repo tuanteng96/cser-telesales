@@ -15,9 +15,9 @@ $dark-65: $gray-700 !default; // Custom variable
 $dark-50: $gray-600 !default; // Custom variable
 $dark-25: $gray-400 !default; // Custom variable
 //
-$font-family-base: 'Roboto', sans-serif;
-$font-family-number: 'Poppins', sans-serif;
-$font-family-label: 'Niramit', sans-serif;
+$font-family-base: $font-family-sans-serif;
+$font-family-number: $font-family-base;
+$font-family-label: $font-family-base;
 // Settings for the `<body>` element.
 $body-bg: $white !default;
 $body-color: $dark-75 !default;

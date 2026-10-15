@@ -7,7 +7,14 @@ module.exports = {
     preflight: false
   },
   theme: {
-    extend: {}
+    extend: {
+      colors: {
+        primary: 'var(--bs-primary)'
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif']
+      }
+    }
   },
   plugins: []
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.scss'
 import './tailwind.css'
 import App from './app/App'
@@ -19,14 +20,18 @@ const { PUBLIC_URL } = process.env
 
 _redux.setupAxios(http, store)
 
+const queryClient = new QueryClient()
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <SplashScreenProvider>
-      <BrowserRouter>
-        <App store={store} persistor={persistor} basename={PUBLIC_URL} />
-      </BrowserRouter>
-    </SplashScreenProvider>
+    <QueryClientProvider client={queryClient}>
+      <SplashScreenProvider>
+        <BrowserRouter>
+          <App store={store} persistor={persistor} basename={PUBLIC_URL} />
+        </BrowserRouter>
+      </SplashScreenProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 )
 

@@ -1,22 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
-import configApi from 'src/api/config.api'
+import useTagKh from 'src/hooks/useTagKh'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import { NumericFormat } from 'react-number-format'
 import clsx from 'clsx'
 import Skeleton from 'react-loading-skeleton'
-import MemberTransfer from './MemberTransfer'
-import telesalesApi from 'src/api/telesales.api'
 import { useSelector } from 'react-redux'
 import { TelesalesContext } from 'src/features/Telesales'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectProduct from 'src/components/Selects/SelectProduct'
 import Select from 'react-select'
 import vi from 'date-fns/locale/vi' // the locale you want
-import MemberTransferImport from './MemberTransferImport'
-import { Dropdown } from 'react-bootstrap'
 import SelectServiceCard from 'src/components/Selects/SelectServiceCard'
 import SelectGroupsMember from 'src/components/Selects/SelectGroupsMember'
 
@@ -82,114 +78,12 @@ FilterSection.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-function Sidebar({ filters, onSubmit, loading, onRefresh }) {
-  const [ListType, setListType] = useState([])
-  const [loadingType, setLoadingType] = useState(false)
-  const [btnLoading, setBtnLoading] = useState(false)
-  const [btnLoadingImport, setBtnLoadingImport] = useState(false)
-  const [btnLoadingReset, setBtnLoadingReset] = useState(false)
-  const [isModal, setIsModal] = useState(false)
-  const [isModalImport, setIsModalImport] = useState(false)
+function Sidebar({ filters, onSubmit, loading }) {
+  const { data: ListType = [], isLoading: loadingType } = useTagKh()
   const { isSidebar, onHideSidebar } = useContext(TelesalesContext)
   const { teleAdv } = useSelector(({ auth }) => ({
     teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false
   }))
-
-  useEffect(() => {
-    getTypeConfig()
-  }, [])
-
-  const getTypeConfig = async () => {
-    setLoadingType(true)
-    try {
-      const { data } = await configApi.getConfigName('tagkh')
-      if (data && data.data && data?.data.length > 0) {
-        const result = JSON.parse(data.data[0].Value)
-        setListType(result)
-      }
-      setLoadingType(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const onSubmitTransfer = (values, { resetForm }) => {
-    setBtnLoading(true)
-    const dataSubmit = {
-      FromTeleUserID: values.FromTeleUserID ? values.FromTeleUserID.value : '',
-      ToTeleUserID: values.ToTeleUserID ? values.ToTeleUserID.value : ''
-    }
-    telesalesApi
-      .transferMember(dataSubmit)
-      .then(response => {
-        onRefresh(() => {
-          setBtnLoading(false)
-          resetForm()
-          onHideModal()
-          window.top?.toastr &&
-            window.top?.toastr.success('Chuyển đổi thành công', '', {
-              timeOut: 1500
-            })
-        })
-      })
-      .catch(error => console.log(error))
-  }
-
-  const onSubmitTransferImport = (values, { resetForm }) => {
-    setBtnLoadingImport(true)
-    const dataSubmit = {
-      ...values,
-      users: values.users ? values.users.map(x => x.value).join(',') : ''
-    }
-
-    telesalesApi
-      .transferMemberImport(dataSubmit)
-      .then(response => {
-        onRefresh(() => {
-          setBtnLoadingImport(false)
-          resetForm()
-          onHideModalImport()
-          window.top?.toastr &&
-            window.top?.toastr.success('Chuyển đổi thành công', '', {
-              timeOut: 1500
-            })
-        })
-      })
-      .catch(error => console.log(error))
-  }
-
-  const onResetMember = () => {
-    setBtnLoadingReset(true)
-    telesalesApi
-      .transferMemberReset()
-      .then(response => {
-        onRefresh(() => {
-          setBtnLoadingReset(false)
-          onHideModalImport()
-          window.top?.toastr &&
-            window.top?.toastr.success('Chuyển đổi thành công', '', {
-              timeOut: 1500
-            })
-        })
-      })
-      .catch(error => console.log(error))
-  }
-
-  const onOpenModal = () => {
-    setIsModal(true)
-  }
-
-  const onHideModal = () => {
-    setIsModal(false)
-  }
-
-  const onOpenModalImport = () => {
-    setIsModalImport(true)
-  }
-
-  const onHideModalImport = () => {
-    setIsModalImport(false)
-  }
 
   return (
     <>
@@ -199,20 +93,6 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
           isSidebar && 'show'
         )}
       >
-        <MemberTransfer
-          show={isModal}
-          loading={btnLoading}
-          onSubmit={onSubmitTransfer}
-          onHide={onHideModal}
-        />
-        <MemberTransferImport
-          show={isModalImport}
-          loading={btnLoadingImport}
-          onSubmit={onSubmitTransferImport}
-          onHide={onHideModalImport}
-          onResetMember={onResetMember}
-          loadingReset={btnLoadingReset}
-        />
         <Formik
           initialValues={filters}
           onSubmit={onSubmit}
@@ -226,41 +106,10 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
             return (
               <Form className="d-flex flex-column h-100">
                 <div className="border-bottom p-15px text-uppercase fw-600 font-size-lg position-relative">
-                  Bộ lọc khách hàng
-                  {teleAdv && (
-                    <div className="cursor-pointer position-absolute top-8px right-10px">
-                      <Dropdown>
-                        <Dropdown.Toggle
-                          className="btn-out cursor-pointer w-40px h-40px d-flex align-items-center justify-content-center bg-white"
-                          style={{
-                            background: '#fff !important'
-                          }}
-                        >
-                          <i className="fa-regular fa-users-gear text-primary"></i>
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                          <Dropdown.Item
-                            className="text-capitalize"
-                            href="#"
-                            onClick={onOpenModal}
-                          >
-                            Chuyển đổi khách hàng
-                          </Dropdown.Item>
-                          <Dropdown.Item
-                            className="text-capitalize"
-                            href="#"
-                            onClick={onOpenModalImport}
-                          >
-                            Import khách hàng
-                          </Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </div>
-                  )}
+                  Tìm kiếm
                 </div>
                 <div
-                  className="flex-grow-1 p-15px overflow-auto d-flex flex-column"
+                  className="overflow-auto flex-grow-1 p-15px d-flex flex-column"
                   style={{
                     gap: '12px'
                   }}
@@ -299,7 +148,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                                   .fill()
                                   .map((x, idx) => (
                                     <label
-                                      className="checkbox d-flex cursor-pointer"
+                                      className="cursor-pointer checkbox d-flex"
                                       key={idx}
                                     >
                                       <input
@@ -328,7 +177,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                               {type.Children &&
                                 type.Children.map((x, idx) => (
                                   <label
-                                    className="checkbox d-flex cursor-pointer"
+                                    className="cursor-pointer checkbox d-flex"
                                     key={idx}
                                   >
                                     <input
@@ -486,7 +335,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                               isClearable={true}
                             />
                           </div>
-                          <label className="checkbox d-flex cursor-pointer mt-12px">
+                          <label className="cursor-pointer checkbox d-flex mt-12px">
                             <input
                               type="checkbox"
                               name="filter.emptyStaff"
@@ -826,7 +675,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                           onBlur={handleBlur}
                           autoComplete="off"
                         />
-                        <label className="checkbox d-flex cursor-pointer mt-12px">
+                        <label className="cursor-pointer checkbox d-flex mt-12px">
                           <input
                             type="checkbox"
                             name="filter.last_used_type"
@@ -836,7 +685,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                           />
                           <span className="checkbox-icon"></span>
                           <span
-                            className="font-label italic text-muted"
+                            className="italic font-label text-muted"
                             style={{ fontStyle: 'italic', lineHeight: '17px' }}
                           >
                             Lọc chính xác số ngày khách chưa đến cơ sở

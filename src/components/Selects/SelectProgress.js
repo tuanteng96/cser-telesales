@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import Select from 'react-select'
 import PropTypes from 'prop-types'
-import configApi from 'src/api/config.api'
+import useTagKh from 'src/hooks/useTagKh'
 import clsx from 'clsx'
 import { useTeleDetail } from 'src/features/Telesales/pages/TelesalesDetail/TelesalesDetailLayout'
 
@@ -10,35 +10,25 @@ SelectProgress.propTypes = {
 }
 
 function SelectProgress({ onChange, value, isLoading, className, ...props }) {
-  const [loading, setLoading] = useState(false)
-  const [options, setOptions] = useState([])
+  const { data: groups, isLoading: loading } = useTagKh()
   const { setTagsList } = useTeleDetail()
 
-  useEffect(() => {
-    getAllProgress()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const getAllProgress = async () => {
-    setLoading(true)
-    const { data } = await configApi.getConfigName('tagkh')
-    if (data && data.data && data?.data.length > 0) {
-      const result = JSON.parse(data.data[0].Value)
-      const newResult = result.map(item => ({
+  const options = useMemo(
+    () =>
+      (groups || []).map(item => ({
         value: item.Title,
         label: item.Title,
-        options:
-          item.Children &&
-          item.Children.map(o => ({
-            value: o.Title,
-            label: o.Title
-          }))
-      }))
-      setOptions(newResult)
-      setTagsList && setTagsList(newResult)
-      setLoading(false)
-    }
-  }
+        options: item.Children.map(o => ({
+          value: o.Title,
+          label: o.Title
+        }))
+      })),
+    [groups]
+  )
+
+  useEffect(() => {
+    setTagsList && setTagsList(options)
+  }, [options, setTagsList])
 
   return (
     <Select

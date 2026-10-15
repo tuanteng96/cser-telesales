@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useOutletContext, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import ModalCalendarIframe from './ModalCalendarIframe'
 import Swal from 'sweetalert2'
@@ -25,6 +25,7 @@ const perfectScrollbarOptions = {
 
 function CalendarMember({ MemberCurrent }) {
   let { MemberID } = useParams()
+  const { onRefresh } = useOutletContext()
   const [loading, setLoading] = useState(false)
   const [ListBooks, setListBooks] = useState([])
   const [isModalCalendar, setIsModalCalendar] = useState(false)
@@ -209,6 +210,7 @@ function CalendarMember({ MemberCurrent }) {
         }
         await telesalesApi.editTagsMember(newData)
       }
+      onRefresh()
       getListBook(false, () => {
         window.top?.toastr &&
           window.top?.toastr.success('Đặt lịch thành công', '', {
@@ -331,6 +333,7 @@ function CalendarMember({ MemberCurrent }) {
           telesalesApi
             .addMemberBooking(dataPost, { CurrentStockID, u_id_z4aDf2 })
             .then(response => {
+              onRefresh()
               getListBook(false, () => {
                 window.top?.toastr &&
                   window.top?.toastr.success('Hủy lịch thành công', '', {

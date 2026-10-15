@@ -4,6 +4,9 @@ import { Link, Outlet, useLocation } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite'
 import Sidebar from './components/Sidebar'
+import EditableStatusCell from './components/EditableStatusCell'
+import EditableNoteCell from './components/EditableNoteCell'
+import PickerCareHistory from '../TelesalesDetail/PickerCareHistory'
 import { Overlay, OverlayTrigger, Popover } from 'react-bootstrap'
 import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
@@ -12,7 +15,7 @@ import { useWindowSize } from 'src/hooks/useWindowSize'
 import Text from 'react-texty'
 import ReminderCalendar from './components/ReminderCalendar'
 import clsx from 'clsx'
-import Navbar from 'src/components/Navbar/Navbar'
+import PageHeader from 'src/components/Navbar/PageHeader'
 
 import moment from 'moment'
 import 'moment/locale/vi'
@@ -89,7 +92,7 @@ const EditableCell = ({ rowData, container, showEditing, hideEditing }) => {
 
   return (
     <div
-      className="h-100 d-flex align-items-center cursor-pointer"
+      className="cursor-pointer h-100 d-flex align-items-center"
       ref={target}
       onClick={() => handleClick()}
     >
@@ -373,7 +376,7 @@ function TelesalesList(props) {
               <div className="fw-600 truncate-multi-line tw-mb-1">
                 {rowData?.FullName}
               </div>
-              <div className="tw-flex gap-2">
+              <div className="gap-2 tw-flex">
                 <div className="font-number">{rowData?.MobilePhone}</div>
                 {rowData?.GroupNames && (
                   <div className="tw-items-center tw-text-[13px] tw-px-2 tw-rounded tw-text-[#187de4] tw-bg-[#e1f0ff]">
@@ -418,14 +421,60 @@ function TelesalesList(props) {
           key: 'TeleTags',
           title: 'Trạng thái',
           dataKey: 'TeleTags',
-          width: 200,
+          cellRenderer: ({ rowData }) => (
+            <EditableStatusCell
+              key={rowData.ID}
+              rowData={rowData}
+              onEditingChange={setIsEditing}
+              onSaved={() => setFilters(prevState => ({ ...prevState, pi: 1 }))}
+            />
+          ),
+          width: 250,
           sortable: false
         },
         {
           key: 'TopTele',
           title: 'Liên hệ gần nhất',
           cellRenderer: ({ rowData }) => (
-            <>
+            <div className="tw-relative tw-w-full tw-pr-8">
+              <div className="tw-absolute tw-top-0 tw-right-0">
+                <PickerCareHistory
+                  key={rowData.ID}
+                  memberId={rowData.ID}
+                  onEditingChange={setIsEditing}
+                  onSaved={() =>
+                    setFilters(prevState => ({ ...prevState, pi: 1 }))
+                  }
+                >
+                  {({ open }) => (
+                    <button
+                      type="button"
+                      className="btn btn-light-primary tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-p-0"
+                      aria-label={`Thêm lịch sử chăm sóc cho ${
+                        rowData.FullName || rowData.ID
+                      }`}
+                      title="Thêm lịch sử chăm sóc"
+                      onClick={open}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="tw-w-5 tw-h-5"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 4.5v15m7.5-7.5h-15"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </PickerCareHistory>
+              </div>
               {rowData.TopTele && rowData.TopTele.length > 0 ? (
                 <div className="tw-w-full">
                   <div className="d-flex align-items-center w-100">
@@ -438,8 +487,8 @@ function TelesalesList(props) {
                       key="auto"
                       placement="auto"
                       overlay={
-                        <Popover id={`popover-positioned-top`}>
-                          <Popover.Body className="p-0 max-h-300px overflow-auto">
+                        <Popover id={`contact-history-${rowData.ID}`}>
+                          <Popover.Body className="p-0 overflow-auto max-h-300px">
                             {rowData.TopTele.map((item, index) => (
                               <div
                                 className={clsx(
@@ -462,7 +511,7 @@ function TelesalesList(props) {
                         </Popover>
                       }
                     >
-                      <i className="fa-solid fa-circle-info text-warning font-size-lg cursor-pointer"></i>
+                      <i className="cursor-pointer fa-solid fa-circle-info text-warning font-size-lg"></i>
                     </OverlayTrigger>
                   </div>
                   <div>
@@ -470,23 +519,36 @@ function TelesalesList(props) {
                       'DD-MM-YYYY HH:mm'
                     )}
                   </div>
-                  <div className="tw-italic">
-                    Đơn hàng gần nhất #{rowData?.Present?.lastOrderID}
-                  </div>
+                  {rowData?.Present?.lastOrder && (
+                    <div className="tw-italic tw-text-[13px]">
+                      Đơn hàng gần nhất ngày{' '}
+                      {moment(rowData?.Present?.lastOrder, 'YYYY-MM-DD').format(
+                        'DD/MM/YYYY'
+                      )}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>Chưa có liên hệ</>
               )}
-            </>
+            </div>
           ),
           dataKey: 'TopTele',
-          width: 250,
+          width: 290,
           sortable: false
         },
         {
           key: 'TeleNote',
           title: 'Ghi chú',
           dataKey: 'TeleNote',
+          cellRenderer: ({ rowData }) => (
+            <EditableNoteCell
+              key={rowData.ID}
+              rowData={rowData}
+              onEditingChange={setIsEditing}
+              onSaved={() => setFilters(prevState => ({ ...prevState, pi: 1 }))}
+            />
+          ),
           width: 353,
           sortable: false
         },
@@ -498,7 +560,7 @@ function TelesalesList(props) {
             <div className="d-flex">
               <a
                 href={`tel:${rowData?.MobilePhone}`}
-                className="w-38px h-38px rounded-circle btn btn-success shadow mx-4px p-0 position-relative"
+                className="p-0 shadow w-38px h-38px rounded-circle btn btn-success mx-4px position-relative"
               >
                 <img
                   className="w-23px position-absolute top-7px right-7px"
@@ -509,7 +571,7 @@ function TelesalesList(props) {
                 />
               </a>
               <Link
-                className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
+                className="shadow w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary mx-4px"
                 to={`${rowData.ID}/dich-vu`}
                 state={{
                   from: pathname
@@ -638,40 +700,16 @@ function TelesalesList(props) {
   return (
     <>
       <div className="d-flex h-100 telesales-list">
-        <Sidebar
-          filters={filters}
-          loading={loading}
-          onSubmit={onFilter}
-          onRefresh={onRefresh}
-        />
-        <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
-          <div className="border-bottom py-10px fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
-            <div className="flex-1">
-              <span className="text-uppercase ">Danh sách khách hàng -</span>
-              <span className="text-danger pl-3px">{PageTotal}</span>
-              <span className="pl-5px font-label text-muted font-size-sm text-none">
-                khách hàng
-              </span>
-            </div>
-            <div className="w-85px w-md-auto d-flex">
-              <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
-              {/* <button
-              type="button"
-              className="btn btn-primary"
-              onClick={onOpenModal}
-            >
-              <i className="far fa-bells pr-5px"></i>
-              <span className="d-none d-md-inline-block">Lịch nhắc</span>
-            </button> */}
-              <button
-                type="button"
-                className="btn btn-primary d-lg-none ml-5px"
-                onClick={onOpenSidebar}
-              >
-                <i className="fa-solid fa-filters"></i>
-              </button>
-            </div>
-          </div>
+        <Sidebar filters={filters} loading={loading} onSubmit={onFilter} />
+        <div className="telesales-list__content flex-fill px-15px px-lg-20px pb-15px pb-lg-20px d-flex flex-column">
+          <PageHeader
+            title="Danh sách khách hàng"
+            total={PageTotal}
+            onExport={ExportExcel}
+            isExporting={IsLoadingEx}
+            onOpenSidebar={onOpenSidebar}
+            onRefresh={onRefresh}
+          />
           <div className="flex-grow-1">
             <ReactBaseTableInfinite
               rowKey="ID"
@@ -697,7 +735,7 @@ function TelesalesList(props) {
           filters={filters}
         />
       </div>
-      <Outlet />
+      <Outlet context={{ onRefresh }} />
     </>
   )
 }

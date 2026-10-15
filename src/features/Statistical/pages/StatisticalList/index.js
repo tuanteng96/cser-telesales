@@ -4,7 +4,7 @@ import telesalesApi from 'src/api/telesales.api'
 import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite'
 import Sidebar from './components/Sidebar'
 import { StatisticalContext } from '../..'
-import Navbar from 'src/components/Navbar/Navbar'
+import PageHeader from 'src/components/Navbar/PageHeader'
 
 import moment from 'moment'
 import 'moment/locale/vi'
@@ -198,7 +198,7 @@ function StatisticalList(props) {
           cellRenderer: ({ rowData }) => (
             <div className="d-flex">
               <Link
-                className="w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary shadow mx-4px"
+                className="shadow w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary mx-4px"
                 to={`/danh-sach/${rowData.MemberID}/dich-vu`}
                 state={{ from: pathname, filters: filters }}
               >
@@ -269,28 +269,15 @@ function StatisticalList(props) {
         onSubmit={onFilter}
         onRefresh={onRefresh}
       />
-      <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
-        <div className="border-bottom py-10px fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
-          <div className="flex-1">
-            <span className="text-uppercase">
-              Thống kê chăm sóc khách hàng -
-            </span>
-            <span className="text-danger pl-3px">{PageTotal}</span>
-            <span className="pl-5px font-label text-muted font-size-sm text-none">
-              lượt chăm sóc
-            </span>
-          </div>
-          <div className="w-85px w-md-auto d-flex">
-            <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
-            <button
-              type="button"
-              className="btn btn-primary d-lg-none ml-5px"
-              onClick={onOpenSidebar}
-            >
-              <i className="fa-solid fa-filters"></i>
-            </button>
-          </div>
-        </div>
+      <div className="telesales-list__content flex-fill px-15px px-lg-20px pb-15px pb-lg-20px d-flex flex-column">
+        <PageHeader
+          title="Thống kê chăm sóc khách hàng"
+          total={PageTotal}
+          onExport={ExportExcel}
+          isExporting={IsLoadingEx}
+          onOpenSidebar={onOpenSidebar}
+          onRefresh={onRefresh}
+        />
         <div className="flex-grow-1">
           <ReactBaseTableInfinite
             rowKey="ID"

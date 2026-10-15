@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import DatePicker, { registerLocale } from 'react-datepicker'
@@ -11,7 +11,7 @@ import vi from 'date-fns/locale/vi' // the locale you want
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectGroupsMember from 'src/components/Selects/SelectGroupsMember'
-import configApi from 'src/api/config.api'
+import useTagKh from 'src/hooks/useTagKh'
 import Skeleton from 'react-loading-skeleton'
 
 registerLocale('vi', vi) // register it with the name you want
@@ -27,26 +27,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
     teleAdv: auth?.Info?.rightsSum?.teleAdv?.hasRight || false
   }))
 
-  const [ListType, setListType] = useState([])
-  const [loadingType, setLoadingType] = useState(false)
-
-  useEffect(() => {
-    getTypeConfig()
-  }, [])
-
-  const getTypeConfig = async () => {
-    setLoadingType(true)
-    try {
-      const { data } = await configApi.getConfigName('tagkh')
-      if (data && data.data && data?.data.length > 0) {
-        const result = JSON.parse(data.data[0].Value)
-        setListType(result)
-      }
-      setLoadingType(false)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { data: ListType = [], isLoading: loadingType } = useTagKh()
 
   return (
     <>
@@ -69,7 +50,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
             return (
               <Form className="d-flex flex-column h-100">
                 <div className="border-bottom p-15px text-uppercase fw-600 font-size-lg position-relative">
-                  Bộ lọc khách hàng
+                  Tìm kiếm
                 </div>
                 <div className="flex-grow-1 p-15px overflow-auto">
                   <div className="mb-15px form-group">

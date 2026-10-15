@@ -55,9 +55,9 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
             return (
               <Form className="d-flex flex-column h-100">
                 <div className="border-bottom p-15px text-uppercase fw-600 font-size-lg position-relative">
-                  Bộ lọc khách hàng
+                  Tìm kiếm
                 </div>
-                <div className="flex-grow-1 p-15px overflow-auto">
+                <div className="overflow-auto flex-grow-1 p-15px">
                   <div className="mb-15px form-group">
                     <label className="font-label text-muted mb-5px">
                       Cơ sở
@@ -143,7 +143,7 @@ function Sidebar({ filters, onSubmit, loading, onRefresh }) {
                       </div>
                     </div>
                   </div>
-                  <div className="form-group mb-0">
+                  <div className="mb-0 form-group">
                     <label className="font-label text-muted mb-5px">
                       Trạng thái
                     </label>

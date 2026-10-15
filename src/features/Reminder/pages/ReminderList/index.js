@@ -4,7 +4,7 @@ import ReactBaseTableInfinite from 'src/components/Tables/ReactBaseTableInfinite
 import { ReminderContext } from '../..'
 import Sidebar from '../../components/Sidebar'
 import telesalesApi from 'src/api/telesales.api'
-import Navbar from 'src/components/Navbar/Navbar'
+import PageHeader from 'src/components/Navbar/PageHeader'
 import uniqid from 'uniqid'
 import { OverlayTrigger, Popover } from 'react-bootstrap'
 import { Form, Formik } from 'formik'
@@ -110,7 +110,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
               } = formikProps
               return (
                 <Form>
-                  <Popover.Header className="font-weight-bold text-uppercase d-flex justify-content-between py-3">
+                  <Popover.Header className="py-3 font-weight-bold text-uppercase d-flex justify-content-between">
                     Thực hiện lịch nhắc
                   </Popover.Header>
                   <Popover.Body>
@@ -118,7 +118,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
                       <label>Kết quả</label>
                       <SelectTeleHis
                         isLoading={false}
-                        className="w-100 flex-1"
+                        className="flex-1 w-100"
                         placeholder="Chọn kết quả"
                         name="Result"
                         onChange={otp => {
@@ -144,7 +144,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
                       ></textarea>
                     </div>
                   </Popover.Body>
-                  <div className="font-weight-bold d-flex justify-content-between py-10px px-3 border-top">
+                  <div className="px-3 font-weight-bold d-flex justify-content-between py-10px border-top">
                     <button
                       type="submit"
                       className={clsx(
@@ -334,7 +334,7 @@ function ReminderList(props) {
             Button={() => (
               <button
                 type="button"
-                className="fw-500 cursor-pointer btn btn-sm btn-success py-5px"
+                className="cursor-pointer fw-500 btn btn-sm btn-success py-5px"
                 disabled={!teleAdv || rowData.IsNoti}
               >
                 Thực hiện
@@ -458,26 +458,15 @@ function ReminderList(props) {
         onSubmit={onFilter}
         onRefresh={onRefresh}
       />
-      <div className="telesales-list__content flex-fill px-15px px-lg-30px pb-15px pb-lg-30px d-flex flex-column">
-        <div className="border-bottom py-10px fw-600 font-size-lg position-relative d-flex justify-content-between align-items-center">
-          <div className="flex-1">
-            <span className="text-uppercase">Lịch nhắc -</span>
-            <span className="text-danger pl-3px">{PageTotal}</span>
-            <span className="pl-5px font-label text-muted font-size-sm text-none">
-              khách hàng
-            </span>
-          </div>
-          <div className="w-85px w-md-auto d-flex">
-            <Navbar ExportExcel={ExportExcel} IsLoadingEx={IsLoadingEx} />
-            <button
-              type="button"
-              className="btn btn-primary d-lg-none ml-5px"
-              onClick={onOpenSidebar}
-            >
-              <i className="fa-solid fa-filters"></i>
-            </button>
-          </div>
-        </div>
+      <div className="telesales-list__content flex-fill px-15px px-lg-20px pb-15px pb-lg-20px d-flex flex-column">
+        <PageHeader
+          title="Lịch nhắc"
+          total={PageTotal}
+          onExport={ExportExcel}
+          isExporting={IsLoadingEx}
+          onOpenSidebar={onOpenSidebar}
+          onRefresh={onRefresh}
+        />
         <div className="flex-grow-1">
           <ReactBaseTableInfinite
             rowKey="Ids"

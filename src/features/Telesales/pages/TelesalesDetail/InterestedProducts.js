@@ -4,7 +4,7 @@ import SelectProduct from 'src/components/Selects/SelectProduct'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import clsx from 'clsx'
-import { useParams } from 'react-router-dom'
+import { useOutletContext, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import Text from 'react-texty'
 import Skeleton from 'react-loading-skeleton'
@@ -27,6 +27,7 @@ const AddWishListSchema = Yup.object().shape({
 
 function InterestedProducts(props) {
   let { MemberID } = useParams()
+  const { onRefresh } = useOutletContext()
   const [loading, setLoading] = useState(false)
   const [List, setList] = useState([])
   const [btnLoading, setBtnLoading] = useState(false)
@@ -74,6 +75,7 @@ function InterestedProducts(props) {
     telesalesApi
       .addWishListMember(newData)
       .then(response => {
+        onRefresh()
         getWishListMember(false, () => {
           setBtnLoading(false)
           setLoading(false)
@@ -117,6 +119,7 @@ function InterestedProducts(props) {
           telesalesApi
             .addWishListMember(newData)
             .then(response => {
+              onRefresh()
               getWishListMember(false, () => {
                 window.top?.toastr &&
                   window.top?.toastr.success(

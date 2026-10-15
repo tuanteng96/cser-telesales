@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import SelectProgress from 'src/components/Selects/SelectProgress'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
 import { TelesalesContext } from '../..'
 import { useTeleDetail } from './TelesalesDetailLayout'
@@ -13,6 +13,7 @@ ProgressList.propTypes = {
 
 function ProgressList({ initialValues, MemberLoading, ...props }) {
   let { MemberID } = useParams()
+  const { onRefresh } = useOutletContext()
   const [loading, setLoading] = useState(false)
   const [values, setValues] = useState(null)
   const { onOpenProfile } = useContext(TelesalesContext)
@@ -50,6 +51,7 @@ function ProgressList({ initialValues, MemberLoading, ...props }) {
     telesalesApi
       .editTagsMember(newData)
       .then(response => {
+        onRefresh()
         setValues(otp)
         setLoading(false)
         setTagsSelected(otp)
