@@ -13,7 +13,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
-import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 moment.locale('vi')
 
@@ -31,7 +30,6 @@ const AddNotiSchema = Yup.object().shape({
 
 function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
   let { MemberID } = useParams()
-  const { onRefresh } = useOutletContext()
   const [initialValues, setInitialValues] = useState({
     noti: {
       MemberID: MemberID,
@@ -82,7 +80,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
               } = formikProps
               return (
                 <Form>
-                  <Popover.Header className="font-weight-bold text-uppercase d-flex justify-content-between py-3">
+                  <Popover.Header className="py-3 font-weight-bold text-uppercase d-flex justify-content-between">
                     {!item ? 'Thêm mới' : 'Cập nhập'} lịch nhắc
                   </Popover.Header>
                   <Popover.Body>
@@ -121,7 +119,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
                       ></textarea>
                     </div>
                     <div className="form-group">
-                      <label className="checkbox d-flex cursor-pointer">
+                      <label className="cursor-pointer checkbox d-flex">
                         <input
                           type="checkbox"
                           name="noti.IsNoti"
@@ -134,7 +132,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
                       </label>
                     </div>
                   </Popover.Body>
-                  <div className="font-weight-bold d-flex justify-content-between py-10px px-3 border-top">
+                  <div className="px-3 font-weight-bold d-flex justify-content-between py-10px border-top">
                     <button
                       type="submit"
                       className={clsx(
@@ -160,6 +158,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
 
 function NotificationMember(props) {
   let { MemberID } = useParams()
+  const { onRefresh } = useOutletContext()
   const [loading, setLoading] = useState(false)
   const [List, setList] = useState([])
   const [btnLoading, setBtnLoading] = useState(false)
@@ -324,7 +323,7 @@ function NotificationMember(props) {
                         Button={() =>
                           teleAdv && (
                             <span
-                              className="fw-500 text-success cursor-pointer text-underline font-size-sm mr-8px"
+                              className="cursor-pointer fw-500 text-success text-underline font-size-sm mr-8px"
                               //onClick={() => onDelete(item)}
                             >
                               Sửa
@@ -337,7 +336,7 @@ function NotificationMember(props) {
                         moment(item.CreateDate).format('DD-MM-YYYY') ===
                           moment().format('DD-MM-YYYY')) && (
                         <span
-                          className="fw-500 text-danger cursor-pointer text-underline font-size-sm"
+                          className="cursor-pointer fw-500 text-danger text-underline font-size-sm"
                           onClick={() => onDelete(item)}
                         >
                           Xóa
@@ -366,13 +365,13 @@ function NotificationMember(props) {
             ) : (
               <div className="w-100 d-flex align-items-center justify-content-center">
                 <div className="text-center">
-                  <img
+                  {/* <img
                     className="w-100 max-w-120px"
                     src={AssetsHelpers.toAbsoluteUrl(
                       '/_assets/images/data-empty.png'
                     )}
                     alt="Không có dữ liệu"
-                  />
+                  /> */}
                   <div className="text-center font-size-base fw-300">
                     Không có lịch sử chăm sóc.
                   </div>

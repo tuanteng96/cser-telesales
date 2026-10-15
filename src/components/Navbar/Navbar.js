@@ -9,6 +9,7 @@ import { useRoles } from 'src/hooks/useRoles'
 import telesalesApi from 'src/api/telesales.api'
 import MemberTransfer from 'src/features/Telesales/pages/TelesalesList/components/MemberTransfer'
 import MemberTransferImport from 'src/features/Telesales/pages/TelesalesList/components/MemberTransferImport'
+import ModalCalendarIframe from 'src/features/Telesales/pages/TelesalesDetail/ModalCalendarIframe'
 
 const navLinkClassName = ({ isActive }) =>
   clsx(
@@ -24,6 +25,7 @@ function Navbar({ ExportExcel, IsLoadingEx, onOpenSidebar, onRefresh }) {
   const [btnLoadingReset, setBtnLoadingReset] = useState(false)
   const [isModal, setIsModal] = useState(false)
   const [isModalImport, setIsModalImport] = useState(false)
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
   const { AuthID } = useSelector(({ auth }) => ({
     AuthID: auth?.Info?.User?.ID
@@ -125,7 +127,19 @@ function Navbar({ ExportExcel, IsLoadingEx, onOpenSidebar, onRefresh }) {
         <NavLink to="/lich-nhac/danh-sach" className={navLinkClassName}>
           Danh sách lịch nhắc
         </NavLink>
+        <button
+          type="button"
+          className={navLinkClassName({ isActive: isCalendarOpen })}
+          onClick={() => setIsCalendarOpen(true)}
+          aria-haspopup="dialog"
+        >
+          Bảng lịch
+        </button>
       </div>
+      <ModalCalendarIframe
+        show={isCalendarOpen}
+        onHide={() => setIsCalendarOpen(false)}
+      />
       <div className="tw-flex tw-justify-end tw-gap-2">
         {(window?.top?.GlobalConfig?.Admin?.byAdminExcel
           ? AuthID === 1

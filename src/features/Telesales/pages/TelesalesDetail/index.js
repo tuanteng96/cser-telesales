@@ -110,7 +110,7 @@ function TelesalesDetail(props) {
         >
           <div className="border-bottom px-18px py-15px text-uppercase fw-600 font-size-lg d-flex align-items-center">
             <div
-              className="w-40px h-40px border rounded-circle cursor-pointer position-relative mr-10px d-none d-xxl-block"
+              className="border cursor-pointer w-40px h-40px rounded-circle position-relative mr-10px d-none d-xxl-block"
               onClick={() =>
                 navigate(state?.from || '/danh-sach', {
                   state: {
@@ -122,7 +122,7 @@ function TelesalesDetail(props) {
               <i className="fa-regular fa-arrow-left position-absolute left-12px top-12px"></i>
             </div>
             <div
-              className="w-40px h-40px border rounded-circle cursor-pointer position-relative mr-10px d-xxl-none"
+              className="border cursor-pointer w-40px h-40px rounded-circle position-relative mr-10px d-xxl-none"
               onClick={() =>
                 navigate(state?.from || '/danh-sach', {
                   state: {
@@ -148,7 +148,7 @@ function TelesalesDetail(props) {
                   )}
                   {!loadingMember && (
                     <img
-                      className="w-100 rounded-sm shadow"
+                      className="rounded-sm shadow w-100"
                       src={AssetsHelpers.toUrlAvatarServer(
                         MemberCurrent?.Photo
                       )}
@@ -171,7 +171,7 @@ function TelesalesDetail(props) {
                   </div>
                   <a
                     href={`tel:${MemberCurrent?.MobilePhone}`}
-                    className="btn btn-sm btn-primary mr-2 py-6px px-3 px-xxl-3 fw-500 mt-8px"
+                    className="px-3 mr-2 btn btn-sm btn-primary py-6px px-xxl-3 fw-500 mt-8px"
                   >
                     <i className="fa-solid fa-phone pr-5px"></i>
                     Gọi điện
@@ -204,7 +204,7 @@ function TelesalesDetail(props) {
                 </div>
               </div>
             </div>
-            <div className="d-flex flex-wrap px-10px border-top pt-10px">
+            <div className="flex-wrap d-flex px-10px border-top pt-10px">
               <div className="w-50 p-8px">
                 <div className="border rounded-sm d-flex align-items-center flex-column px-10px py-15px">
                   <div className="text-uppercase font-size-min fw-700 text-muted">
@@ -265,7 +265,7 @@ function TelesalesDetail(props) {
                   </div>
                 </div>
               </div>
-              <div className="w-50 p-8px">
+              <div className="w-100 p-8px">
                 <div className="border rounded-sm d-flex align-items-center flex-column px-10px py-15px">
                   <div className="text-uppercase font-size-min fw-700 text-muted">
                     Tích điểm
@@ -290,15 +290,15 @@ function TelesalesDetail(props) {
           className={clsx('telesales-list__sidebar--bg', isProfile && 'show')}
           onClick={onHideProfile}
         ></div>
-        <div className="telesales-list__content flex-fill d-flex flex-column bg-white border-left">
+        <div className="bg-white telesales-list__content flex-fill d-flex flex-column border-left">
           <ProgressList
             initialValues={MemberCurrent?.TeleTags}
             MemberLoading={loadingMember}
           />
-          <div className="d-flex flex-wrap telesales-detail-body">
+          <div className="flex-wrap d-flex telesales-detail-body">
             <PerfectScrollbar
               options={perfectScrollbarOptions}
-              className="border-right telesales-use scroll h-md-100 h-auto"
+              className="h-auto border-right telesales-use scroll h-md-100"
               style={{ position: 'relative' }}
             >
               <InterestedProducts />

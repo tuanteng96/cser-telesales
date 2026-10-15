@@ -12,7 +12,6 @@ import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import { TelesalesContext } from '../..'
 import { useWindowSize } from 'src/hooks/useWindowSize'
-import Text from 'react-texty'
 import ReminderCalendar from './components/ReminderCalendar'
 import clsx from 'clsx'
 import PageHeader from 'src/components/Navbar/PageHeader'
@@ -436,8 +435,8 @@ function TelesalesList(props) {
           key: 'TopTele',
           title: 'Liên hệ gần nhất',
           cellRenderer: ({ rowData }) => (
-            <div className="tw-relative tw-w-full tw-pr-8">
-              <div className="tw-absolute tw-top-0 tw-right-0">
+            <div className="tw-relative tw-w-full tw-h-full tw-flex tw-items-center">
+              <div className="tw-absolute tw-top-1/2 -tw-translate-y-1/2 tw-right-0 tw-z-10">
                 <PickerCareHistory
                   key={rowData.ID}
                   memberId={rowData.ID}
@@ -476,58 +475,61 @@ function TelesalesList(props) {
                 </PickerCareHistory>
               </div>
               {rowData.TopTele && rowData.TopTele.length > 0 ? (
-                <div className="tw-w-full">
-                  <div className="d-flex align-items-center w-100">
-                    <Text className="flex-1 pr-10px" tooltipMaxWidth={280}>
+                <OverlayTrigger
+                  rootClose
+                  trigger="click"
+                  key="auto"
+                  placement="auto"
+                  overlay={
+                    <Popover id={`contact-history-${rowData.ID}`}>
+                      <Popover.Body className="p-0 overflow-auto max-h-300px">
+                        {rowData.TopTele.map((item, index) => (
+                          <div
+                            className={clsx(
+                              'p-15px',
+                              rowData.TopTele.length - 1 !== index &&
+                                'border-bottom'
+                            )}
+                            key={index}
+                          >
+                            {item.Content}
+                            <div className="font-number mt-5px text-muted">
+                              Ngày{' '}
+                              {moment(item.CreateDate).format(
+                                'DD-MM-YYYY HH:mm'
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </Popover.Body>
+                    </Popover>
+                  }
+                >
+                  <button
+                    type="button"
+                    className="btn p-0 h-100 w-100 text-start text-reset !tw-pr-8"
+                    aria-label={`Xem lịch sử liên hệ của ${
+                      rowData.FullName || rowData.ID
+                    }`}
+                  >
+                    <span className="tw-block tw-line-clamp-2 tw-break-words">
                       {rowData.TopTele[0].Content}
-                    </Text>
-                    <OverlayTrigger
-                      rootClose
-                      trigger="click"
-                      key="auto"
-                      placement="auto"
-                      overlay={
-                        <Popover id={`contact-history-${rowData.ID}`}>
-                          <Popover.Body className="p-0 overflow-auto max-h-300px">
-                            {rowData.TopTele.map((item, index) => (
-                              <div
-                                className={clsx(
-                                  'p-15px',
-                                  rowData.TopTele.length - 1 !== index &&
-                                    'border-bottom'
-                                )}
-                                key={index}
-                              >
-                                {item.Content}
-                                <div className="font-number mt-5px text-muted">
-                                  Ngày{' '}
-                                  {moment(item.CreateDate).format(
-                                    'DD-MM-YYYY HH:mm'
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </Popover.Body>
-                        </Popover>
-                      }
-                    >
-                      <i className="cursor-pointer fa-solid fa-circle-info text-warning font-size-lg"></i>
-                    </OverlayTrigger>
-                  </div>
-                  <div>
-                    {moment(rowData.TopTele[0].CreateDate).format(
-                      'DD-MM-YYYY HH:mm'
-                    )}
-                  </div>
-                  {rowData?.Present?.lastOrder && (
+                    </span>
+                    <span className="tw-block">
+                      {moment(rowData.TopTele[0].CreateDate).format(
+                        'DD-MM-YYYY HH:mm'
+                      )}
+                    </span>
+                    {/* {rowData?.Present?.lastOrder && (
                     <div className="tw-italic tw-text-[13px]">
                       Đơn hàng gần nhất ngày{' '}
                       {moment(rowData?.Present?.lastOrder, 'YYYY-MM-DD').format(
                         'DD/MM/YYYY'
                       )}
                     </div>
-                  )}
-                </div>
+                  )} */}
+                  </button>
+                </OverlayTrigger>
               ) : (
                 <>Chưa có liên hệ</>
               )}

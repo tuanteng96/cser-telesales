@@ -68,10 +68,6 @@ function EditableStatusCell({ rowData, onSaved, onEditingChange }) {
             ? values.map(item => item.label).join(', ')
             : 'Chọn trạng thái'}
         </span>
-        <i
-          aria-hidden="true"
-          className="fa-solid fa-pen pl-8px font-size-base text-muted flex-shrink-0"
-        ></i>
       </button>
       <Overlay
         target={target.current}

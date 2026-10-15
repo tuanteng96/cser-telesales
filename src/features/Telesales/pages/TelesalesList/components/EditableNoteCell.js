@@ -65,10 +65,6 @@ function EditableNoteCell({ rowData, onSaved, onEditingChange }) {
         <span className="tw-line-clamp-2 tw-break-words tw-whitespace-pre-line">
           {note || 'Thêm ghi chú'}
         </span>
-        <i
-          aria-hidden="true"
-          className="fa-solid fa-pen pl-8px font-size-base text-muted flex-shrink-0"
-        ></i>
       </button>
       <Overlay
         target={target.current}

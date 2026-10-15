@@ -7,7 +7,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
-import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 moment.locale('vi')
 
@@ -134,13 +133,13 @@ function NotiListMember(props) {
             ) : (
               <div className="w-100 d-flex align-items-center justify-content-center">
                 <div className="text-center">
-                  <img
+                  {/* <img
                     className="w-100 max-w-120px"
                     src={AssetsHelpers.toAbsoluteUrl(
                       '/_assets/images/data-empty.png'
                     )}
                     alt="Không có dữ liệu"
-                  />
+                  /> */}
                   <div className="text-center font-size-base fw-300">
                     Không có ghi chú.
                   </div>

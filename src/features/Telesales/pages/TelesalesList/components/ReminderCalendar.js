@@ -12,7 +12,6 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 import moment from 'moment'
 import 'moment/locale/vi'
-import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 moment.locale('vi')
 
@@ -72,7 +71,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
               } = formikProps
               return (
                 <Form>
-                  <Popover.Header className="font-weight-bold text-uppercase d-flex justify-content-between py-3">
+                  <Popover.Header className="py-3 font-weight-bold text-uppercase d-flex justify-content-between">
                     Thực hiện lịch nhắc
                   </Popover.Header>
                   <Popover.Body>
@@ -80,7 +79,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
                       <label>Kết quả</label>
                       <SelectTeleHis
                         isLoading={false}
-                        className="w-100 flex-1"
+                        className="flex-1 w-100"
                         placeholder="Chọn kết quả"
                         name="Result"
                         onChange={otp => {
@@ -106,7 +105,7 @@ function OverlayComponent({ btnLoading, onSubmit, item, Button }) {
                       ></textarea>
                     </div>
                   </Popover.Body>
-                  <div className="font-weight-bold d-flex justify-content-between py-10px px-3 border-top">
+                  <div className="px-3 font-weight-bold d-flex justify-content-between py-10px border-top">
                     <button
                       type="submit"
                       className={clsx(
@@ -279,7 +278,7 @@ function ReminderCalendar({ onHide, show, filters }) {
                   .fill()
                   .map((item, idx) => (
                     <div
-                      className="bg-light rounded-sm p-15px mt-10px"
+                      className="rounded-sm bg-light p-15px mt-10px"
                       key={idx}
                     >
                       <div className="d-flex justify-content-between">
@@ -314,7 +313,7 @@ function ReminderCalendar({ onHide, show, filters }) {
                           .fill()
                           .map((item, idx) => (
                             <div
-                              className="bg-light rounded-sm p-15px mt-10px"
+                              className="rounded-sm bg-light p-15px mt-10px"
                               key={idx}
                             >
                               <div className="d-flex justify-content-between">
@@ -345,7 +344,7 @@ function ReminderCalendar({ onHide, show, filters }) {
                         {item.lst &&
                           item.lst.map((noti, idx) => (
                             <div
-                              className="bg-light rounded-sm p-15px mt-10px"
+                              className="rounded-sm bg-light p-15px mt-10px"
                               key={idx}
                             >
                               <div className="d-flex justify-content-between">
@@ -360,7 +359,7 @@ function ReminderCalendar({ onHide, show, filters }) {
                                     btnLoading={btnLoading}
                                     Button={() =>
                                       teleAdv && (
-                                        <span className="fw-500 cursor-pointer btn btn-xs btn-success">
+                                        <span className="cursor-pointer fw-500 btn btn-xs btn-success">
                                           Thực hiện
                                         </span>
                                       )
@@ -400,13 +399,13 @@ function ReminderCalendar({ onHide, show, filters }) {
               ) : (
                 <div className="w-100 h-350px d-flex align-items-center justify-content-center">
                   <div>
-                    <img
+                    {/* <img
                       className="w-100 max-w-300px"
                       src={AssetsHelpers.toAbsoluteUrl(
                         '/_assets/images/data-empty.png'
                       )}
                       alt="Không có dữ liệu"
-                    />
+                    /> */}
                     <div className="text-center font-size-base mt-15px fw-300">
                       Không có lịch nhắc.
                     </div>

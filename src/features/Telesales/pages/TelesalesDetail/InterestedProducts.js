@@ -10,7 +10,6 @@ import Text from 'react-texty'
 import Skeleton from 'react-loading-skeleton'
 import Swal from 'sweetalert2'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 
 const perfectScrollbarOptions = {
   wheelSpeed: 2,
@@ -160,7 +159,7 @@ function InterestedProducts(props) {
                     formikProps
                   return (
                     <Form>
-                      <Popover.Header className="font-weight-bold text-uppercase d-flex justify-content-between py-3">
+                      <Popover.Header className="py-3 font-weight-bold text-uppercase d-flex justify-content-between">
                         Thêm mới sản phẩm quan tâm
                       </Popover.Header>
                       <Popover.Body>
@@ -183,7 +182,7 @@ function InterestedProducts(props) {
                           />
                         </div>
                       </Popover.Body>
-                      <div className="font-weight-bold d-flex justify-content-between py-10px px-3 border-top">
+                      <div className="px-3 font-weight-bold d-flex justify-content-between py-10px border-top">
                         <button
                           type="submit"
                           className={clsx(
@@ -224,8 +223,8 @@ function InterestedProducts(props) {
                 <div className="flex-fill py-8px px-15px fw-500">
                   <Skeleton count={1} width={150} height={18} />
                 </div>
-                <div className="w-35px bg-danger d-flex align-items-center justify-content-center cursor-pointer">
-                  <i className="fa-regular fa-xmark text-white"></i>
+                <div className="cursor-pointer w-35px bg-danger d-flex align-items-center justify-content-center">
+                  <i className="text-white fa-regular fa-xmark"></i>
                 </div>
               </div>
             ))}
@@ -247,23 +246,23 @@ function InterestedProducts(props) {
                     <Text tooltipMaxWidth={250}>{item.Title}</Text>
                   </div>
                   <div
-                    className="w-35px bg-danger d-flex align-items-center justify-content-center cursor-pointer"
+                    className="cursor-pointer w-35px bg-danger d-flex align-items-center justify-content-center"
                     onClick={() => onDelete(item)}
                   >
-                    <i className="fa-regular fa-xmark text-white"></i>
+                    <i className="text-white fa-regular fa-xmark"></i>
                   </div>
                 </div>
               ))
             ) : (
               <div className="w-100 d-flex align-items-center justify-content-center">
                 <div className="text-center">
-                  <img
+                  {/* <img
                     className="w-100 max-w-120px"
                     src={AssetsHelpers.toAbsoluteUrl(
                       '/_assets/images/data-empty.png'
                     )}
                     alt="Không có dữ liệu"
-                  />
+                  /> */}
                   <div className="text-center font-size-base fw-300">
                     Không có sản phẩm.
                   </div>

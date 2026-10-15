@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useOutletContext, useParams } from 'react-router-dom'
 import telesalesApi from 'src/api/telesales.api'
-import ModalCalendarIframe from './ModalCalendarIframe'
 import Swal from 'sweetalert2'
 import Cookies from 'js-cookie'
 import Skeleton from 'react-loading-skeleton'
@@ -12,7 +11,6 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import moment from 'moment'
 import 'moment/locale/vi'
 import clsx from 'clsx'
-import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import { useTeleDetail } from './TelesalesDetailLayout'
 import configApi from 'src/api/config.api'
 
@@ -28,7 +26,6 @@ function CalendarMember({ MemberCurrent }) {
   const { onRefresh } = useOutletContext()
   const [loading, setLoading] = useState(false)
   const [ListBooks, setListBooks] = useState([])
-  const [isModalCalendar, setIsModalCalendar] = useState(false)
   const [isModalBook, setIsModalBook] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
   const { AuthCrStockID } = useSelector(({ auth }) => ({
@@ -348,14 +345,6 @@ function CalendarMember({ MemberCurrent }) {
     })
   }
 
-  const onOpenModal = () => {
-    setIsModalCalendar(true)
-  }
-
-  const onHideModal = () => {
-    setIsModalCalendar(false)
-  }
-
   const onOpenModalBook = () => {
     setIsModalBook(true)
   }
@@ -369,12 +358,6 @@ function CalendarMember({ MemberCurrent }) {
       <div className="text-uppercase d-flex justify-content-between align-items-center pt-18px pl-18px pr-18px pb-10px">
         <span className="fw-600 text-primary">Đặt lịch khách hàng</span>
         <div className="d-flex">
-          <button
-            className="btn btn-xs btn-primary mr-5px"
-            onClick={onOpenModal}
-          >
-            Bảng lịch
-          </button>
           <button className="btn btn-xs btn-success" onClick={onOpenModalBook}>
             Đặt lịch
           </button>
@@ -400,7 +383,7 @@ function CalendarMember({ MemberCurrent }) {
                   <div>
                     <Skeleton count={1} width={130} height={15} />
                   </div>
-                  <span className="fw-500 text-danger cursor-pointer text-underline font-size-sm">
+                  <span className="cursor-pointer fw-500 text-danger text-underline font-size-sm">
                     <Skeleton count={1} width={80} height={15} />
                   </span>
                 </div>
@@ -430,7 +413,7 @@ function CalendarMember({ MemberCurrent }) {
                       </span>
                     </div>
                     <span
-                      className="fw-500 text-danger cursor-pointer text-underline font-size-sm"
+                      className="cursor-pointer fw-500 text-danger text-underline font-size-sm"
                       onClick={() => onDelete(item)}
                     >
                       Hủy lịch
@@ -442,13 +425,13 @@ function CalendarMember({ MemberCurrent }) {
             ) : (
               <div className="w-100 d-flex align-items-center justify-content-center">
                 <div className="text-center">
-                  <img
+                  {/* <img
                     className="w-100 max-w-120px"
                     src={AssetsHelpers.toAbsoluteUrl(
                       '/_assets/images/data-empty.png'
                     )}
                     alt="Không có dữ liệu"
-                  />
+                  /> */}
                   <div className="text-center font-size-base fw-300">
                     Không có lịch.
                   </div>
@@ -472,7 +455,6 @@ function CalendarMember({ MemberCurrent }) {
             : []
         }
       />
-      <ModalCalendarIframe show={isModalCalendar} onHide={onHideModal} />
     </div>
   )
 }
