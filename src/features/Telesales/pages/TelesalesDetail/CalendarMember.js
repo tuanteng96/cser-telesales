@@ -5,14 +5,12 @@ import Swal from 'sweetalert2'
 import Cookies from 'js-cookie'
 import Skeleton from 'react-loading-skeleton'
 import { useSelector } from 'react-redux'
-import CalendarMemberBook from './CalendarMemberBook'
+import ModalCalendarIframe from './ModalCalendarIframe'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 import moment from 'moment'
 import 'moment/locale/vi'
 import clsx from 'clsx'
-import { useTeleDetail } from './TelesalesDetailLayout'
-import configApi from 'src/api/config.api'
 
 moment.locale('vi')
 
@@ -27,38 +25,13 @@ function CalendarMember({ MemberCurrent }) {
   const [loading, setLoading] = useState(false)
   const [ListBooks, setListBooks] = useState([])
   const [isModalBook, setIsModalBook] = useState(false)
-  const [btnLoading, setBtnLoading] = useState(false)
   const { AuthCrStockID } = useSelector(({ auth }) => ({
     AuthCrStockID: auth?.Info?.CrStockID
   }))
-  const [SettingCalendar, setSettingCalendar] = useState({
-    Tags: '',
-    OriginalServices: []
-  })
-
-  const { TagsList, TagsSelected } = useTeleDetail()
-
   useEffect(() => {
     getListBook()
-    getSettingCalendar()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const getSettingCalendar = () => {
-    configApi.getConfigName('ArticleRel').then(({ data }) => {
-      let rs = {
-        Tags: '',
-        OriginalServices: []
-      }
-      if (data?.data && data?.data.length > 0) {
-        const result = JSON.parse(data?.data[0].Value)
-        if (result) {
-          rs = result
-        }
-      }
-      setSettingCalendar(rs)
-    })
-  }
 
   const getListBook = (isLoading = true, callback) => {
     const filters = {
@@ -76,160 +49,6 @@ function CalendarMember({ MemberCurrent }) {
         callback && callback()
       })
       .catch(error => console.log(error))
-  }
-
-  const onSubmit = async (values, { resetForm }) => {
-    const hasTags =
-      TagsList &&
-      TagsList.some(
-        x =>
-          x.options &&
-          x.options.some(
-            s =>
-              window?.top?.GlobalConfig?.Admin?.kpiSuccess &&
-              s.value === window?.top?.GlobalConfig?.Admin?.kpiSuccess
-          )
-      )
-    const hasTagsSelectd = TagsSelected
-      ? TagsSelected.some(
-          x => x.value === window?.top?.GlobalConfig?.Admin?.kpiSuccess
-        )
-      : false
-    setBtnLoading(true)
-
-    let Desc = ''
-    if (window?.top?.GlobalConfig?.APP?.SL_khach && values.AmountPeople) {
-      Desc =
-        (Desc ? Desc + '\n' : '') +
-        `Số lượng khách: ${values.AmountPeople.value}`
-    }
-    if (values.TagSetting && values.TagSetting.length > 0) {
-      Desc =
-        (Desc ? Desc + '\n' : '') +
-        `Tags: ${values.TagSetting.map(x => x.value).toString()}`
-    }
-    Desc = (Desc ? Desc + '\n' : '') + `Ghi chú: ${values.Desc}`
-
-    const objBooking = {
-      ...values,
-      MemberID: MemberID,
-      RootIdS: values.RootIdS.map(item => item.value).toString(),
-      UserServiceIDs:
-        values.UserServiceIDs && values.UserServiceIDs.length > 0
-          ? values.UserServiceIDs.map(item => item.value).toString()
-          : '',
-      BookDate: moment(values.BookDate).format('YYYY-MM-DD HH:mm'),
-      Status: 'XAC_NHAN',
-      CreateBy: 'tele',
-      Desc,
-      InfoMore: {
-        Member: {
-          ID: MemberCurrent?.ID || '',
-          FullName: MemberCurrent?.FullName || '',
-          MobilePhone: MemberCurrent?.MobilePhone || ''
-        },
-        Roots: values.RootIdS
-          ? values.RootIdS.map(item => ({
-              ID: item.value,
-              Title: item.label
-            }))
-          : null
-      }
-    }
-
-    let History = {
-      ...(values?.History || {}),
-      Edit: values?.History?.Edit
-        ? [
-            ...values?.History?.Edit,
-            {
-              CreateDate: moment().format('HH:mm DD-MM-YYYY'),
-              Staff: {
-                ID: window?.top?.Info?.User?.ID,
-                FullName: window?.top?.Info?.User?.FullName
-              },
-              Booking: {
-                ...objBooking,
-                UserServices: values.UserServiceIDs,
-                Roots: values.RootIdS
-              }
-            }
-          ]
-        : [
-            {
-              CreateDate: moment().format('HH:mm DD-MM-YYYY'),
-              Staff: {
-                ID: window?.top?.Info?.User?.ID,
-                FullName: window?.top?.Info?.User?.FullName
-              },
-              Booking: {
-                ...objBooking,
-                UserServices: values.UserServiceIDs,
-                Roots: values.RootIdS
-              }
-            }
-          ]
-    }
-
-    objBooking.History = History
-
-    const CurrentStockID = Cookies.get('StockID')
-    const u_id_z4aDf2 = Cookies.get('u_id_z4aDf2')
-
-    try {
-      const dataPost = {
-        booking: [objBooking]
-      }
-      await telesalesApi.addMemberBooking(dataPost, {
-        CurrentStockID,
-        u_id_z4aDf2
-      })
-      if (
-        hasTags &&
-        !hasTagsSelectd &&
-        window?.top?.GlobalConfig?.Admin?.kpiSuccess
-      ) {
-        let newData = {
-          items: [
-            {
-              MemberID: MemberID,
-              TeleTags: [
-                ...(TagsSelected || []),
-                {
-                  value: window?.top?.GlobalConfig?.Admin?.kpiSuccess,
-                  label: window?.top?.GlobalConfig?.Admin?.kpiSuccess
-                }
-              ]
-                .map(item => item.value)
-                .join(',')
-            }
-          ]
-        }
-        await telesalesApi.editTagsMember(newData)
-      }
-      onRefresh()
-      getListBook(false, () => {
-        window.top?.toastr &&
-          window.top?.toastr.success('Đặt lịch thành công', '', {
-            timeOut: 1500
-          })
-        onHideModalBook()
-        setBtnLoading(false)
-        resetForm()
-        if (
-          hasTags &&
-          !hasTagsSelectd &&
-          window?.top?.GlobalConfig?.Admin?.kpiSuccess
-        ) {
-          window.getMemberTelesales && window.getMemberTelesales()
-        }
-      })
-    } catch (error) {
-      setBtnLoading(prevState => ({
-        ...prevState,
-        isBtnBooking: false
-      }))
-    }
   }
 
   const onDelete = item => {
@@ -441,20 +260,19 @@ function CalendarMember({ MemberCurrent }) {
           </>
         )}
       </PerfectScrollbar>
-      <CalendarMemberBook
-        show={isModalBook}
-        onHide={onHideModalBook}
-        btnLoading={btnLoading}
-        onSubmit={onSubmit}
-        TagsList={
-          SettingCalendar?.Tags
-            ? SettingCalendar?.Tags.split(',').map(x => ({
-                label: x,
-                value: x
-              }))
-            : []
-        }
-      />
+      {isModalBook && (
+        <ModalCalendarIframe
+          show
+          newBooking
+          member={MemberCurrent}
+          onHide={() => {
+            onHideModalBook()
+            onRefresh()
+            getListBook(false)
+            window.getMemberTelesales && window.getMemberTelesales()
+          }}
+        />
+      )}
     </div>
   )
 }

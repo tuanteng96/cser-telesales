@@ -7,11 +7,9 @@ import * as Yup from 'yup'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import moreApi from 'src/api/more.api'
-import { useParams } from 'react-router-dom'
 import SelectStocks from 'src/components/Selects/SelectStocks'
 import SelectStaffsService from 'src/components/Selects/SelectStaffsService'
 import Select, { components } from 'react-select'
-import telesalesApi from 'src/api/telesales.api'
 import { AsyncPaginate } from 'react-select-async-paginate'
 import clsx from 'clsx'
 
@@ -20,7 +18,10 @@ moment.locale('vi')
 CalendarMemberBook.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  memberId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  member: PropTypes.object,
+  error: PropTypes.string
 }
 CalendarMemberBook.defaultProps = {
   show: false,
@@ -54,11 +55,20 @@ const initialValue = {
   TagSetting: ''
 }
 
-function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
-  let { MemberID } = useParams()
-  const [initialValues, setInitialValues] = useState(initialValue)
-  const [MemberCurrent, setMemberCurrent] = useState(null)
-  const [loading, setLoading] = useState(false)
+function CalendarMemberBook({
+  show,
+  onHide,
+  onSubmit,
+  btnLoading,
+  TagsList,
+  memberId: MemberID,
+  member: MemberCurrent,
+  error
+}) {
+  const [initialValues, setInitialValues] = useState(() => ({
+    ...initialValue,
+    BookDate: new Date()
+  }))
   const { AuthCrStockID } = useSelector(({ auth }) => ({
     AuthStocks: auth.Info.Stocks.filter(item => item.ParentID !== 0).map(
       item => ({
@@ -69,27 +79,6 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
     ),
     AuthCrStockID: auth.Info.CrStockID
   }))
-
-  useEffect(() => {
-    getMemberTelesales()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [MemberID])
-
-  const getMemberTelesales = () => {
-    setLoading(true)
-
-    telesalesApi
-      .getMemberIDTelesales(MemberID)
-      .then(({ data }) => {
-        if (data.error) {
-          onHide()
-        } else {
-          setMemberCurrent(data.member)
-          setLoading(false)
-        }
-      })
-      .catch(error => console.log(error))
-  }
 
   useEffect(() => {
     setInitialValues(prevState => ({
@@ -156,7 +145,8 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
               values,
               handleChange,
               handleBlur,
-              setFieldValue
+              setFieldValue,
+              status
             } = formikProps
             return (
               <Form className="h-100 d-flex flex-column">
@@ -166,6 +156,11 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                   </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="p-0">
+                  {(error || status) && (
+                    <div role="alert" className="text-danger px-20px pt-15px">
+                      {error || status}
+                    </div>
+                  )}
                   <div className="form-group form-group-ezs px-20px pt-15px mb-15px border-top">
                     <label className="mb-1 d-none d-md-flex justify-content-between">
                       Thời gian / Cơ sở
@@ -221,7 +216,7 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                   <div className="form-group form-group-ezs border-top px-20px pt-15px mb-15px">
                     <label className="mb-1 d-none d-md-block">Dịch vụ</label>
                     <AsyncPaginate
-                      key={`${'No-Member'}-${values.StockID}`}
+                      key={`${MemberID}-${values.StockID}`}
                       menuPosition="fixed"
                       isMulti
                       className={`select-control ${
@@ -359,11 +354,9 @@ function CalendarMemberBook({ show, onHide, onSubmit, btnLoading, TagsList }) {
                     <button
                       type="submit"
                       className={`btn btn-sm btn-primary mr-2 font-size-base ${
-                        btnLoading || loading
-                          ? 'spinner spinner-white spinner-right'
-                          : ''
+                        btnLoading ? 'spinner spinner-white spinner-right' : ''
                       } w-auto my-0 mr-0 h-auto`}
-                      disabled={btnLoading || loading}
+                      disabled={btnLoading}
                     >
                       Đặt lịch ngay
                     </button>

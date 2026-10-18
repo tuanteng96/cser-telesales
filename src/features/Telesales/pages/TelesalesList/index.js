@@ -7,8 +7,9 @@ import Sidebar from './components/Sidebar'
 import EditableStatusCell from './components/EditableStatusCell'
 import EditableNoteCell from './components/EditableNoteCell'
 import PickerCareHistory from '../TelesalesDetail/PickerCareHistory'
+import ModalCalendarIframe from '../TelesalesDetail/ModalCalendarIframe'
 import { Overlay, OverlayTrigger, Popover } from 'react-bootstrap'
-import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
+// import { AssetsHelpers } from 'src/helpers/AssetsHelpers'
 import SelectStaffs from 'src/components/Selects/SelectStaffs'
 import { TelesalesContext } from '../..'
 import { useWindowSize } from 'src/hooks/useWindowSize'
@@ -161,6 +162,7 @@ function TelesalesList(props) {
   const [isModal, setIsModal] = useState(false)
   const [IsLoadingEx, setIsLoadingEx] = useState(false)
   const [active, setActive] = useState('')
+  const [bookingMember, setBookingMember] = useState(null)
 
   const { onOpenSidebar } = useContext(TelesalesContext)
   const dispatch = useDispatch()
@@ -560,7 +562,7 @@ function TelesalesList(props) {
           dataKey: 'action',
           cellRenderer: ({ rowData }) => (
             <div className="d-flex">
-              <a
+              {/* <a
                 href={`tel:${rowData?.MobilePhone}`}
                 className="p-0 shadow w-38px h-38px rounded-circle btn btn-success mx-4px position-relative"
               >
@@ -571,7 +573,19 @@ function TelesalesList(props) {
                   )}
                   alt=""
                 />
-              </a>
+              </a> */}
+              <button
+                type="button"
+                className="p-0 shadow w-38px h-38px rounded-circle btn btn-success mx-4px d-flex align-items-center justify-content-center"
+                title="Đặt lịch"
+                aria-label={`Đặt lịch cho ${rowData.FullName || rowData.ID}`}
+                onClick={() => setBookingMember(rowData)}
+              >
+                <i
+                  className="fa-regular fa-calendar-plus"
+                  aria-hidden="true"
+                ></i>
+              </button>
               <Link
                 className="shadow w-38px h-38px rounded-circle d-flex align-items-center justify-content-center text-none btn btn-primary mx-4px"
                 to={`${rowData.ID}/dich-vu`}
@@ -737,6 +751,18 @@ function TelesalesList(props) {
           filters={filters}
         />
       </div>
+      {bookingMember !== null && (
+        <ModalCalendarIframe
+          key={bookingMember.ID}
+          show
+          newBooking
+          member={bookingMember}
+          onHide={() => {
+            setBookingMember(null)
+            onRefresh()
+          }}
+        />
+      )}
       <Outlet context={{ onRefresh }} />
     </>
   )
