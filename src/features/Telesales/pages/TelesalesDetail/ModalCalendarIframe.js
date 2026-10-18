@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 ModalCalendarIframe.propTypes = {
   show: PropTypes.bool,
@@ -14,8 +15,29 @@ ModalCalendarIframe.propTypes = {
 }
 
 function ModalCalendarIframe({ show, onHide, newBooking = false, member }) {
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [frameLoaded, setFrameLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!show) return
+
+    const openMember = memberId => {
+      if (!/^[1-9]\d*$/.test(String(memberId))) return
+      onHide()
+      navigate(`/danh-sach/${memberId}/dich-vu`, {
+        state: { from: '/danh-sach' }
+      })
+    }
+
+    window.top.openTelesalesMember = openMember
+    return () => {
+      if (window.top.openTelesalesMember === openMember) {
+        delete window.top.openTelesalesMember
+      }
+    }
+  }, [show, onHide, navigate])
+
   useEffect(() => {
     setFrameLoaded(false)
     if (show) setLoading(true)
