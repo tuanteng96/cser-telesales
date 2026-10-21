@@ -201,6 +201,7 @@ function TelesalesList(props) {
       last_used_type: filtersRedux.last_used_type || false,
       bookStocks: filtersRedux.bookStocks || '',
       service_stock: filtersRedux.service_stock || '',
+      service_rate: filtersRedux.service_rate || [],
       order_stock: filtersRedux.order_stock || '',
       ServiceUseFrom: '',
       ServiceUseTo: ''
@@ -306,6 +307,7 @@ function TelesalesList(props) {
         service_stock: filters?.filter?.service_stock
           ? filters?.filter?.service_stock.map(x => x.value).toString()
           : '',
+        service_rate: filters.filter.service_rate.map(x => x.value).join(','),
         order_stock: filters?.filter?.order_stock
           ? filters?.filter?.order_stock.map(x => x.value).toString()
           : '',

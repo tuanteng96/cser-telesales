@@ -40,6 +40,11 @@ const OsList = [
 
 const INITIAL_OPEN_SECTIONS = ['tags']
 
+const ServiceRateOptions = [1, 2, 3, 4, 5].map(value => ({
+  value,
+  label: `${value} sao`
+}))
+
 function FilterSection({ sectionKey, title, children }) {
   const [isOpen, setIsOpen] = useState(() =>
     INITIAL_OPEN_SECTIONS.includes(sectionKey)
@@ -600,6 +605,54 @@ function Sidebar({ filters, onSubmit, loading }) {
                           value={values?.filter?.service_stock}
                           onChange={otp => {
                             setFieldValue('filter.service_stock', otp)
+                          }}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label
+                          htmlFor="service_rate"
+                          className="font-label text-muted mb-5px"
+                        >
+                          Đánh giá
+                        </label>
+                        <Select
+                          inputId="service_rate"
+                          name="filter.service_rate"
+                          options={ServiceRateOptions}
+                          formatOptionLabel={({ label, value }, { context }) =>
+                            context === 'menu' ? (
+                              <div className="d-flex align-items-center justify-content-between">
+                                <span>{label}</span>
+                                <span
+                                  className="d-flex ml-8px"
+                                  style={{ gap: '4px' }}
+                                  aria-hidden="true"
+                                >
+                                  {[1, 2, 3, 4, 5].map(star => (
+                                    <i
+                                      key={star}
+                                      className={clsx(
+                                        'fas fa-star',
+                                        star <= value
+                                          ? 'text-warning'
+                                          : 'text-muted'
+                                      )}
+                                    />
+                                  ))}
+                                </span>
+                              </div>
+                            ) : (
+                              label
+                            )
+                          }
+                          isMulti
+                          isClearable
+                          classNamePrefix="select"
+                          className="select-control"
+                          placeholder="Chọn đánh giá"
+                          value={values.filter.service_rate}
+                          onChange={options => {
+                            setFieldValue('filter.service_rate', options || [])
                           }}
                         />
                       </div>

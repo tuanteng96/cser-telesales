@@ -32,9 +32,9 @@ function Navbar({ ExportExcel, IsLoadingEx, onOpenSidebar, onRefresh }) {
   }))
 
   const { nang_cao_tele } = useRoles({ nameRoles: ['nang_cao_tele'] })
-  const hasSettings = Boolean(
-    nang_cao_tele?.hasRight && (onRefresh || nang_cao_tele?.IsAllStock)
-  )
+  // const hasSettings = Boolean(
+  //   nang_cao_tele?.hasRight && (onRefresh || nang_cao_tele?.IsAllStock)
+  // )
 
   const onSubmitTransfer = (values, { resetForm }) => {
     setBtnLoading(true)
